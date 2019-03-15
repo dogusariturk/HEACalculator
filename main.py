@@ -1,8 +1,26 @@
+import numpy as np
+from scipy import constants
 from mendeleev import element
 from pymatgen import Element
+from mixing import __df
+from thermo import nested_formula_parser, atom_fractions, mass_fractions, molecular_weight
+from thermo.utils import ws_to_zs
+
+# inp = input('Alloy: ')
+
+atoms = nested_formula_parser('AlTiVMnSi')
+
+# afracs = atom_fractions(atoms)
+# ws = (mass_fractions(atoms))
 
 
 def main():
+
+    def configurationalEntropy(atoms):
+        if len(set(atoms.values())) == 1:
+            return constants.R * np.log(len(atoms))
+        else:
+            pass
 
     def averageAtomicRadius(atoms):
         sumAtomicRadius = sum(
