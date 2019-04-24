@@ -21,7 +21,8 @@ import pandas as pd
 
 from scipy import constants
 from mendeleev import element
-from thermo import nested_formula_parser
+from pymatgen import Element
+from thermo import nested_formula_parser, mass_fractions
 from prettytable import PrettyTable
 
 __author__ = 'Dogu Sariturk'
@@ -72,7 +73,16 @@ class HEA:
 
     _data = pd.read_csv('data/mixing.csv')
     _tab = PrettyTable(
-        field_names=["Alloy", "Density", "Delta", "Hmix", "Smix", "VEC", "Tm", "Phases"])
+        field_names=["Alloy", "Density", "Delta", "Hmix", "Smix", "VEC", "Tm", "Phases", "isSolidSolution"])
+    _tab.align["Alloy"] = 'r'
+    _tab.align["Density"] = 'r'
+    _tab.align["Delta"] = 'r'
+    _tab.align["Hmix"] = 'r'
+    _tab.align["Smix"] = 'r'
+    _tab.align["VEC"] = 'r'
+    _tab.align["Tm"] = 'r'
+    _tab.align["Phases"] = 'r'
+    _tab.align["isSolidSolution"] = 'r'
 
     def __init__(self, formula):
         """
@@ -98,11 +108,7 @@ class HEA:
 
     def configurationalEntropy(self):
         """Return the mixing entropy of the alloy."""
-        # TODO: Non equiatomic alloys.
-        if len(set(self._alloy.values())) == 1:
-            return constants.R * np.log(len(self._alloy))
-        else:
-            pass
+        return -1 * constants.R * sum(num / sum(self._alloy.values()) * np.log(num / sum(self._alloy.values())) for num in self._alloy.values())
 
     def enthalpyOfMixing(self):
         """
@@ -112,7 +118,7 @@ class HEA:
 
         References
         ----------
-
+        F. R. Boer and D. G. Perrifor: Cohesion in Metals, (Elsevier Science Publishers B.V., Netherlands, 1988)
         """
         list_of_pairs = [(a, b)
                          for a in self._alloy for b in self._alloy if a != b and (a, b) != (b, a)]
@@ -120,41 +126,17 @@ class HEA:
         return sum(2 * y / (len(self._alloy) ** 2) for y in enthalpy)
 
     def atomicSizeDifference(self):
-        """
-
-        Return the atomic size difference of the alloy, i.e. delta.
-
-        References
-        ----------
-
-        """
-        # FIXME:
+        """Return the atomic size difference of the alloy, i.e. delta."""
         delta = sum((num / sum(self._alloy.values())) * (1 - (element(elm).atomic_radius /
                                                               self.averageAtomicRadius()))**2 for elm, num in self._alloy.items())
         return np.sqrt(delta) * 100
 
     def averageAtomicRadius(self):
-        """
-
-        Return the average atomic radius of the alloy.
-
-        References
-        ----------
-
-
-        """
+        """Return the average atomic radius of the alloy."""
         return sum(num / sum(self._alloy.values()) * (element(elm).atomic_radius) for elm, num in self._alloy.items())
 
     def valenceElectronConcentration(self):
-        """
-
-        Return the valence electron concentration of the alloy.
-
-        References
-        ----------
-
-
-        """
+        """Return the valence electron concentration of the alloy."""
         return sum(num / sum(self._alloy.values()) * element(elm).nvalence() for elm, num in self._alloy.items())
 
     def omegaCalculation(self):
@@ -162,14 +144,7 @@ class HEA:
         return (self.meltingTemperature() * self.configurationalEntropy()) / (abs(self.enthalpyOfMixing()) * 1000)
 
     def meltingTemperature(self):
-        """
-
-        Return the approximate melting temperature of the alloy.
-
-        References
-        ----------
-
-        """
+        """Return the approximate melting temperature of the alloy."""
         t_melting = sum(num / sum(self._alloy.values()) * (element(elm).melting_point)
                         for elm, num in self._alloy.items())
         return t_melting
@@ -184,17 +159,11 @@ class HEA:
             return 'No'
 
     def density(self):
-        """
-
-        Return the approximate density of the alloy.
-
-        References
-        ----------
-
-        """
+        """Return the approximate density of the alloy."""
         # element(x).density for x in self._alloy.keys()
         # (at% * at.wt) of x / (at% * at.wt) of all
-        pass
+
+        return 100 / sum(element(elm).density / (ws * 100) for elm, ws in mass_fractions(self._alloy).items())
 
     def crystalStructure(self):
         """Return the predicted crystal structure of the alloy."""
@@ -209,19 +178,19 @@ class HEA:
     def printResults(self):
 
         print(self.formula)
-        print(
-            '\n\t S_mixing\t\t= {:7.2f} [J/K mol]'.format(self.mixing_entropy))
-        print('\t H_mixing\t\t= {:7.2f} [kJ/mol]'.format(self.mixing_enthalpy))
+        print('\n\t Density\t\t= {:7.2f} [g/cm3]'.format(self.density))
         print('\t Delta\t\t\t= {:7.2f} [%]'.format(self.delta))
+        print('\t H_mixing\t\t= {:7.2f} [kJ/mol]'.format(self.mixing_enthalpy))
         print('\t VEC\t\t\t= {:7.2f}'.format(self.VEC))
-        print('\t Omega\t\t\t= {:7.3f}'.format(self.omega))
+        print('\t S_mixing\t\t= {:7.2f} [J/K mol]'.format(self.mixing_entropy))
         print('\t T_melting\t\t= {:7.3f} [K]'.format(self.melting_temperature))
-        print('\t Density\t\t=')
+        print('\t Omega\t\t\t= {:7.3f}'.format(self.omega))
         print('\t Crystal Structure\t=   {}\n'.format(self.crystalStructure))
+        print('\t Is Solid Solution\t=   {}\n'.format(self.isSolidSolution))
 
     def prettyPrint(self):
-        self._tab.add_row([self.formula, "TODO", self.delta, self.mixing_enthalpy,
-                           self.mixing_entropy, self.VEC, self.melting_temperature, self.crystalStructure])
+        self._tab.add_row([self.formula, round(self.density, 2), round(self.delta, 2), round(self.mixing_enthalpy, 2),
+                           round(self.mixing_entropy, 2), round(self.VEC, 2), round(self.melting_temperature, 2), self.crystalStructure, self.isSolidSolution])
 
     def table(self):
         print(self._tab)
