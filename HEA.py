@@ -160,8 +160,6 @@ class HEA:
 
     def density(self):
         """Return the approximate density of the alloy."""
-        # element(x).density for x in self._alloy.keys()
-        # (at% * at.wt) of x / (at% * at.wt) of all
 
         return 100 / sum(element(elm).density / (ws * 100) for elm, ws in mass_fractions(self._alloy).items())
 
