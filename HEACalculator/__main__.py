@@ -15,9 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from HEACalculator.core.HEA import HEACalculator
+import typer
 
-__author__ = 'Doguhan Sariturk'
-__email__ = 'dogu.sariturk@gmail.com'
+from HEACalculator.cli import app as cli_app
+from HEACalculator.gui import app as gui_app
 
-__all__ = ['HEACalculator']
+app = typer.Typer(add_completion=False, no_args_is_help=True)
+app.add_typer(gui_app,
+              name='gui',
+              help='Starts the HEACalculator Graphical User Interface (GUI)')
+app.add_typer(cli_app,
+              name='search',
+              help='Parameter search commands',
+              no_args_is_help=True)
+
+
+@app.callback(no_args_is_help=True,
+              context_settings={'help_option_names': ["-h", "--help"]})
+def main():
+    """A tool for calculating High-Entropy Alloy (HEA) specific parameters and solid-solution predictions"""
+
+
+if __name__ == '__main__':
+    app()

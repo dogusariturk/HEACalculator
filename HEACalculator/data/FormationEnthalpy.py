@@ -12,9 +12,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # You should have received a copy of the GNU General Public License
-
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = 'Doguhan Sariturk'
 __email__ = 'dogu.sariturk@gmail.com'
@@ -129,13 +128,9 @@ _formation_enthalpy_data = {('Al', 'Mg'): -33.0, ('Mg', 'Sc'): 2.0, ('Mg', 'Ti')
                             ('Au', 'Re'): 166.0, ('Ir', 'Os'): -8.0, ('Os', 'Pt'): 22.0, ('Au', 'Os'): 232.0,
                             ('Ir', 'Pt'): 11.0, ('Au', 'Ir'): 154.0, ('Au', 'Pt'): 8.0}
 
-formation_enthalpy_data_elements = ['Mg', 'Al', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn',
-                                    'Y', 'Zr', 'Nb', 'Mo', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'La', 'Hf', 'Ta',
-                                    'W', 'Re', 'Os', 'Ir', 'Pt', 'Au']
-
 
 def FormationEnthalpy(pair=None):
-    """Function to return the Pair Formation Enthalpy of a element-pair
+    """Function to return the Pair Formation Enthalpy of a element-pair in meV/atom
 
     Parameters
     ----------
@@ -145,18 +140,25 @@ def FormationEnthalpy(pair=None):
     Returns
     -------
     float or str
-        The Pair Formation Enthalpy, if the pair exists in the database, 'NaN' otherwise.
+        The Pair Formation Enthalpy in meV/atom, if the pair exists in the database, 'NaN' otherwise
 
+    Raises
+    ------
+    SyntaxError
+        If the input parameter is missing or not an instance of a tuple or a list
+
+    KeyError
+        If the requested pair does not exist in the database
 
     References
     ----------
-    M.C. Troparevsky, J.R. Morris, P.R.C. Kent, A.R. Lupini, G.M. Stocks, Phys. Rev. X 5 (1) (2015) 011041.
+    M.C. Troparevsky, J.R. Morris, P.R.C. Kent, A.R. Lupini, G.M. Stocks, Phys. Rev. X 5 (1) (2015) 011041
     """
-    _pair = tuple(sorted(pair))
+    if pair is None or not isinstance(pair, (tuple, list)):
+        raise SyntaxError("Usage: FormationEnthalpy(('X', 'Y')) where X and Y are element names.")
 
-    if _pair is None:
-        print("Usage: FormationEnthalpy(('X1', 'X2')) where X1 and X2 are element names.")
-    elif _pair in _formation_enthalpy_data.keys():
-        return _formation_enthalpy_data[_pair]
-    else:
-        return "NaN"
+    _pair = tuple(sorted(pair))
+    if _pair not in _formation_enthalpy_data:
+        raise KeyError('The requested pair does not exist in the formation enthalpy database.')
+
+    return _formation_enthalpy_data[_pair]

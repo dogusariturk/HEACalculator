@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_HEACalculator(object):
     def setupUi(self, HEACalculator):
         HEACalculator.setObjectName("HEACalculator")
@@ -52,24 +51,24 @@ class Ui_HEACalculator(object):
         font.setWeight(75)
         self.lblTitle.setFont(font)
         self.lblTitle.setStyleSheet("color: rgb(240, 235, 216);\n"
-"border: 0px solid;")
+                                    "border: 0px solid;")
         self.lblTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.lblTitle.setObjectName("lblTitle")
         self.verticalLayout_2.addWidget(self.lblTitle)
         self.horizontalLayout.addWidget(self.toggle_f)
         self.title_f = QtWidgets.QFrame(self.TopBar)
         self.title_f.setStyleSheet("QPushButton {\n"
-"    color: #F0EBD8;\n"
-"    border: 0px solid;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3E5C76\n"
-"}\n"
-"\n"
-"QPushButton:pressed {    \n"
-"    background-color: #748CAB;\n"
-"}")
+                                   "    color: #F0EBD8;\n"
+                                   "    border: 0px solid;\n"
+                                   "}\n"
+                                   "\n"
+                                   "QPushButton:hover {\n"
+                                   "    background-color: #3E5C76\n"
+                                   "}\n"
+                                   "\n"
+                                   "QPushButton:pressed {    \n"
+                                   "    background-color: #748CAB;\n"
+                                   "}")
         self.title_f.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.title_f.setFrameShadow(QtWidgets.QFrame.Raised)
         self.title_f.setObjectName("title_f")
@@ -85,9 +84,9 @@ class Ui_HEACalculator(object):
         self.frame_2 = QtWidgets.QFrame(self.title_f)
         self.frame_2.setMaximumSize(QtCore.QSize(40, 16777215))
         self.frame_2.setStyleSheet("QPushButton {\n"
-"    border: 0px solid;\n"
-"    color: #F0EBD8\n"
-"}")
+                                   "    border: 0px solid;\n"
+                                   "    color: #F0EBD8\n"
+                                   "}")
         self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -120,21 +119,21 @@ class Ui_HEACalculator(object):
         self.menu_f.setMinimumSize(QtCore.QSize(125, 0))
         self.menu_f.setMaximumSize(QtCore.QSize(125, 16777215))
         self.menu_f.setStyleSheet("QFrame {\n"
-"background-color: rgb(29, 45, 68);\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"    background-color: rgb(29, 45, 68);\n"
-"    border: 0px solid;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #748CAB\n"
-"}\n"
-"\n"
-"QPushButton:pressed {    \n"
-"    background-color: #748CAB;\n"
-"}")
+                                  "background-color: rgb(29, 45, 68);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton {\n"
+                                  "    background-color: rgb(29, 45, 68);\n"
+                                  "    border: 0px solid;\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:hover {\n"
+                                  "    background-color: #748CAB\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed {    \n"
+                                  "    background-color: #748CAB;\n"
+                                  "}")
         self.menu_f.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.menu_f.setFrameShadow(QtWidgets.QFrame.Raised)
         self.menu_f.setObjectName("menu_f")
@@ -144,17 +143,17 @@ class Ui_HEACalculator(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.menu_top_f = QtWidgets.QFrame(self.menu_f)
         self.menu_top_f.setStyleSheet("QPushButton {\n"
-"    color: #F0EBD8;\n"
-"    border: 0px solid;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3E5C76\n"
-"}\n"
-"\n"
-"QPushButton:pressed {    \n"
-"    background-color: #748CAB;\n"
-"}")
+                                      "    color: #F0EBD8;\n"
+                                      "    border: 0px solid;\n"
+                                      "}\n"
+                                      "\n"
+                                      "QPushButton:hover {\n"
+                                      "    background-color: #3E5C76\n"
+                                      "}\n"
+                                      "\n"
+                                      "QPushButton:pressed {    \n"
+                                      "    background-color: #748CAB;\n"
+                                      "}")
         self.menu_top_f.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.menu_top_f.setFrameShadow(QtWidgets.QFrame.Raised)
         self.menu_top_f.setObjectName("menu_top_f")
@@ -168,32 +167,32 @@ class Ui_HEACalculator(object):
         self.btnParameters.setStyleSheet("")
         self.btnParameters.setObjectName("btnParameters")
         self.verticalLayout_4.addWidget(self.btnParameters)
-        self.btnConverter = QtWidgets.QPushButton(self.menu_top_f)
-        self.btnConverter.setMinimumSize(QtCore.QSize(0, 45))
-        self.btnConverter.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.btnConverter.setStyleSheet("")
-        self.btnConverter.setObjectName("btnConverter")
-        self.verticalLayout_4.addWidget(self.btnConverter)
-        self.btnBatchAmount = QtWidgets.QPushButton(self.menu_top_f)
-        self.btnBatchAmount.setMinimumSize(QtCore.QSize(0, 45))
-        self.btnBatchAmount.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.btnBatchAmount.setStyleSheet("")
-        self.btnBatchAmount.setObjectName("btnBatchAmount")
-        self.verticalLayout_4.addWidget(self.btnBatchAmount)
+        # self.btnConverter = QtWidgets.QPushButton(self.menu_top_f)
+        # self.btnConverter.setMinimumSize(QtCore.QSize(0, 45))
+        # self.btnConverter.setFocusPolicy(QtCore.Qt.NoFocus)
+        # self.btnConverter.setStyleSheet("")
+        # self.btnConverter.setObjectName("btnConverter")
+        # self.verticalLayout_4.addWidget(self.btnConverter)
+        # self.btnBatchAmount = QtWidgets.QPushButton(self.menu_top_f)
+        # self.btnBatchAmount.setMinimumSize(QtCore.QSize(0, 45))
+        # self.btnBatchAmount.setFocusPolicy(QtCore.Qt.NoFocus)
+        # self.btnBatchAmount.setStyleSheet("")
+        # self.btnBatchAmount.setObjectName("btnBatchAmount")
+        # self.verticalLayout_4.addWidget(self.btnBatchAmount)
         self.verticalLayout_3.addWidget(self.menu_top_f, 0, QtCore.Qt.AlignTop)
         self.menu_down_f = QtWidgets.QFrame(self.menu_f)
         self.menu_down_f.setStyleSheet("QPushButton {\n"
-"    color: #F0EBD8;\n"
-"    border: 0px solid;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3E5C76\n"
-"}\n"
-"\n"
-"QPushButton:pressed {    \n"
-"    background-color: #748CAB;\n"
-"}")
+                                       "    color: #F0EBD8;\n"
+                                       "    border: 0px solid;\n"
+                                       "}\n"
+                                       "\n"
+                                       "QPushButton:hover {\n"
+                                       "    background-color: #3E5C76\n"
+                                       "}\n"
+                                       "\n"
+                                       "QPushButton:pressed {    \n"
+                                       "    background-color: #748CAB;\n"
+                                       "}")
         self.menu_down_f.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.menu_down_f.setFrameShadow(QtWidgets.QFrame.Raised)
         self.menu_down_f.setObjectName("menu_down_f")
@@ -227,8 +226,10 @@ class Ui_HEACalculator(object):
         self.retranslateUi(HEACalculator)
         self.stackedWidget.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(HEACalculator)
-        HEACalculator.setTabOrder(self.btnParameters, self.btnBatchAmount)
-        HEACalculator.setTabOrder(self.btnBatchAmount, self.btnMDL)
+        # HEACalculator.setTabOrder(self.btnParameters, self.btnBatchAmount)
+        # HEACalculator.setTabOrder(self.btnBatchAmount, self.btnMDL)
+        # HEACalculator.setTabOrder(self.btnMDL, self.btnClose)
+        HEACalculator.setTabOrder(self.btnParameters, self.btnMDL)
         HEACalculator.setTabOrder(self.btnMDL, self.btnClose)
 
     def retranslateUi(self, HEACalculator):
@@ -236,10 +237,12 @@ class Ui_HEACalculator(object):
         HEACalculator.setWindowTitle(_translate("HEACalculator", "HEACalculator | MDL"))
         self.lblTitle.setText(_translate("HEACalculator", "HEACalculator"))
         self.btnParameters.setText(_translate("HEACalculator", "HEA\n"
-"Parameters"))
-        self.btnConverter.setText(_translate("HEACalculator", "At% - Wt% - Vol%\n"
-"Converter"))
-        self.btnBatchAmount.setText(_translate("HEACalculator", "Batch Amount\n"
-"Calculator"))
+                                                               "Parameters"))
+        #         self.btnConverter.setText(_translate("HEACalculator", "At% - Wt% - Vol%\n"
+        # "Converter"))
+        #         self.btnBatchAmount.setText(_translate("HEACalculator", "Batch Amount\n"
+        # "Calculator"))
         self.btnMDL.setText(_translate("HEACalculator", "MDL"))
-import HEACalculator_rc
+
+
+from HEACalculator.ui import HEACalculator_rc

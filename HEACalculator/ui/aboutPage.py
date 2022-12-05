@@ -29,4 +29,6 @@ class Ui_AboutPage(object):
     def retranslateUi(self, AboutPage):
         _translate = QtCore.QCoreApplication.translate
         AboutPage.setWindowTitle(_translate("AboutPage", "Form"))
-import HEACalculator_rc
+
+
+from HEACalculator.ui import HEACalculator_rc

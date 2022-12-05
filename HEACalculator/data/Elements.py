@@ -12,8 +12,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = 'Doguhan Sariturk'
 __email__ = 'dogu.sariturk@gmail.com'
@@ -967,7 +967,7 @@ _element_data = {
 
 
 class _Element:
-    """Element class for storing element properties.
+    """Helper class for storing element properties
 
     Attributes
     ----------
@@ -993,7 +993,14 @@ class _Element:
     .. [radius] John C Slater. Atomic Radii in Crystals. The Journal of Chemical Physics, 41(10):3199, 1964. URL: http://scitation.aip.org/content/aip/journal/jcp/41/10/10.1063/1.1725697, doi:10.1063/1.1725697.
     """
 
-    def __init__(self, symbol, melting_point, atomic_number, atomic_volume, atomic_weight, atomic_radius, nvalence):
+    def __init__(self,
+                 symbol,
+                 melting_point,
+                 atomic_number,
+                 atomic_volume,
+                 atomic_weight,
+                 atomic_radius,
+                 nvalence):
         self.symbol = symbol
         self.melting_point = melting_point
         self.atomic_number = atomic_number
@@ -1002,27 +1009,25 @@ class _Element:
         self.atomic_radius = atomic_radius
         self.nvalence = nvalence
 
-    def __getattribute__(self, symbol):
-        try:
-            return super(_Element, self).__getattribute__(symbol)
-        except AttributeError:
-            print(f"Object has no attribute '{symbol}'")
-
-    def __getitem__(self, key):
-        return self.__dict__.get(key)
-
-    def __repr__(self):
-        return f'\n{self.symbol}\n'\
-               f'\tMelting point: {self.melting_point} K\n'\
-               f'\tAtomic number: {self.atomic_number}\n'\
-               f'\tAtomic volume: {self.atomic_volume} cm^3/mol\n'\
-               f'\tAtomic weight: {self.atomic_weight}\n'\
-               f'\tAtomic radius: {self.atomic_radius} pm\n'\
+    def __str__(self):
+        return f'\n{self.symbol}\n' \
+               f'\tMelting point: {self.melting_point} K\n' \
+               f'\tAtomic number: {self.atomic_number}\n' \
+               f'\tAtomic volume: {self.atomic_volume} cm^3/mol\n' \
+               f'\tAtomic weight: {self.atomic_weight}\n' \
+               f'\tAtomic radius: {self.atomic_radius} pm\n' \
                f'\tValence electrons: {self.nvalence}\n'
 
 
-_elements = {x: _Element(x, _element_data[x]['melting_point'], _element_data[x]['atomic_number'], _element_data[x]['atomic_volume'],
-                         _element_data[x]['atomic_weight'], _element_data[x]['atomic_radius'], _element_data[x]['nvalence']) for x in _element_data}
+_elements = {element_name: _Element(symbol=element_name,
+                                    melting_point=properties['melting_point'],
+                                    atomic_number=properties['atomic_number'],
+                                    atomic_volume=properties['atomic_volume'],
+                                    atomic_weight=properties['atomic_weight'],
+                                    atomic_radius=properties['atomic_radius'],
+                                    nvalence=properties['nvalence'])
+             for element_name, properties in _element_data.items()}
+
 globals().update(_elements)
 
 __all__ = list(_elements.keys())

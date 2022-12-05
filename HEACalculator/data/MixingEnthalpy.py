@@ -12,9 +12,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # You should have received a copy of the GNU General Public License
-
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = 'Doguhan Sariturk'
 __email__ = 'dogu.sariturk@gmail.com'
@@ -548,7 +547,7 @@ _mixing_data = {
 
 
 def MixingEnthalpy(pair=None):
-    """Function to return the Pair Mixing Enthalpy of a element-pair
+    """Function to return the Pair Mixing Enthalpy of a element-pair in kJ/mol
 
     Parameters
     ----------
@@ -558,16 +557,25 @@ def MixingEnthalpy(pair=None):
     Returns
     -------
     float or str
-        The Pair Mixing Enthalpy, if the pair exists in the database, 'NaN' otherwise.
+        The Pair Mixing Enthalpy in kJ/mol, if the pair exists in the database, 'NaN' otherwise
+
+    Raises
+    ------
+    SyntaxError
+        If the input parameter is missing or not an instance of a tuple or a list
+
+    KeyError
+        If the requested pair does not exist in the database
 
     References
     ----------
     F. R. Boer and D. G. Perrifor: Cohesion in Metals, (Elsevier Science Publishers B.V., Netherlands, 1988)
     """
+    if pair is None or not isinstance(pair, (tuple, list)):
+        raise SyntaxError("Usage: Mixing(('X', 'Y')) where X and Y are element names.")
+
     _pair = tuple(sorted(pair))
-    if _pair is None:
-        print("Usage: Mixing(('X1', 'X2')) where X1 and X2 are element names.")
-    elif _pair in _mixing_data.keys():
-        return _mixing_data[_pair]
-    else:
-        return "NaN"
+    if _pair not in _mixing_data:
+        raise KeyError('The requested pair does not exist in the mixing enthalpy database.')
+
+    return _mixing_data[_pair]

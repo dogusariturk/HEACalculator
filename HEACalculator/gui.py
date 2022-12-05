@@ -12,10 +12,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import csv
+import os
 import sys
+
+import typer
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -24,11 +28,13 @@ from PyQt5.QtWidgets import QMessageBox
 
 from HEACalculator.ui.HEACalculatorMain import Ui_HEACalculator
 from HEACalculator.ui.parametersPage import Ui_ParametersPage
-from HEACalculator.ui.batchCalculationsPage import Ui_BatchCalculationsPage
+# from HEACalculator.ui.batchCalculationsPage import Ui_BatchCalculationsPage
 from HEACalculator.ui.aboutPage import Ui_AboutPage
-from HEACalculator.ui.converterPage import Ui_ConverterPage
+# from HEACalculator.ui.converterPage import Ui_ConverterPage
 
 from HEACalculator.core.HEA import HEACalculator, __version__
+
+app = typer.Typer()
 
 
 class AlignDelegate(QtWidgets.QStyledItemDelegate):
@@ -45,12 +51,12 @@ class ItemDelegate(QtWidgets.QStyledItemDelegate):
         return lineEdt
 
 
-class ConverterPage(QtWidgets.QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.aboutPage = Ui_ConverterPage()
-        self.aboutPage.setupUi(self)
+# class ConverterPage(QtWidgets.QWidget):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#
+#         self.aboutPage = Ui_ConverterPage()
+#         self.aboutPage.setupUi(self)
 
 
 class AboutPage(QtWidgets.QWidget):
@@ -61,16 +67,15 @@ class AboutPage(QtWidgets.QWidget):
         self.aboutPage.setupUi(self)
 
 
-class BatchCalculationsPage(QtWidgets.QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.batchCalculationsPage = Ui_BatchCalculationsPage()
-        self.batchCalculationsPage.setupUi(self)
+# class BatchCalculationsPage(QtWidgets.QWidget):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#
+#         self.batchCalculationsPage = Ui_BatchCalculationsPage()
+#         self.batchCalculationsPage.setupUi(self)
 
 
 class ParametersPage(QtWidgets.QWidget):
-
     elementEmitted = QtCore.pyqtSignal(str, bool)
 
     def __init__(self, *args, **kwargs):
@@ -88,6 +93,7 @@ class ParametersPage(QtWidgets.QWidget):
 
         self.parametersPage.ClearAllPushButton.setEnabled(False)
         self.parametersPage.CalculatePushButton.setEnabled(False)
+        self.parametersPage.SavePushButton.setEnabled(False)
 
         for name in dir(self.parametersPage):
             if 'ebtn' in name:
@@ -98,6 +104,7 @@ class ParametersPage(QtWidgets.QWidget):
         self.parametersPage.tableWidget.cellChanged.connect(self.handleAmountChanged)
         self.parametersPage.ClearAllPushButton.pressed.connect(self.handleClearAllButton)
         self.parametersPage.CalculatePushButton.pressed.connect(self.handleCalculateButton)
+        self.parametersPage.SavePushButton.clicked.connect(self.handleSaveButton)
 
     def calculate(self, formula):
         if not self.parametersPage.resultsTreeWidget.findItems(formula, QtCore.Qt.MatchExactly):
@@ -105,9 +112,10 @@ class ParametersPage(QtWidgets.QWidget):
             res.calculate()
             resList = res.get_list()
             QtWidgets.QTreeWidgetItem(self.parametersPage.resultsTreeWidget, resList)
+            self.parametersPage.SavePushButton.setEnabled(True)
 
     def handleCalculateButton(self):
-        formula = ''.join(['%s%d' % (k, v) for k, v in self.selectedElements.items()])
+        formula = ''.join(['%s%d' % (k, v) for k, v in dict(sorted(self.selectedElements.items())).items()])
         self.calculate(formula)
 
     def handleClearAllButton(self):
@@ -120,6 +128,22 @@ class ParametersPage(QtWidgets.QWidget):
                 btn.setChecked(False)
         self.parametersPage.ClearAllPushButton.setEnabled(False)
         self.parametersPage.CalculatePushButton.setEnabled(False)
+        self.parametersPage.SavePushButton.setEnabled(False)
+
+    def handleSaveButton(self):
+        path, ok = QtWidgets.QFileDialog.getSaveFileName(
+                self, 'Save CSV', os.getenv('HOME'), 'CSV(*.csv)')
+        if ok:
+            columns = range(self.parametersPage.resultsTreeWidget.columnCount())
+            header = [self.parametersPage.resultsTreeWidget.headerItem().text(column)
+                      for column in columns]
+            with open(path, 'w') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow(header)
+                for row in range(self.parametersPage.resultsTreeWidget.topLevelItemCount()):
+                    writer.writerow(
+                            self.parametersPage.resultsTreeWidget.topLevelItem(row).text(column)
+                            for column in columns)
 
     def handleElementClicked(self, symbol, checked):
         currentRowCount = self.parametersPage.tableWidget.rowCount()
@@ -127,7 +151,7 @@ class ParametersPage(QtWidgets.QWidget):
         if checked and (symbol not in self.selectedElements):
             self.parametersPage.ClearAllPushButton.setEnabled(True)
             self.parametersPage.CalculatePushButton.setEnabled(True)
-            percentage = 100/(len(self.selectedElements) + 1) if len(self.selectedElements) + 1 != 1 else 100
+            percentage = 100 / (len(self.selectedElements) + 1) if len(self.selectedElements) + 1 != 1 else 100
             self.selectedElements = {k: percentage for k, v in self.selectedElements.items()}
             self.selectedElements.update({symbol: float(percentage)})
             self.parametersPage.tableWidget.insertRow(currentRowCount)
@@ -135,7 +159,7 @@ class ParametersPage(QtWidgets.QWidget):
             elmItem.setFlags(QtCore.Qt.ItemIsEnabled)
             elmItem.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
             self.parametersPage.tableWidget.setItem(currentRowCount, 0, elmItem)
-            amount = "{:.2f}".format(percentage)
+            amount = '{:.2f}'.format(percentage)
             amountItem = QtWidgets.QTableWidgetItem(amount)
             amountItem.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
             self.parametersPage.tableWidget.setItem(currentRowCount, 1, amountItem)
@@ -148,12 +172,13 @@ class ParametersPage(QtWidgets.QWidget):
             del self.selectedElements[symbol]
             percentage = 100 / (len(self.selectedElements)) if len(self.selectedElements) != 0 else 100
             self.selectedElements = {k: float(percentage) for k, v in self.selectedElements.items()}
-            amount = "{:.2f}".format(percentage)
+            amount = '{:.2f}'.format(percentage)
             for row in range(self.parametersPage.tableWidget.rowCount()):
                 self.parametersPage.tableWidget.item(row, 1).setText(amount)
             if not self.selectedElements:
                 self.parametersPage.ClearAllPushButton.setEnabled(False)
                 self.parametersPage.CalculatePushButton.setEnabled(False)
+                self.parametersPage.SavePushButton.setEnabled(False)
 
     def handleAmountChanged(self, row, column):
         if column != 0:
@@ -168,7 +193,6 @@ class ParametersPage(QtWidgets.QWidget):
 
 
 class HEACalculatorMainWindow(QtWidgets.QMainWindow):
-
     BTN_BACKGROUND_COLOR_HIGHLIGHTED = """QPushButton{background-color: #3E5C76}
                                           QPushButton:hover{background-color: #3E5C76}
                                           QPushButton:pressed{background-color: #748CAB;}"""
@@ -183,70 +207,70 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_HEACalculator()
         self.ui.setupUi(self)
 
-        self.setWindowTitle("HEACalculator | MDL")
+        self.setWindowTitle('HEACalculator | MDL')
 
         self.oldPos = self.pos()
 
         self.parametersPage = ParametersPage()
         self.aboutPage = AboutPage()
-        self.batchCalculationsPage = BatchCalculationsPage()
-        self.converterPage = ConverterPage()
+        # self.batchCalculationsPage = BatchCalculationsPage()
+        # self.converterPage = ConverterPage()
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
         self.ui.stackedWidget.addWidget(self.parametersPage)
-        self.ui.stackedWidget.addWidget(self.converterPage)
-        self.ui.stackedWidget.addWidget(self.batchCalculationsPage)
+        # self.ui.stackedWidget.addWidget(self.converterPage)
+        # self.ui.stackedWidget.addWidget(self.batchCalculationsPage)
         self.ui.stackedWidget.addWidget(self.aboutPage)
 
-        self.ui.btnParameters.setStyleSheet("QPushButton{background-color: #3E5C76}")
+        self.ui.btnParameters.setStyleSheet('QPushButton{background-color: #3E5C76}')
 
         self.ui.btnParameters.clicked.connect(self.btn_parameters_clicked)
-        self.ui.btnConverter.clicked.connect(self.btn_converter_clicked)
-        self.ui.btnBatchAmount.clicked.connect(self.btn_batch_amount_clicked)
+        # self.ui.btnConverter.clicked.connect(self.btn_converter_clicked)
+        # self.ui.btnBatchAmount.clicked.connect(self.btn_batch_amount_clicked)
         self.ui.btnMDL.clicked.connect(self.helpAbout)
         self.ui.btnClose.clicked.connect(self.close)
 
     def btn_parameters_clicked(self):
         self.ui.stackedWidget.setCurrentWidget(self.parametersPage)
         self.ui.btnParameters.setStyleSheet(self.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
-        self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+        # self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+        # self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
         self.ui.btnMDL.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
 
-    def btn_converter_clicked(self):
-        self.ui.stackedWidget.setCurrentWidget(self.converterPage)
-        self.ui.btnParameters.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
-        self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnMDL.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-
-    def btn_batch_amount_clicked(self):
-        self.ui.stackedWidget.setCurrentWidget(self.batchCalculationsPage)
-        self.ui.btnParameters.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
-        self.ui.btnMDL.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+    # def btn_converter_clicked(self):
+    #     self.ui.stackedWidget.setCurrentWidget(self.converterPage)
+    #     self.ui.btnParameters.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+    #     self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
+    #     self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+    #     self.ui.btnMDL.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+    #
+    # def btn_batch_amount_clicked(self):
+    #     self.ui.stackedWidget.setCurrentWidget(self.batchCalculationsPage)
+    #     self.ui.btnParameters.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+    #     self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+    #     self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
+    #     self.ui.btnMDL.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
 
     def btn_mdl_clicked(self):
         self.ui.stackedWidget.setCurrentWidget(self.aboutPage)
         self.ui.btnParameters.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
-        self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+        # self.ui.btnConverter.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
+        # self.ui.btnBatchAmount.setStyleSheet(self.BTN_BACKGROUND_COLOR_DEFAULT)
         self.ui.btnMDL.setStyleSheet(self.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
 
     @staticmethod
     def helpAbout():
         __ABOUT_TEXT = """<b>HEA Calculator v {}
-    <p>Copyright &copy; 2020 MDL (METU).
+    <p>Copyright &copy; 2022 MDL (METU).
     <p>This application can be used to perform calculations on
     thermodynamic parameters of high-entropy alloys."""
 
         __ABOUT_BOX = QMessageBox()
-        __ABOUT_BOX.setIconPixmap(QtGui.QPixmap(":/img/images/ic1.png"))
+        __ABOUT_BOX.setIconPixmap(QtGui.QPixmap(':/img/images/ic1.png'))
         __ABOUT_BOX.setText(__ABOUT_TEXT.format(__version__))
-        __ABOUT_BOX.setWindowTitle("About | HEA Calculator | MDL")
+        __ABOUT_BOX.setWindowTitle('About | HEA Calculator | MDL')
         __ABOUT_BOX.exec_()
 
     def mousePressEvent(self, event):
@@ -258,9 +282,10 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
         self.oldPos = event.globalPos()
 
 
+@app.callback(invoke_without_command=True)
 def run():
     application = QtWidgets.QApplication([])
-    application.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(":/icons/images/icon.ico")))
+    application.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(':/icons/images/icon.ico')))
     window = HEACalculatorMainWindow()
     desktop = QtWidgets.QDesktopWidget().availableGeometry()
     width = (desktop.width() - window.width()) / 2
@@ -270,5 +295,5 @@ def run():
     sys.exit(application.exec_())
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     run()

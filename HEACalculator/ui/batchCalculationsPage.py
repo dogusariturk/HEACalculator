@@ -29,4 +29,6 @@ class Ui_BatchCalculationsPage(object):
     def retranslateUi(self, BatchCalculationsPage):
         _translate = QtCore.QCoreApplication.translate
         BatchCalculationsPage.setWindowTitle(_translate("BatchCalculationsPage", "Form"))
-import HEACalculator_rc
+
+
+from HEACalculator.ui import HEACalculator_rc
