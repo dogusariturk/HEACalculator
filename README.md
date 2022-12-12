@@ -6,14 +6,14 @@
 <h3 align="center">HEACalculator</h3>
 
   <p align="center">
-    *HEACalculator* is a Python tool for calculating phenomenological parameters based on thermodynamics and physics in order to predict the formation of solid solutions in High Entropy Alloys (HEAs)
+    HEACalculator is a Python tool for calculating phenomenological parameters based on thermodynamics and physics in order to predict the formation of solid solutions in High Entropy Alloys (HEAs)
     <br />
     <img width="1171" src="https://user-images.githubusercontent.com/46679086/205514727-a6637cda-f727-430f-af8c-463350763818.png">
   </p>
 </div>
 
 <div align="center">
-<a href="https://doi.org/10.5281/zenodo.3590319"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3590319.svg" alt="DOI"></a>
+<a href="https://doi.org/10.5281/zenodo.3590318"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3590318.svg" alt="DOI"></a>
 <img src="https://img.shields.io/github/license/dogusariturk/HEACalculator" alt="LICENSE">
 <img alt="GitHub release" src="https://img.shields.io/github/v/release/dogusariturk/HEACalculator?include_prereleases">
 </div>
@@ -104,11 +104,11 @@ Currently, *HEACalculator* supports two different calculation methods.
 
 ![HEACalculator_SearchSingle](https://user-images.githubusercontent.com/46679086/205514947-ca25fb25-c726-4de9-a79b-1cccf354b4e3.png)
 
-- `HEACalculator search range` calculates all parameters/predictions for a given composition range of a given set of elements and exports results to the stdout (i.e., terminal) by default.
+- `HEACalculator search range` calculates all parameters/predictions for a given composition range of a given set of elements and exports results to the stdout (i.e., terminal) by default
 
 ![HEACalculator_SearchRange](https://user-images.githubusercontent.com/46679086/205514952-95dcb909-2147-4fcf-91df-4e0d1a1321dc.png)
 
-- `--csv` flag can be used with `HEACalculator search range` command to make Range Search function to export the results in CSV format to the stdout or redirected to a file using the `>` operator.
+- `--csv` flag can be used with `HEACalculator search range` command to make Range Search function to export the results in CSV format to the stdout or redirected to a file using the `>` operator
 
 ### Graphical User Interface
 
