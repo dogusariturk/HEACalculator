@@ -27,7 +27,7 @@ from HEACalculator.data.MixingEnthalpy import MixingEnthalpy
 
 __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
-__version__ = "1.3.0"
+__version__ = "1.3.1"
 
 GAS_CONSTANT = 8.314462618
 J_PER_MOL_TO_EV_PER_ATOM = 0.0103642688 / 1000
@@ -119,7 +119,7 @@ class HEACalculator:
     .. [11] D.J.M. King, S.C. Middleburgh, A.G. McGregor, M.B. Cortie, Acta Mater. 104 (2016) 172–179.
     """
 
-    def __init__(self, formula):
+    def __init__(self, formula, csv=False):
         self.formula = formula
 
         self._alloy = nested_formula_parser(self.formula)
@@ -156,7 +156,8 @@ class HEACalculator:
         self.model_7 = None
         self.model_8 = 'Not Implemented Yet'
 
-        self.calculate()
+        if not csv:
+            self.calculate()
 
     def calculate(self):
         """This method calculates phenomenological parameters based on thermodynamics and physics
@@ -648,6 +649,29 @@ class HEACalculator:
                 self.model_8,
         ]:
             return_list.append(item)
+        return return_list
+
+    def get_csv_list(self):
+        """Returns a list of specific properties of the alloy
+
+        Returns
+        -------
+        list
+            All the calculated properties of the alloy
+        """
+        return_list = [self.formula]
+        for item in [
+                self.get_density(),
+                self.get_atomic_size_difference(),
+                self.get_omega(),
+                self.get_gamma(),
+                self.get_lambda(),
+                self.get_valance_electron_concentration(),
+                self.get_mixing_enthalpy(),
+                self.get_mixing_entropy(),
+                self.get_melting_temperature(),
+        ]:
+            return_list.append("%.2f" % item)
         return return_list
 
     def __str__(self):

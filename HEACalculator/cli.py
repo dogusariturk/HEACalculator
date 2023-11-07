@@ -18,6 +18,7 @@
 from itertools import combinations_with_replacement, permutations
 
 import numpy as np
+import pandas as pd
 import typer
 
 from HEACalculator import HEACalculator
@@ -25,6 +26,23 @@ from HEACalculator.core.helpers import nested_formula_parser
 
 app = typer.Typer()
 
+@app.command(name='csv')
+def csv_search(csv_file: str = typer.Argument(...)):
+    """Calculates HEA parameters from the composition column of the given CSV file"""
+
+    HEADER = ['Formula',
+              'Density',
+              'Delta',
+              'Omega',
+              'VEC',
+              'Mixing Enthalpy',
+              'Mixing Entropy',
+              'Melting Temperature',]
+
+    print(', '.join(HEADER))
+    df = pd.read_csv(csv_file, usecols = lambda x : x.lower() in ['composition'])
+    for alloy in df['composition']:
+        print(', '.join(HEACalculator(alloy, csv=True).get_csv_list()))
 
 @app.command(no_args_is_help=True, name='single')
 def single_search(alloy: str = typer.Argument(...)):
