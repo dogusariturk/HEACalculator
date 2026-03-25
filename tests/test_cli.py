@@ -2,7 +2,7 @@
 
 Uses ``typer.testing.CliRunner`` to invoke the ``single``, ``range``, and
 ``csv`` commands and the ``find_all_comps`` helper without spawning a
-subprocess, so no PyQt5 installation is required.
+subprocess, so no PyQt6 installation is required.
 """
 
 import tempfile

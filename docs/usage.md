@@ -103,13 +103,13 @@ HEACalculator search csv alloys.csv
 
 ### `gui` - Graphical User Interface
 
-Launch the PyQt5 desktop application:
+Launch the PyQt6 desktop application:
 
 ```bash
 HEACalculator gui
 ```
 
-> **Note:** Requires `PyQt5`. Install with `pip install "HEACalculator[gui]"`.
+> **Note:** Requires `PyQt6`. Install with `pip install "HEACalculator[gui]"`.
 
 ![HEACalculator GUI](https://user-images.githubusercontent.com/46679086/205514915-e4ce2dbf-4636-4639-b978-3a018183ba82.png)
 

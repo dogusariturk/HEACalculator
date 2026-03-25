@@ -20,7 +20,7 @@
 
 `HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics in order to predict the formation of solid solutions in High Entropy Alloys (HEAs).
 
-It exposes both a **command-line interface** (CLI) powered by [Typer](https://typer.tiangolo.com/) and a **graphical user interface** (GUI) built with [PyQt5](https://riverbankcomputing.com/software/pyqt/), sharing the same calculation core.
+It exposes both a **command-line interface** (CLI) powered by [Typer](https://typer.tiangolo.com/) and a **graphical user interface** (GUI) built with [PyQt6](https://riverbankcomputing.com/software/pyqt/), sharing the same calculation core.
 
 ---
 
