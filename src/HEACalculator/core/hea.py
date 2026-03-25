@@ -8,7 +8,7 @@ from HEACalculator.core.thermodynamics import HEAThermodynamics
 
 __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
-__version__ = "1.3.1"
+__version__ = "2.0.0"
 
 
 class HEACalculator:
