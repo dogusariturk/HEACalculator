@@ -7,7 +7,7 @@ selector as the parameters page alongside start/end/step inputs, a results
 table, and CSV export controls.
 """
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_BatchCalculationsPage(object):
@@ -35,7 +35,7 @@ class Ui_BatchCalculationsPage(object):
         BatchCalculationsPage.setMaximumSize(QtCore.QSize(1000, 9999))
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         BatchCalculationsPage.setFont(font)
         BatchCalculationsPage.setStyleSheet(
             "QWidget{\n"
@@ -50,7 +50,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnHe.setGeometry(QtCore.QRect(740, 10, 29, 29))
         self.ebtnHe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnHe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnHe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnHe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnHe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -79,7 +79,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRa.setGeometry(QtCore.QRect(260, 190, 29, 29))
         self.ebtnRa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -108,7 +108,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnLu.setGeometry(QtCore.QRect(740, 230, 29, 29))
         self.ebtnLu.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnLu.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnLu.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnLu.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnLu.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -137,7 +137,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnGa.setGeometry(QtCore.QRect(590, 100, 29, 29))
         self.ebtnGa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnGa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnGa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnGa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnGa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -166,7 +166,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCa.setGeometry(QtCore.QRect(260, 100, 29, 29))
         self.ebtnCa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -195,7 +195,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAu.setGeometry(QtCore.QRect(530, 160, 29, 29))
         self.ebtnAu.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAu.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAu.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAu.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAu.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -224,7 +224,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnLa.setGeometry(QtCore.QRect(320, 230, 29, 29))
         self.ebtnLa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnLa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnLa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnLa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnLa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -253,7 +253,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnYb.setGeometry(QtCore.QRect(710, 230, 29, 29))
         self.ebtnYb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnYb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnYb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnYb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnYb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -282,7 +282,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnW.setGeometry(QtCore.QRect(380, 160, 29, 29))
         self.ebtnW.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnW.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnW.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnW.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnW.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -311,7 +311,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBk.setGeometry(QtCore.QRect(560, 260, 29, 29))
         self.ebtnBk.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnBk.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnBk.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnBk.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnBk.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -340,7 +340,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSc.setGeometry(QtCore.QRect(290, 100, 29, 29))
         self.ebtnSc.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSc.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSc.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSc.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSc.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -369,7 +369,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnNi.setGeometry(QtCore.QRect(500, 100, 29, 29))
         self.ebtnNi.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnNi.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnNi.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnNi.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnNi.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -398,7 +398,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBa.setGeometry(QtCore.QRect(260, 160, 29, 29))
         self.ebtnBa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnBa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnBa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnBa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnBa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -427,7 +427,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBh.setGeometry(QtCore.QRect(410, 190, 29, 29))
         self.ebtnBh.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnBh.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnBh.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnBh.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnBh.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -456,7 +456,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnHs.setGeometry(QtCore.QRect(440, 190, 29, 29))
         self.ebtnHs.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnHs.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnHs.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnHs.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnHs.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -485,7 +485,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnHf.setGeometry(QtCore.QRect(320, 160, 29, 29))
         self.ebtnHf.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnHf.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnHf.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnHf.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnHf.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -514,7 +514,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPr.setGeometry(QtCore.QRect(380, 230, 29, 29))
         self.ebtnPr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -543,7 +543,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnV.setGeometry(QtCore.QRect(350, 100, 29, 29))
         self.ebtnV.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnV.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnV.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnV.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnV.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -572,7 +572,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnN.setGeometry(QtCore.QRect(650, 40, 29, 29))
         self.ebtnN.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnN.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnN.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnN.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnN.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -601,7 +601,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnFr.setGeometry(QtCore.QRect(230, 190, 29, 29))
         self.ebtnFr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnFr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnFr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnFr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnFr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -630,7 +630,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnGd.setGeometry(QtCore.QRect(530, 230, 29, 29))
         self.ebtnGd.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnGd.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnGd.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnGd.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnGd.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -659,7 +659,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnO.setGeometry(QtCore.QRect(680, 40, 29, 29))
         self.ebtnO.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnO.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnO.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnO.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnO.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -688,7 +688,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPt.setGeometry(QtCore.QRect(500, 160, 29, 29))
         self.ebtnPt.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPt.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPt.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPt.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPt.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -717,7 +717,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnLi.setGeometry(QtCore.QRect(230, 40, 29, 29))
         self.ebtnLi.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnLi.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnLi.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnLi.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnLi.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -746,7 +746,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnP.setGeometry(QtCore.QRect(650, 70, 29, 29))
         self.ebtnP.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnP.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnP.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnP.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnP.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -775,7 +775,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnXe.setGeometry(QtCore.QRect(740, 130, 29, 29))
         self.ebtnXe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnXe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnXe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnXe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnXe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -804,7 +804,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPd.setGeometry(QtCore.QRect(500, 130, 29, 29))
         self.ebtnPd.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPd.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPd.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPd.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPd.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -833,7 +833,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnDb.setGeometry(QtCore.QRect(350, 190, 29, 29))
         self.ebtnDb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnDb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnDb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnDb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnDb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -862,7 +862,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRb.setGeometry(QtCore.QRect(230, 130, 29, 29))
         self.ebtnRb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -891,7 +891,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBi.setGeometry(QtCore.QRect(650, 160, 29, 29))
         self.ebtnBi.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnBi.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnBi.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnBi.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnBi.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -920,7 +920,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnIn.setGeometry(QtCore.QRect(590, 130, 29, 29))
         self.ebtnIn.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnIn.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnIn.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnIn.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnIn.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -949,7 +949,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnS.setGeometry(QtCore.QRect(680, 70, 29, 29))
         self.ebtnS.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnS.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnS.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnS.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnS.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -978,7 +978,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAnd.setGeometry(QtCore.QRect(410, 230, 29, 29))
         self.ebtnAnd.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAnd.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAnd.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAnd.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAnd.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1007,7 +1007,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnNa.setGeometry(QtCore.QRect(230, 70, 29, 29))
         self.ebtnNa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnNa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnNa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnNa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnNa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1036,7 +1036,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnIr.setGeometry(QtCore.QRect(470, 160, 29, 29))
         self.ebtnIr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnIr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnIr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnIr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnIr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1065,7 +1065,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnOs.setGeometry(QtCore.QRect(440, 160, 29, 29))
         self.ebtnOs.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnOs.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnOs.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnOs.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnOs.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1094,7 +1094,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPu.setGeometry(QtCore.QRect(470, 260, 29, 29))
         self.ebtnPu.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPu.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPu.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPu.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPu.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1123,7 +1123,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTe.setGeometry(QtCore.QRect(680, 130, 29, 29))
         self.ebtnTe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1152,7 +1152,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnEs.setGeometry(QtCore.QRect(620, 260, 29, 29))
         self.ebtnEs.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnEs.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnEs.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnEs.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnEs.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1181,7 +1181,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCe.setGeometry(QtCore.QRect(350, 230, 29, 29))
         self.ebtnCe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1210,7 +1210,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnB.setGeometry(QtCore.QRect(590, 40, 29, 29))
         self.ebtnB.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnB.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnB.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnB.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnB.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1239,7 +1239,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRe.setGeometry(QtCore.QRect(410, 160, 29, 29))
         self.ebtnRe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1268,7 +1268,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCs.setGeometry(QtCore.QRect(230, 160, 29, 29))
         self.ebtnCs.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCs.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCs.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCs.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCs.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1297,7 +1297,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCd.setGeometry(QtCore.QRect(560, 130, 29, 29))
         self.ebtnCd.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCd.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCd.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCd.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCd.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1326,7 +1326,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPb.setGeometry(QtCore.QRect(620, 160, 29, 29))
         self.ebtnPb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1355,7 +1355,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRn.setGeometry(QtCore.QRect(740, 160, 29, 29))
         self.ebtnRn.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRn.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRn.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRn.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRn.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1384,7 +1384,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnY.setGeometry(QtCore.QRect(290, 130, 29, 29))
         self.ebtnY.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnY.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnY.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnY.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnY.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1413,7 +1413,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnU.setGeometry(QtCore.QRect(410, 260, 29, 29))
         self.ebtnU.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnU.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnU.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnU.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnU.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1442,7 +1442,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBr.setGeometry(QtCore.QRect(710, 100, 29, 29))
         self.ebtnBr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnBr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnBr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnBr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnBr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1471,7 +1471,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnC.setGeometry(QtCore.QRect(620, 40, 29, 29))
         self.ebtnC.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnC.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnC.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnC.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnC.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1500,7 +1500,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnHo.setGeometry(QtCore.QRect(620, 230, 29, 29))
         self.ebtnHo.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnHo.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnHo.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnHo.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnHo.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1529,7 +1529,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnNp.setGeometry(QtCore.QRect(440, 260, 29, 29))
         self.ebtnNp.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnNp.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnNp.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnNp.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnNp.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1558,7 +1558,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnEu.setGeometry(QtCore.QRect(500, 230, 29, 29))
         self.ebtnEu.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnEu.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnEu.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnEu.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnEu.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1587,7 +1587,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnMn.setGeometry(QtCore.QRect(410, 100, 29, 29))
         self.ebtnMn.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnMn.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnMn.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnMn.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnMn.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1616,7 +1616,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnGe.setGeometry(QtCore.QRect(620, 100, 29, 29))
         self.ebtnGe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnGe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnGe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnGe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnGe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1646,7 +1646,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAc.setGeometry(QtCore.QRect(320, 260, 29, 29))
         self.ebtnAc.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAc.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAc.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAc.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAc.setAcceptDrops(False)
         self.ebtnAc.setStyleSheet(
             "QPushButton {\n"
@@ -1677,7 +1677,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAl.setGeometry(QtCore.QRect(590, 70, 29, 29))
         self.ebtnAl.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAl.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAl.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAl.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAl.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1706,7 +1706,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSr.setGeometry(QtCore.QRect(260, 130, 29, 29))
         self.ebtnSr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1735,7 +1735,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPo.setGeometry(QtCore.QRect(680, 160, 29, 29))
         self.ebtnPo.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPo.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPo.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPo.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPo.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1764,7 +1764,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnH.setGeometry(QtCore.QRect(230, 10, 29, 29))
         self.ebtnH.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnH.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnH.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnH.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnH.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1793,7 +1793,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnMg.setGeometry(QtCore.QRect(260, 70, 29, 29))
         self.ebtnMg.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnMg.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnMg.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnMg.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnMg.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1822,7 +1822,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnNb.setGeometry(QtCore.QRect(350, 130, 29, 29))
         self.ebtnNb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnNb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnNb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnNb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnNb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1851,7 +1851,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSe.setGeometry(QtCore.QRect(680, 100, 29, 29))
         self.ebtnSe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1880,7 +1880,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnFm.setGeometry(QtCore.QRect(650, 260, 29, 29))
         self.ebtnFm.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnFm.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnFm.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnFm.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnFm.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1909,7 +1909,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRu.setGeometry(QtCore.QRect(440, 130, 29, 29))
         self.ebtnRu.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRu.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRu.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRu.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRu.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1938,7 +1938,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnZr.setGeometry(QtCore.QRect(320, 130, 29, 29))
         self.ebtnZr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnZr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnZr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnZr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnZr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1967,7 +1967,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCm.setGeometry(QtCore.QRect(530, 260, 29, 29))
         self.ebtnCm.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCm.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCm.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCm.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCm.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -1996,7 +1996,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAm.setGeometry(QtCore.QRect(500, 260, 29, 29))
         self.ebtnAm.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAm.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAm.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAm.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAm.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2025,7 +2025,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnNo.setGeometry(QtCore.QRect(710, 260, 29, 29))
         self.ebtnNo.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnNo.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnNo.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnNo.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnNo.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2054,7 +2054,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnMt.setGeometry(QtCore.QRect(470, 190, 29, 29))
         self.ebtnMt.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnMt.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnMt.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnMt.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnMt.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2083,7 +2083,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTh.setGeometry(QtCore.QRect(350, 260, 29, 29))
         self.ebtnTh.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTh.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTh.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTh.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTh.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2112,7 +2112,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnK.setGeometry(QtCore.QRect(230, 100, 29, 29))
         self.ebtnK.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnK.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnK.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnK.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnK.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2141,7 +2141,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnMo.setGeometry(QtCore.QRect(380, 130, 29, 29))
         self.ebtnMo.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnMo.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnMo.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnMo.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnMo.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2170,7 +2170,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnF.setGeometry(QtCore.QRect(710, 40, 29, 29))
         self.ebtnF.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnF.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnF.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnF.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnF.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2199,7 +2199,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTc.setGeometry(QtCore.QRect(410, 130, 29, 29))
         self.ebtnTc.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTc.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTc.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTc.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTc.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2228,7 +2228,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnNe.setGeometry(QtCore.QRect(740, 40, 29, 29))
         self.ebtnNe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnNe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnNe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnNe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnNe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2257,7 +2257,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCo.setGeometry(QtCore.QRect(470, 100, 29, 29))
         self.ebtnCo.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCo.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCo.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCo.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCo.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2286,7 +2286,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnMd.setGeometry(QtCore.QRect(680, 260, 29, 29))
         self.ebtnMd.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnMd.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnMd.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnMd.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnMd.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2315,7 +2315,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSb.setGeometry(QtCore.QRect(650, 130, 29, 29))
         self.ebtnSb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2344,7 +2344,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTb.setGeometry(QtCore.QRect(560, 230, 29, 29))
         self.ebtnTb.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTb.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTb.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTb.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2373,7 +2373,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTm.setGeometry(QtCore.QRect(680, 230, 29, 29))
         self.ebtnTm.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTm.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTm.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTm.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTm.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2402,7 +2402,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnEr.setGeometry(QtCore.QRect(650, 230, 29, 29))
         self.ebtnEr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnEr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnEr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnEr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnEr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2431,7 +2431,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCl.setGeometry(QtCore.QRect(710, 70, 29, 29))
         self.ebtnCl.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCl.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCl.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCl.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCl.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2460,7 +2460,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAt.setGeometry(QtCore.QRect(710, 160, 29, 29))
         self.ebtnAt.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAt.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAt.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAt.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAt.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2489,7 +2489,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCr.setGeometry(QtCore.QRect(380, 100, 29, 29))
         self.ebtnCr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2518,7 +2518,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTa.setGeometry(QtCore.QRect(350, 160, 29, 29))
         self.ebtnTa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2547,7 +2547,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRh.setGeometry(QtCore.QRect(470, 130, 29, 29))
         self.ebtnRh.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRh.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRh.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRh.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRh.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2576,7 +2576,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnI.setGeometry(QtCore.QRect(710, 130, 29, 29))
         self.ebtnI.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnI.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnI.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnI.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnI.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2605,7 +2605,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTl.setGeometry(QtCore.QRect(590, 160, 29, 29))
         self.ebtnTl.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTl.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTl.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTl.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTl.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2634,7 +2634,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSn.setGeometry(QtCore.QRect(620, 130, 29, 29))
         self.ebtnSn.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSn.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSn.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSn.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSn.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2663,7 +2663,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPa.setGeometry(QtCore.QRect(380, 260, 29, 29))
         self.ebtnPa.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPa.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPa.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPa.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPa.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2692,7 +2692,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAr.setGeometry(QtCore.QRect(740, 70, 29, 29))
         self.ebtnAr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2721,7 +2721,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSi.setGeometry(QtCore.QRect(620, 70, 29, 29))
         self.ebtnSi.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSi.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSi.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSi.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSi.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2750,7 +2750,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSm.setGeometry(QtCore.QRect(470, 230, 29, 29))
         self.ebtnSm.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSm.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSm.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSm.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSm.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2779,7 +2779,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnFe.setGeometry(QtCore.QRect(440, 100, 29, 29))
         self.ebtnFe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnFe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnFe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnFe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnFe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2808,7 +2808,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnKr.setGeometry(QtCore.QRect(740, 100, 29, 29))
         self.ebtnKr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnKr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnKr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnKr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnKr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2837,7 +2837,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBe.setGeometry(QtCore.QRect(260, 40, 29, 29))
         self.ebtnBe.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnBe.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnBe.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnBe.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnBe.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2866,7 +2866,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnRf.setGeometry(QtCore.QRect(320, 190, 29, 29))
         self.ebtnRf.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnRf.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnRf.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnRf.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnRf.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2895,7 +2895,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnLr.setGeometry(QtCore.QRect(740, 260, 29, 29))
         self.ebtnLr.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnLr.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnLr.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnLr.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnLr.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2924,7 +2924,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnSg.setGeometry(QtCore.QRect(380, 190, 29, 29))
         self.ebtnSg.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnSg.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnSg.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnSg.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnSg.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2953,7 +2953,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnHg.setGeometry(QtCore.QRect(560, 160, 29, 29))
         self.ebtnHg.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnHg.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnHg.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnHg.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnHg.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -2982,7 +2982,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAs.setGeometry(QtCore.QRect(650, 100, 29, 29))
         self.ebtnAs.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAs.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAs.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAs.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAs.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3011,7 +3011,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCu.setGeometry(QtCore.QRect(530, 100, 29, 29))
         self.ebtnCu.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCu.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCu.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCu.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCu.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3040,7 +3040,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnCf.setGeometry(QtCore.QRect(590, 260, 29, 29))
         self.ebtnCf.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnCf.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnCf.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnCf.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnCf.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3069,7 +3069,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnTi.setGeometry(QtCore.QRect(320, 100, 29, 29))
         self.ebtnTi.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnTi.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnTi.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnTi.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnTi.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3098,7 +3098,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnDy.setGeometry(QtCore.QRect(590, 230, 29, 29))
         self.ebtnDy.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnDy.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnDy.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnDy.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnDy.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3127,7 +3127,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnPm.setGeometry(QtCore.QRect(440, 230, 29, 29))
         self.ebtnPm.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnPm.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnPm.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnPm.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnPm.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3156,7 +3156,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnAg.setGeometry(QtCore.QRect(530, 130, 29, 29))
         self.ebtnAg.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnAg.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnAg.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnAg.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnAg.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3185,7 +3185,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnZn.setGeometry(QtCore.QRect(560, 100, 29, 29))
         self.ebtnZn.setMinimumSize(QtCore.QSize(29, 29))
         self.ebtnZn.setMaximumSize(QtCore.QSize(29, 29))
-        self.ebtnZn.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ebtnZn.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ebtnZn.setStyleSheet(
             "QPushButton {\n"
             "                    border: none;\n"
@@ -3212,7 +3212,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnZn.setObjectName("ebtnZn")
         self.resultsTreeWidget = QtWidgets.QTreeWidget(BatchCalculationsPage)
         self.resultsTreeWidget.setGeometry(QtCore.QRect(10, 355, 971, 190))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.resultsTreeWidget.sizePolicy().hasHeightForWidth())
@@ -3222,9 +3222,9 @@ class Ui_BatchCalculationsPage(object):
         font = QtGui.QFont()
         font.setPointSize(13)
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.resultsTreeWidget.setFont(font)
-        self.resultsTreeWidget.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.resultsTreeWidget.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.resultsTreeWidget.setStyleSheet(
             "QTreeWidget {\n"
             "                    color: #F0EBD8;\n"
@@ -3263,13 +3263,13 @@ class Ui_BatchCalculationsPage(object):
             "                    }\n"
             "                "
         )
-        self.resultsTreeWidget.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.resultsTreeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
-        self.resultsTreeWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.resultsTreeWidget.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.resultsTreeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        self.resultsTreeWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.resultsTreeWidget.setTabKeyNavigation(True)
         self.resultsTreeWidget.setProperty("showDropIndicator", False)
         self.resultsTreeWidget.setAlternatingRowColors(True)
-        self.resultsTreeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.resultsTreeWidget.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection)
         self.resultsTreeWidget.setRootIsDecorated(False)
         self.resultsTreeWidget.setUniformRowHeights(True)
         self.resultsTreeWidget.setItemsExpandable(True)
@@ -3280,7 +3280,7 @@ class Ui_BatchCalculationsPage(object):
         self.resultsTreeWidget.setExpandsOnDoubleClick(True)
         self.resultsTreeWidget.setObjectName("resultsTreeWidget")
         for _col in range(21):
-            self.resultsTreeWidget.headerItem().setTextAlignment(_col, QtCore.Qt.AlignCenter)
+            self.resultsTreeWidget.headerItem().setTextAlignment(_col, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsTreeWidget.header().setVisible(True)
         self.resultsTreeWidget.header().setCascadingSectionResizes(False)
         self.resultsTreeWidget.header().setDefaultSectionSize(96)
@@ -3310,7 +3310,7 @@ class Ui_BatchCalculationsPage(object):
         self.startSpinBox.setDecimals(1)
         self.startSpinBox.setSuffix(" %")
         self.startSpinBox.setStyleSheet(_spinbox_style)
-        self.startSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.startSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.startSpinBox.setObjectName("startSpinBox")
 
         self.lblEnd = QtWidgets.QLabel(BatchCalculationsPage)
@@ -3326,7 +3326,7 @@ class Ui_BatchCalculationsPage(object):
         self.endSpinBox.setDecimals(1)
         self.endSpinBox.setSuffix(" %")
         self.endSpinBox.setStyleSheet(_spinbox_style)
-        self.endSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.endSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.endSpinBox.setObjectName("endSpinBox")
 
         self.lblStep = QtWidgets.QLabel(BatchCalculationsPage)
@@ -3342,21 +3342,21 @@ class Ui_BatchCalculationsPage(object):
         self.stepSpinBox.setDecimals(1)
         self.stepSpinBox.setSuffix(" %")
         self.stepSpinBox.setStyleSheet(_spinbox_style)
-        self.stepSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.stepSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.stepSpinBox.setObjectName("stepSpinBox")
 
         # Row 2: Search / Clear / Save buttons
         self.btnSearch = QtWidgets.QPushButton(BatchCalculationsPage)
         self.btnSearch.setGeometry(QtCore.QRect(600, 312, 120, 28))
         self.btnSearch.setMinimumSize(QtCore.QSize(0, 28))
-        self.btnSearch.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnSearch.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnSearch.setStyleSheet(_btn_style)
         self.btnSearch.setObjectName("btnSearch")
 
         self.btnClear = QtWidgets.QPushButton(BatchCalculationsPage)
         self.btnClear.setGeometry(QtCore.QRect(728, 312, 110, 28))
         self.btnClear.setMinimumSize(QtCore.QSize(0, 28))
-        self.btnClear.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnClear.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnClear.setStyleSheet(_btn_style)
         self.btnClear.setObjectName("btnClear")
 
@@ -3364,7 +3364,7 @@ class Ui_BatchCalculationsPage(object):
         self.btnSave.setGeometry(QtCore.QRect(846, 312, 138, 28))
         self.btnSave.setMinimumSize(QtCore.QSize(0, 28))
         self.btnSave.setEnabled(False)
-        self.btnSave.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnSave.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnSave.setStyleSheet(_btn_style)
         self.btnSave.setObjectName("btnSave")
 
