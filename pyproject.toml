@@ -1,3 +1,113 @@
+[project]
+name = "HEACalculator"
+version = "1.3.1"
+description = "A Python tool for calculating phenomenological parameters to predict solid solution formation in High Entropy Alloys (HEAs)"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Doguhan Sariturk", email = "dogu.sariturk@gmail.com" },
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "numpy>=1.23.4",
+    "pandas>=1.4.1",
+    "typer>=0.7.0",
+]
+
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+gui = ["PyQt5>=5.15.7"]
+docs = [
+    "mkdocs-material==9.7.4",
+    "mkdocstrings[python]==1.0.3",
+]
+
+[project.urls]
+Home-page = "https://github.com/dogusariturk/HEACalculator/"
+Issues = "https://github.com/dogusariturk/HEACalculator/issues"
+Repository = "https://github.com/dogusariturk/HEACalculator.git"
+
+[project.scripts]
+HEACalculator = "HEACalculator.__main__:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/HEACalculator"]
+
+[dependency-groups]
+dev = [
+    "prek>=0.3.4",
+    "pytest>=9.0.2",
+    "ruff>=0.15.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["src/HEACalculator"]
+omit = [
+    "src/HEACalculator/app.py",
+    "src/HEACalculator/gui/*",
+]
+
+[tool.coverage.report]
+omit = [
+    "src/HEACalculator/app.py",
+    "src/HEACalculator/gui/*",
+]
+
+[tool.ruff]
+line-length = 130
+
+[tool.ruff.lint]
+select = [
+    "A", # flake8-builtins
+    "B", # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "D", # pydocstyle
+    "E", # pycodestyle Errors
+    "ERA", # Eradicate
+    "F", # Pyflakes
+    "FA",  # flake8-future-annotations
+    "I", # isort
+    "ICN", # flake8-import-conventions
+    "N", # pep8-naming
+    "PL",  # Pylint
+    "PTH", # flake8-use-pathlib
+    "Q", # flake8-quotes
+    "SIM", # flake8-simplify
+    "TC",  # flake8-type-checking
+    "UP",  # pyupgrade
+    "W", # pycodestyle Warnings
+]
+ignore = [
+    "D403", # First word of the docstring should be capitalized
+    "E402", # module level import not at top of file
+    "E501", # line-too-long
+    "N802", # function name should be lowercase
+    "N999", # invalid-module-name
+    "PLC0415", # `import` should be at the top-level of a file
+    "PLR0912", # too-many-branches in complex functions
+    "PLR2004", # magic value used in comparison
+]
+pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"src/HEACalculator/gui/*.py" = ["ALL"]
+"src/HEACalculator/app.py" = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
