@@ -18,7 +18,7 @@ try:
 except ImportError:
     raise SystemExit("PyQt6 is required for GUI mode. Install with: pip install HEACalculator[gui]") from None
 
-from HEACalculator.cli import find_all_comps
+from HEACalculator.utils import find_all_comps
 from HEACalculator.core.hea import HEACalculator, __version__
 from HEACalculator.exceptions import ElementNotFoundError, MissingFormationEnthalpyError, MissingMixingEnthalpyError
 from HEACalculator.gui.HEACalculatorMain import Ui_HEACalculator

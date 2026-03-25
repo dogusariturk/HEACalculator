@@ -1,18 +1,17 @@
 """Tests for CLI search subcommands.
 
 Uses ``typer.testing.CliRunner`` to invoke the ``single``, ``range``, and
-``csv`` commands and the ``find_all_comps`` helper without spawning a
-subprocess, so no PyQt6 installation is required.
+``csv`` commands without spawning a subprocess, so no PyQt6 installation is
+required.
 """
 
 import tempfile
 from pathlib import Path
 from unittest import TestCase
 
-import pytest
 from typer.testing import CliRunner
 
-from HEACalculator.cli import app, find_all_comps
+from HEACalculator.cli import app
 
 runner = CliRunner()
 
@@ -220,48 +219,3 @@ class TestCsvSearch(TestCase):
             assert "FeNi" in result.output
         finally:
             Path(tmp_path).unlink()
-
-
-class TestFindAllComps(TestCase):
-    """Tests for the ``find_all_comps`` helper function."""
-
-    def test_returns_tuple(self):
-        """Function returns a (dict, set) pair."""
-        formula, comps = find_all_comps("FeNi", 0, 100, 50)
-        assert isinstance(formula, dict)
-        assert isinstance(comps, set)
-
-    def test_formula_keys_match_elements(self):
-        """The formula dict keys match the element symbols in the input string."""
-        formula, _ = find_all_comps("FeNi", 0, 100, 50)
-        assert set(formula.keys()) == {"Fe", "Ni"}
-
-    def test_all_compositions_sum_to_100(self):
-        """Every generated composition tuple sums to exactly 100 at%."""
-        _, comps = find_all_comps("FeNi", 0, 100, 50)
-        for comp in comps:
-            assert sum(comp) == pytest.approx(100.0)
-
-    def test_no_composition_has_100_percent_single_element(self):
-        """No element occupies 100 at% in any generated composition."""
-        _, comps = find_all_comps("FeNi", 0, 100, 50)
-        for comp in comps:
-            assert all(x < 100 for x in comp)
-
-    def test_empty_when_no_valid_compositions(self):
-        """An impossible range (step larger than range) returns an empty composition set."""
-        _, comps = find_all_comps("FeNi", 0, 10, 3)
-        assert len(comps) == 0
-
-    def test_three_element_alloy(self):
-        """A three-element range search produces compositions that sum to 100 at%."""
-        formula, comps = find_all_comps("AlTiV", 0, 100, 50)
-        assert set(formula.keys()) == {"Al", "Ti", "V"}
-        for comp in comps:
-            assert sum(comp) == pytest.approx(100.0)
-
-    def test_fractional_step_includes_valid_compositions(self):
-        """Fractional step sizes (e.g. 2.5) produce compositions that sum to exactly 100 at%."""
-        _, comps = find_all_comps("FeNi", 0, 100, 2.5)
-        for comp in comps:
-            assert abs(sum(comp) - 100.0) < 1e-9
