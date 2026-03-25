@@ -7,7 +7,7 @@ Search, MDL buttons), and a ``QStackedWidget`` content area that hosts the
 per-page widgets.
 """
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_HEACalculator(object):
@@ -36,8 +36,8 @@ class Ui_HEACalculator(object):
         icon = QtGui.QIcon()
         icon.addPixmap(
             QtGui.QPixmap(":/icons/images/icon.ico"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
+            QtGui.QIcon.Mode.Normal,
+            QtGui.QIcon.State.Off,
         )
         HEACalculator.setWindowIcon(icon)
         HEACalculator.setStyleSheet("background-color: rgb(13, 19, 33);")
@@ -50,8 +50,8 @@ class Ui_HEACalculator(object):
         self.TopBar = QtWidgets.QFrame(self.centralwidget)
         self.TopBar.setMaximumSize(QtCore.QSize(16777215, 40))
         self.TopBar.setStyleSheet("background-color: rgb(29, 45, 68);")
-        self.TopBar.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.TopBar.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.TopBar.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.TopBar.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.TopBar.setObjectName("TopBar")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.TopBar)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -60,8 +60,8 @@ class Ui_HEACalculator(object):
         self.toggle_f = QtWidgets.QFrame(self.TopBar)
         self.toggle_f.setMaximumSize(QtCore.QSize(125, 40))
         self.toggle_f.setStyleSheet("background-color: #748CAB;")
-        self.toggle_f.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.toggle_f.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.toggle_f.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.toggle_f.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.toggle_f.setObjectName("toggle_f")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.toggle_f)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -69,10 +69,10 @@ class Ui_HEACalculator(object):
         font = QtGui.QFont()
         font.setFamily("Roboto Mono for Powerline")
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.lblTitle.setFont(font)
         self.lblTitle.setStyleSheet("color: rgb(240, 235, 216);\nborder: 0px solid;")
-        self.lblTitle.setAlignment(QtCore.Qt.AlignCenter)
+        self.lblTitle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.lblTitle.setObjectName("lblTitle")
         self.verticalLayout_2.addWidget(self.lblTitle)
         self.horizontalLayout.addWidget(self.toggle_f)
@@ -91,23 +91,23 @@ class Ui_HEACalculator(object):
             "    background-color: #748CAB;\n"
             "}"
         )
-        self.title_f.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.title_f.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.title_f.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.title_f.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.title_f.setObjectName("title_f")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.title_f)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.frame = QtWidgets.QFrame(self.title_f)
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame.setObjectName("frame")
         self.horizontalLayout_3.addWidget(self.frame)
         self.frame_2 = QtWidgets.QFrame(self.title_f)
         self.frame_2.setMaximumSize(QtCore.QSize(40, 16777215))
         self.frame_2.setStyleSheet("QPushButton {\n    border: 0px solid;\n    color: #F0EBD8\n}")
-        self.frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_2.setObjectName("frame_2")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_2)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -115,13 +115,13 @@ class Ui_HEACalculator(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.btnClose = QtWidgets.QPushButton(self.frame_2)
         self.btnClose.setMaximumSize(QtCore.QSize(40, 40))
-        self.btnClose.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnClose.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnClose.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(
             QtGui.QPixmap(":/icons/images/multiply.png"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
+            QtGui.QIcon.Mode.Normal,
+            QtGui.QIcon.State.Off,
         )
         self.btnClose.setIcon(icon1)
         self.btnClose.setIconSize(QtCore.QSize(20, 20))
@@ -131,8 +131,8 @@ class Ui_HEACalculator(object):
         self.horizontalLayout.addWidget(self.title_f)
         self.verticalLayout.addWidget(self.TopBar)
         self.Content = QtWidgets.QFrame(self.centralwidget)
-        self.Content.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.Content.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.Content.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.Content.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.Content.setObjectName("Content")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.Content)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -159,8 +159,8 @@ class Ui_HEACalculator(object):
             "    background-color: #748CAB;\n"
             "}"
         )
-        self.menu_f.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.menu_f.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.menu_f.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.menu_f.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.menu_f.setObjectName("menu_f")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.menu_f)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -181,8 +181,8 @@ class Ui_HEACalculator(object):
             "    background-color: #748CAB;\n"
             "}"
         )
-        self.menu_top_f.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.menu_top_f.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.menu_top_f.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.menu_top_f.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.menu_top_f.setObjectName("menu_top_f")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.menu_top_f)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -190,7 +190,7 @@ class Ui_HEACalculator(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.btnParameters = QtWidgets.QPushButton(self.menu_top_f)
         self.btnParameters.setMinimumSize(QtCore.QSize(0, 45))
-        self.btnParameters.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnParameters.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnParameters.setStyleSheet("")
         self.btnParameters.setObjectName("btnParameters")
         self.verticalLayout_4.addWidget(self.btnParameters)
@@ -199,11 +199,11 @@ class Ui_HEACalculator(object):
         self.btnConverter.setVisible(False)
         self.btnBatchAmount = QtWidgets.QPushButton(self.menu_top_f)
         self.btnBatchAmount.setMinimumSize(QtCore.QSize(0, 45))
-        self.btnBatchAmount.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnBatchAmount.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnBatchAmount.setStyleSheet("")
         self.btnBatchAmount.setObjectName("btnBatchAmount")
         self.verticalLayout_4.addWidget(self.btnBatchAmount)
-        self.verticalLayout_3.addWidget(self.menu_top_f, 0, QtCore.Qt.AlignTop)
+        self.verticalLayout_3.addWidget(self.menu_top_f, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.menu_down_f = QtWidgets.QFrame(self.menu_f)
         self.menu_down_f.setStyleSheet(
             "QPushButton {\n"
@@ -219,8 +219,8 @@ class Ui_HEACalculator(object):
             "    background-color: #748CAB;\n"
             "}"
         )
-        self.menu_down_f.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.menu_down_f.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.menu_down_f.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.menu_down_f.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.menu_down_f.setObjectName("menu_down_f")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.menu_down_f)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -228,21 +228,21 @@ class Ui_HEACalculator(object):
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.btnMDL = QtWidgets.QPushButton(self.menu_down_f)
         self.btnMDL.setMinimumSize(QtCore.QSize(0, 40))
-        self.btnMDL.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.btnMDL.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.btnMDL.setObjectName("btnMDL")
         self.verticalLayout_5.addWidget(self.btnMDL)
-        self.verticalLayout_3.addWidget(self.menu_down_f, 0, QtCore.Qt.AlignBottom)
+        self.verticalLayout_3.addWidget(self.menu_down_f, 0, QtCore.Qt.AlignmentFlag.AlignBottom)
         self.horizontalLayout_2.addWidget(self.menu_f)
         self.content_f = QtWidgets.QFrame(self.Content)
-        self.content_f.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.content_f.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.content_f.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        self.content_f.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.content_f.setObjectName("content_f")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.content_f)
         self.verticalLayout_6.setContentsMargins(5, 5, 5, 5)
         self.verticalLayout_6.setSpacing(0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.stackedWidget = QtWidgets.QStackedWidget(self.content_f)
-        self.stackedWidget.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.stackedWidget.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.stackedWidget.setObjectName("stackedWidget")
         self.verticalLayout_6.addWidget(self.stackedWidget)
         self.horizontalLayout_2.addWidget(self.content_f)

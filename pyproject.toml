@@ -26,7 +26,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project.optional-dependencies]
-gui = ["PyQt5>=5.15.7"]
+gui = ["PyQt6>=6.0.0"]
 docs = [
     "mkdocs-material==9.7.4",
     "mkdocstrings[python]==1.0.3",

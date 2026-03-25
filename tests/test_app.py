@@ -1,6 +1,6 @@
 """Tests for app.py GUI module.
 
-All tests are skipped when PyQt5 is not installed or no display is available.
+All tests are skipped when PyQt6 is not installed or no display is available.
 """
 
 import os
@@ -13,19 +13,19 @@ from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
 
-PyQt5 = pytest.importorskip("PyQt5", reason="PyQt5 not installed")
+PyQt6 = pytest.importorskip("PyQt6", reason="PyQt6 not installed")
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMessageBox
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import QMessageBox
 
 from HEACalculator.app import AlignDelegate, HEACalculatorMainWindow, ItemDelegate, NotificationBar, ParametersPage, run
 
 
 class TestAppImportGuard(TestCase):
-    """Tests for the PyQt5 availability guard at module import time."""
+    """Tests for the PyQt6 availability guard at module import time."""
 
     def test_missing_pyqt5_raises_system_exit(self):
-        """Importing app.py without PyQt5 available raises SystemExit."""
+        """Importing app.py without PyQt6 available raises SystemExit."""
         root_dir = Path(__file__).resolve().parents[1]
         env = os.environ.copy()
         env["PYTHONPATH"] = str(root_dir / "src")
@@ -36,10 +36,10 @@ class TestAppImportGuard(TestCase):
                 "-c",
                 (
                     "import sys;"
-                    "sys.modules['PyQt5']=None;"
-                    "sys.modules['PyQt5.QtCore']=None;"
-                    "sys.modules['PyQt5.QtGui']=None;"
-                    "sys.modules['PyQt5.QtWidgets']=None;"
+                    "sys.modules['PyQt6']=None;"
+                    "sys.modules['PyQt6.QtCore']=None;"
+                    "sys.modules['PyQt6.QtGui']=None;"
+                    "sys.modules['PyQt6.QtWidgets']=None;"
                     "import HEACalculator.app"
                 ),
             ],
@@ -50,7 +50,7 @@ class TestAppImportGuard(TestCase):
         )
 
         assert result.returncode != 0
-        assert "PyQt5 is required for GUI mode." in result.stderr
+        assert "PyQt6 is required for GUI mode." in result.stderr
 
 
 class TestHEACalculatorMainWindowConstants(TestCase):
@@ -75,18 +75,14 @@ class TestRunFunction(TestCase):
     def test_run_creates_qapplication(self):
         """run() instantiates QApplication and calls show() on the main window."""
         mock_app = MagicMock()
-        mock_desktop = MagicMock()
-        mock_desktop.availableGeometry.return_value.width.return_value = 1920
-        mock_desktop.availableGeometry.return_value.height.return_value = 1080
         mock_window = MagicMock()
         mock_window.width.return_value = 800
         mock_window.height.return_value = 600
-        mock_app.exec_.return_value = 0
+        mock_app.exec.return_value = 0
 
         with (
             patch("HEACalculator.app.QtWidgets.QApplication", return_value=mock_app),
             patch("HEACalculator.app.HEACalculatorMainWindow", return_value=mock_window),
-            patch("HEACalculator.app.QtWidgets.QDesktopWidget", return_value=mock_desktop),
             patch("HEACalculator.app.QtGui.QPixmap"),
             patch("HEACalculator.app.QtGui.QIcon"),
             patch("sys.exit"),
@@ -607,12 +603,12 @@ class TestHandleClearAllButton(TestCase):
     def test_with_results_user_confirms_yes_clears_everything(self):
         """Confirming the dialog clears elements, table, and results tree."""
         p = self._make_page({"Fe": 50.0, "Co": 50.0}, tree_count=1)
-        yes_value = QMessageBox.Yes
+        yes_value = QMessageBox.StandardButton.Yes
         with patch("HEACalculator.app.QMessageBox") as mock_cls:
             mock_box = MagicMock()
             mock_cls.return_value = mock_box
-            mock_cls.Yes = yes_value
-            mock_box.exec_.return_value = yes_value
+            mock_cls.StandardButton.Yes = yes_value
+            mock_box.exec.return_value = yes_value
             ParametersPage.handleClearAllButton(p)
         assert p.selectedElements == {}
         p.parametersPage.resultsTreeWidget.clear.assert_called_once()
@@ -622,12 +618,12 @@ class TestHandleClearAllButton(TestCase):
         """Dismissing the dialog with No leaves selectedElements and the tree untouched."""
         p = self._make_page({"Fe": 100.0}, tree_count=1)
         original = dict(p.selectedElements)
-        yes_value = QMessageBox.Yes
+        yes_value = QMessageBox.StandardButton.Yes
         with patch("HEACalculator.app.QMessageBox") as mock_cls:
             mock_box = MagicMock()
             mock_cls.return_value = mock_box
-            mock_cls.Yes = yes_value
-            mock_box.exec_.return_value = QMessageBox.No
+            mock_cls.StandardButton.Yes = yes_value
+            mock_box.exec.return_value = QMessageBox.StandardButton.No
             ParametersPage.handleClearAllButton(p)
         assert p.selectedElements == original
         p.parametersPage.tableWidget.setRowCount.assert_not_called()
@@ -894,7 +890,7 @@ class TestItemDelegate:
 
     def test_create_editor_line_edit_has_double_validator(self, qapp):
         """The returned QLineEdit has a QDoubleValidator attached."""
-        from PyQt5 import QtGui
+        from PyQt6 import QtGui
 
         delegate = ItemDelegate()
         parent = QtWidgets.QWidget()
@@ -911,4 +907,4 @@ class TestAlignDelegate:
         option = QtWidgets.QStyleOptionViewItem()
         index = QtCore.QModelIndex()
         delegate.initStyleOption(option, index)
-        assert option.displayAlignment == QtCore.Qt.AlignCenter
+        assert option.displayAlignment == QtCore.Qt.AlignmentFlag.AlignCenter

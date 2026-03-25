@@ -1,4 +1,4 @@
-"""PyQt5 GUI application for HEACalculator.
+"""PyQt6 GUI application for HEACalculator.
 
 Defines the main window, parameters page, and notification bar widgets used
 when the application is launched in GUI mode.
@@ -13,10 +13,10 @@ from functools import partial
 from typing import Any
 
 try:
-    from PyQt5 import QtCore, QtGui, QtWidgets
-    from PyQt5.QtWidgets import QMessageBox
+    from PyQt6 import QtCore, QtGui, QtWidgets
+    from PyQt6.QtWidgets import QMessageBox
 except ImportError:
-    raise SystemExit("PyQt5 is required for GUI mode. Install with: pip install HEACalculator[gui]") from None
+    raise SystemExit("PyQt6 is required for GUI mode. Install with: pip install HEACalculator[gui]") from None
 
 from HEACalculator.cli import find_all_comps
 from HEACalculator.core.hea import HEACalculator, __version__
@@ -32,7 +32,7 @@ class AlignDelegate(QtWidgets.QStyledItemDelegate):
     def initStyleOption(self, option: QtWidgets.QStyleOptionViewItem, index: QtCore.QModelIndex) -> None:
         """Set display alignment to center before the option is used for painting."""
         super().initStyleOption(option, index)
-        option.displayAlignment = QtCore.Qt.AlignCenter
+        option.displayAlignment = QtCore.Qt.AlignmentFlag.AlignCenter
 
 
 class ItemDelegate(QtWidgets.QStyledItemDelegate):
@@ -40,7 +40,7 @@ class ItemDelegate(QtWidgets.QStyledItemDelegate):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        QtCore.QLocale.setDefault(QtCore.QLocale(QtCore.QLocale.C))
+        QtCore.QLocale.setDefault(QtCore.QLocale(QtCore.QLocale.Language.C))
 
     def createEditor(
         self, parent: QtWidgets.QWidget, option: QtWidgets.QStyleOptionViewItem, index: QtCore.QModelIndex
@@ -103,11 +103,11 @@ class NotificationBar(QtWidgets.QFrame):
 
         self.closeButton = QtWidgets.QPushButton("x", self)
         self.closeButton.setFixedSize(24, 24)
-        self.closeButton.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.closeButton.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.closeButton.clicked.connect(self.hide_message)
 
         layout.addWidget(self.messageLabel, 1)
-        layout.addWidget(self.closeButton, 0, QtCore.Qt.AlignTop)
+        layout.addWidget(self.closeButton, 0, QtCore.Qt.AlignmentFlag.AlignTop)
 
     def hide_message(self) -> None:
         """Stop the auto-dismiss timer and hide the notification bar."""
@@ -193,24 +193,24 @@ class BatchCalculationsPage(QtWidgets.QWidget):
         self.ui = Ui_BatchCalculationsPage()
         self.ui.setupUi(self)
         self.selectedElements: list[str] = []
-        self.ui.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-        self.ui.resultsTreeWidget.header().setSectionResizeMode(5, QtWidgets.QHeaderView.Stretch)
+        self.ui.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.resultsTreeWidget.header().setSectionResizeMode(5, QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.ui.resultsTreeWidget.header().setStretchLastSection(False)
 
         self._element_buttons = [btn for btn in self.findChildren(QtWidgets.QPushButton) if btn.objectName().startswith("ebtn")]
         for btn in self._element_buttons:
-            btn.clicked[bool].connect(partial(self._handle_element_clicked, btn.text()))
+            btn.clicked.connect(partial(self._handle_element_clicked, btn.text()))
 
         self.ui.btnSearch.clicked.connect(self._handle_search)
         self.ui.btnClear.clicked.connect(self._handle_clear)
         self.ui.btnSave.clicked.connect(self._handle_save)
 
         _spinbox_palette = QtGui.QPalette()
-        _spinbox_palette.setColor(QtGui.QPalette.Base, QtGui.QColor("#1D2D44"))
-        _spinbox_palette.setColor(QtGui.QPalette.Text, QtGui.QColor("#F0EBD8"))
-        _spinbox_palette.setColor(QtGui.QPalette.Button, QtGui.QColor("#3E5C76"))
-        _spinbox_palette.setColor(QtGui.QPalette.ButtonText, QtGui.QColor("#F0EBD8"))
-        _spinbox_palette.setColor(QtGui.QPalette.Window, QtGui.QColor("#1D2D44"))
+        _spinbox_palette.setColor(QtGui.QPalette.ColorRole.Base, QtGui.QColor("#1D2D44"))
+        _spinbox_palette.setColor(QtGui.QPalette.ColorRole.Text, QtGui.QColor("#F0EBD8"))
+        _spinbox_palette.setColor(QtGui.QPalette.ColorRole.Button, QtGui.QColor("#3E5C76"))
+        _spinbox_palette.setColor(QtGui.QPalette.ColorRole.ButtonText, QtGui.QColor("#F0EBD8"))
+        _spinbox_palette.setColor(QtGui.QPalette.ColorRole.Window, QtGui.QColor("#1D2D44"))
         _fusion = QtWidgets.QStyleFactory.create("Fusion")
         for sb in (self.ui.startSpinBox, self.ui.endSpinBox, self.ui.stepSpinBox):
             sb.setStyle(_fusion)
@@ -275,13 +275,13 @@ class BatchCalculationsPage(QtWidgets.QWidget):
         has_selection = bool(self.selectedElements)
         if has_results or has_selection:
             box = QtWidgets.QMessageBox(self)
-            box.setWindowFlags(box.windowFlags() | QtCore.Qt.FramelessWindowHint)
+            box.setWindowFlags(box.windowFlags() | QtCore.Qt.WindowType.FramelessWindowHint)
             box.setWindowTitle("Clear")
             box.setText("This will clear all element selections and results. Continue?")
-            box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            box.setDefaultButton(QtWidgets.QMessageBox.No)
+            box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
+            box.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
             box.setStyleSheet(_MSGBOX_STYLESHEET)
-            if box.exec_() != QtWidgets.QMessageBox.Yes:
+            if box.exec() != QtWidgets.QMessageBox.StandardButton.Yes:
                 return
         self.ui.resultsTreeWidget.clear()
         self.selectedElements.clear()
@@ -341,19 +341,19 @@ class ParametersPage(QtWidgets.QWidget):
 
         self.selectedElements = {}
 
-        self.parametersPage.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        self.parametersPage.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 
         itemDelegate = ItemDelegate(self.parametersPage.tableWidget)
         self.parametersPage.tableWidget.setItemDelegate(itemDelegate)
 
         self.totalLabel = QtWidgets.QLabel(self)
         self.totalLabel.setGeometry(QtCore.QRect(570, 182, 410, 13))
-        self.totalLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.totalLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.totalLabel.setStyleSheet("color: #748CAB; font-size: 10px;")
 
         self._element_buttons = [btn for btn in self.findChildren(QtWidgets.QPushButton) if btn.objectName().startswith("ebtn")]
         for btn in self._element_buttons:
-            btn.clicked[bool].connect(partial(self.handleElementClicked, btn.text()))
+            btn.clicked.connect(partial(self.handleElementClicked, btn.text()))
         self.parametersPage.tableWidget.cellChanged.connect(self.handleAmountChanged)
         self._update_action_buttons()
         self.parametersPage.ClearAllPushButton.pressed.connect(self.handleClearAllButton)
@@ -417,7 +417,7 @@ class ParametersPage(QtWidgets.QWidget):
         Args:
             formula: Alloy formula string (e.g. "FeCoCrNi").
         """
-        if self.parametersPage.resultsTreeWidget.findItems(formula, QtCore.Qt.MatchExactly):
+        if self.parametersPage.resultsTreeWidget.findItems(formula, QtCore.Qt.MatchFlag.MatchExactly):
             self._show_notification(
                 f"{self._format_formula_for_notification(formula)} has already been calculated.",
                 "warning",
@@ -454,11 +454,11 @@ class ParametersPage(QtWidgets.QWidget):
         """Clear the element table and results tree, prompting for confirmation when results exist."""
         if self.parametersPage.resultsTreeWidget.topLevelItemCount() > 0:
             box = QMessageBox(self)
-            box.setWindowFlags(box.windowFlags() | QtCore.Qt.FramelessWindowHint)
+            box.setWindowFlags(box.windowFlags() | QtCore.Qt.WindowType.FramelessWindowHint)
             box.setWindowTitle("Clear All")
             box.setText("This will also clear all calculated results. Continue?")
-            box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-            box.setDefaultButton(QMessageBox.No)
+            box.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            box.setDefaultButton(QMessageBox.StandardButton.No)
             box.setStyleSheet(
                 """
                 QMessageBox {
@@ -483,7 +483,7 @@ class ParametersPage(QtWidgets.QWidget):
                 }
                 """
             )
-            if box.exec_() != QMessageBox.Yes:
+            if box.exec() != QMessageBox.StandardButton.Yes:
                 return
         self.parametersPage.tableWidget.setRowCount(0)
         self.parametersPage.resultsTreeWidget.clear()
@@ -534,12 +534,12 @@ class ParametersPage(QtWidgets.QWidget):
             self.selectedElements.update({symbol: float(percentage)})
             self.parametersPage.tableWidget.insertRow(currentRowCount)
             elmItem = QtWidgets.QTableWidgetItem(symbol)
-            elmItem.setFlags(QtCore.Qt.ItemIsEnabled)
-            elmItem.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            elmItem.setFlags(QtCore.Qt.ItemFlag.ItemIsEnabled)
+            elmItem.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
             self.parametersPage.tableWidget.setItem(currentRowCount, 0, elmItem)
             amount = f"{percentage:.2f}"
             amountItem = QtWidgets.QTableWidgetItem(amount)
-            amountItem.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            amountItem.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
             self.parametersPage.tableWidget.setItem(currentRowCount, 1, amountItem)
             self.parametersPage.tableWidget.blockSignals(True)
             for row in range(self.parametersPage.tableWidget.rowCount()):
@@ -548,7 +548,7 @@ class ParametersPage(QtWidgets.QWidget):
             self._update_action_buttons()
             self._update_total_label()
         elif not checked and symbol in self.selectedElements:
-            item = self.parametersPage.tableWidget.findItems(symbol, QtCore.Qt.MatchExactly)
+            item = self.parametersPage.tableWidget.findItems(symbol, QtCore.Qt.MatchFlag.MatchExactly)
             for it in item:
                 self.parametersPage.tableWidget.removeRow(it.row())
             del self.selectedElements[symbol]
@@ -612,8 +612,8 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
         self.batchCalculationsPage = BatchCalculationsPage()
         self.notificationBar = NotificationBar()
 
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
 
         self.ui.verticalLayout.insertWidget(1, self.notificationBar)
         self.ui.stackedWidget.addWidget(self.parametersPage)
@@ -649,7 +649,7 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
     @staticmethod
     def helpAbout() -> None:
         """Display a modal About dialog with version and copyright information."""
-        about_text = """<b>HEA Calculator v {}
+        about_text = """<b>HEA Calculator v{}
     <p>Copyright &copy; 2022 MDL (METU).
     <p>This application enables the calculation and analysis of
      thermodynamic parameters in high-entropy alloys."""
@@ -658,7 +658,7 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
         about_box.setIconPixmap(QtGui.QPixmap(":/img/images/ic1.png"))
         about_box.setText(about_text.format(__version__))
         about_box.setWindowTitle("About | HEA Calculator | MDL")
-        about_box.exec_()
+        about_box.exec()
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         """Record the cursor position to support frameless window dragging."""
@@ -681,7 +681,7 @@ def run() -> None:
     height = (screen.height() - window.height()) / 2
     window.show()
     window.move(int(width), int(height))
-    sys.exit(application.exec_())
+    sys.exit(application.exec())
 
 
 if __name__ == "__main__":
