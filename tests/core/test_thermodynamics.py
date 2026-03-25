@@ -175,3 +175,42 @@ class TestEdgeCases:
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
         t.__dict__["atomic_size_difference"] = 0.0
         assert math.isinf(t.lambda_)
+
+    def test_omega_at_zero_temperature_returns_zero(self):
+        """omega_at(0) is 0.0 when mixing_enthalpy is non-zero (T=0 means no entropy contribution)."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        assert t.omega_at(0.0) == pytest.approx(0.0, abs=1e-10)
+
+
+class TestSingleElementThermodynamics:
+    """Tests for thermodynamic properties of a degenerate single-element 'alloy'."""
+
+    def test_mixing_enthalpy_is_zero(self):
+        """A pure element has no mixing enthalpy (no pairs to sum over)."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.mixing_enthalpy == pytest.approx(0.0, abs=1e-10)
+
+    def test_mixing_entropy_is_zero(self):
+        """A pure element has zero configurational entropy (single component)."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.mixing_entropy == pytest.approx(0.0, abs=1e-10)
+
+    def test_atomic_size_difference_is_zero(self):
+        """A single-element alloy has zero atomic size difference (no size mismatch)."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.atomic_size_difference == pytest.approx(0.0, abs=1e-10)
+
+    def test_electronegativity_difference_is_zero(self):
+        """A single-element alloy has zero electronegativity difference."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.electronegativity_difference == pytest.approx(0.0, abs=1e-10)
+
+    def test_omega_is_inf_for_single_element(self):
+        """Omega is infinite for a pure element because mixing_enthalpy == 0."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert math.isinf(t.omega)
+
+    def test_lambda_is_inf_for_single_element(self):
+        """Lambda is infinite for a pure element because atomic_size_difference == 0."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert math.isinf(t.lambda_)

@@ -59,3 +59,21 @@ class TestElementLoader:
         import math
 
         assert math.isnan(Element("Ac").allen_electronegativity)
+
+    def test_lowercase_symbol_raises_element_not_found_error(self):
+        """A lowercase element symbol raises ElementNotFoundError (symbols are case-sensitive)."""
+        from HEACalculator.exceptions import ElementNotFoundError
+
+        with pytest.raises(ElementNotFoundError):
+            Element("fe")
+
+    def test_symbol_with_leading_space_raises_element_not_found_error(self):
+        """An element symbol with leading whitespace raises ElementNotFoundError."""
+        from HEACalculator.exceptions import ElementNotFoundError
+
+        with pytest.raises(ElementNotFoundError):
+            Element(" Fe")
+
+    def test_element_str_contains_symbol(self):
+        """The __str__ representation of an element includes its chemical symbol."""
+        assert "Fe" in str(Element("Fe"))

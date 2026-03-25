@@ -123,3 +123,89 @@ class TestAlloyCompositionBinary:
     def test_pair_percentage(self, binary_composition):
         """The single pair percentage equals 0.5 × 0.5 = 0.25 for an equimolar binary."""
         assert binary_composition.pair_percentage[0] == pytest.approx(0.25, abs=1e-10)
+
+
+@pytest.fixture
+def single_element_composition():
+    """Return a single-element AlloyComposition (Fe)."""
+    return AlloyComposition("Fe")
+
+
+@pytest.fixture
+def five_element_composition():
+    """Return a five-element AlloyComposition (CoCrFeMnNi - Cantor alloy)."""
+    return AlloyComposition("CoCrFeMnNi")
+
+
+class TestAlloyCompositionSingleElement:
+    """Tests for a single-element 'alloy'."""
+
+    def test_atomic_percentage_sums_to_one(self, single_element_composition):
+        """A single-element alloy normalizes to a fraction of 1.0."""
+        assert sum(single_element_composition.atomic_percentage.values()) == pytest.approx(1.0, abs=1e-10)
+
+    def test_pair_list_is_empty(self, single_element_composition):
+        """A single-element alloy has no binary pairs."""
+        assert single_element_composition.pair_list == []
+
+    def test_pair_percentage_is_empty(self, single_element_composition):
+        """A single-element alloy has no pair percentages."""
+        assert single_element_composition.pair_percentage == []
+
+    def test_atomic_radius_list_length(self, single_element_composition):
+        """Single-element alloy has exactly one atomic radius entry."""
+        assert len(single_element_composition.atomic_radius_list) == 1
+
+    def test_allen_electronegativity_list_length(self, single_element_composition):
+        """Single-element alloy has exactly one Allen CE entry."""
+        assert len(single_element_composition.allen_electronegativity_list) == 1
+
+
+class TestAlloyCompositionFiveElement:
+    """Tests for a five-element alloy (Cantor alloy CoCrFeMnNi)."""
+
+    def test_pair_list_length(self, five_element_composition):
+        """Five-element alloy produces C(5, 2) = 10 unique element pairs."""
+        assert len(five_element_composition.pair_list) == 10
+
+    def test_atomic_percentage_sums_to_one(self, five_element_composition):
+        """Atomic fractions sum to 1.0 for the five-element Cantor alloy."""
+        assert sum(five_element_composition.atomic_percentage.values()) == pytest.approx(1.0, abs=1e-10)
+
+    def test_equimolar_fractions(self, five_element_composition):
+        """Each element has an equal 20 at% fraction in the equimolar Cantor alloy."""
+        for pct in five_element_composition.atomic_percentage.values():
+            assert pct == pytest.approx(0.20, abs=1e-10)
+
+    def test_pair_percentages_sum(self, five_element_composition):
+        """For equimolar CoCrFeMnNi, 10 pairs each at 0.04 sum to 0.40."""
+        assert sum(five_element_composition.pair_percentage) == pytest.approx(0.40, abs=1e-10)
+
+
+class TestAlloyCompositionNaNAllenCE:
+    """Tests for alloys containing elements with no Allen CE data (e.g., lanthanides)."""
+
+    def test_allen_electronegativity_list_contains_nan(self):
+        """An alloy including a lanthanide (La) has at least one NaN Allen CE value."""
+        import math
+
+        comp = AlloyComposition("FeLa")
+        assert any(math.isnan(x) for x in comp.allen_electronegativity_list)
+
+    def test_average_allen_electronegativity_is_nan_when_element_missing(self):
+        """The weighted average Allen CE is NaN when any element lacks CE data."""
+        import math
+
+        comp = AlloyComposition("FeLa")
+        assert math.isnan(comp.average_allen_electronegativity)
+
+
+class TestAlloyCompositionRepeatedElement:
+    """Tests that repeated element symbols accumulate counts at the composition level."""
+
+    def test_repeated_element_accumulates(self):
+        """Fe2CoFe is parsed as Fe=3, Co=1; atomic fractions sum to 1.0."""
+        comp = AlloyComposition("Fe2CoFe")
+        assert comp.alloy["Fe"] == 3
+        assert comp.alloy["Co"] == 1
+        assert sum(comp.atomic_percentage.values()) == pytest.approx(1.0, abs=1e-10)

@@ -62,3 +62,22 @@ class TestFindAllComps(TestCase):
         _, comps = find_all_comps("AlTiV", 0, 100, 50)
         pure_element_comps = [c for c in comps if sum(1 for x in c if x > 0) == 1]
         assert len(pure_element_comps) == 3
+
+    def test_start_equals_end_yields_one_composition(self):
+        """When start == end, exactly one composition is produced (both elements at that value)."""
+        _, comps = find_all_comps("FeNi", 50, 50, 5)
+        assert len(comps) == 1
+        assert (50.0, 50.0) in comps
+
+    def test_five_element_alloy_compositions_sum_to_100(self):
+        """A five-element range search produces compositions that each sum to exactly 100 at%."""
+        _, comps = find_all_comps("AlTiVCrMn", 0, 100, 50)
+        assert len(comps) > 0
+        for comp in comps:
+            assert sum(comp) == pytest.approx(100.0, abs=1e-9)
+
+    def test_non_divisible_step_all_comps_sum_to_100(self):
+        """Compositions generated with a non-divisible step still each sum to 100 at%."""
+        _, comps = find_all_comps("FeNi", 0, 100, 3)
+        for comp in comps:
+            assert sum(comp) == pytest.approx(100.0, abs=1e-9)

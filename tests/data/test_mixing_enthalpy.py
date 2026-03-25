@@ -25,3 +25,14 @@ class TestMixingEnthalpyLoader:
         """A non-tuple input raises TypeError."""
         with pytest.raises(TypeError):
             MixingEnthalpy(None)  # ty: ignore[invalid-argument-type]
+
+    def test_list_input_returns_same_as_tuple(self, fe_co_pair):
+        """List input produces the same result as an equivalent tuple."""
+        assert MixingEnthalpy(["Fe", "Co"]) == MixingEnthalpy(fe_co_pair)
+
+    def test_missing_pair_raises_missing_mixing_enthalpy_error(self):
+        """An unrecognized pair raises MissingMixingEnthalpyError (not just KeyError)."""
+        from HEACalculator.exceptions import MissingMixingEnthalpyError
+
+        with pytest.raises(MissingMixingEnthalpyError):
+            MixingEnthalpy(("Xx", "Yy"))

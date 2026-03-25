@@ -123,3 +123,27 @@ class TestValidation(TestCase):
 
         sig = inspect.signature(nested_formula_parser)
         assert sig.parameters["check"].default is True
+
+
+class TestDeepNestingAndLargeMultipliers(TestCase):
+    """Parsing of deeply nested formulas and large multipliers."""
+
+    def test_deeply_nested_parentheses(self):
+        """Three-level nesting applies multipliers from innermost outward."""
+        result = nested_formula_parser("((Fe2Co)3Ni)2")
+        assert result == {"Fe": 12, "Co": 6, "Ni": 2}
+
+    def test_large_integer_multiplier(self):
+        """A very large integer multiplier is stored correctly."""
+        result = nested_formula_parser("Fe1000")
+        assert result == {"Fe": 1000}
+
+    def test_whitespace_in_formula_is_ignored(self):
+        """Leading and trailing whitespace in a formula is silently ignored by the tokenizer."""
+        result = nested_formula_parser(" Fe ")
+        assert result == {"Fe": 1}
+
+    def test_single_repeated_element(self):
+        """A formula with only one element repeated accumulates to a single entry."""
+        result = nested_formula_parser("FeFe")
+        assert result == {"Fe": 2}

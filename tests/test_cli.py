@@ -219,3 +219,45 @@ class TestCsvSearch(TestCase):
             assert "FeNi" in result.output
         finally:
             Path(tmp_path).unlink()
+
+    def test_csv_headers_only_exits_zero(self):
+        """A CSV file with headers but no data rows exits with code 0."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path])
+            assert result.exit_code == 0
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_csv_headers_only_output_contains_header(self):
+        """A CSV file with headers but no data rows still prints the output header row."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path])
+            assert "Formula" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+
+class TestRangeSearchEdgeCases(TestCase):
+    """Edge case tests for the ``range`` subcommand."""
+
+    def test_start_equals_end_exits_zero(self):
+        """When start == end, the command exits successfully."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "50", "--end", "50", "--step", "5"],
+        )
+        assert result.exit_code == 0
+
+    def test_step_larger_than_range_exits_zero(self):
+        """When the step is larger than the range no compositions are found but the command exits 0."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "10", "--end", "20", "--step", "50"],
+        )
+        assert result.exit_code == 0

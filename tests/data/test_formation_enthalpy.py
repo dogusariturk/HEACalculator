@@ -26,3 +26,7 @@ class TestFormationEnthalpyLoader:
         """A non-tuple input raises TypeError."""
         with pytest.raises(TypeError):
             FormationEnthalpy(None)  # ty: ignore[invalid-argument-type]
+
+    def test_list_input_returns_same_as_tuple(self, fe_co_pair):
+        """List input produces the same result as an equivalent tuple."""
+        assert FormationEnthalpy(["Fe", "Co"]) == FormationEnthalpy(fe_co_pair)
