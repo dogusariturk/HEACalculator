@@ -48,13 +48,15 @@ HEACalculator search range --elements "El1 El2 ..." [OPTIONS]
 
 **Options**
 
-| Option       | Default      | Description                                                             |
-|--------------|--------------|-------------------------------------------------------------------------|
-| `--elements` | *(required)* | Space-separated list of element symbols                                 |
-| `--start`    | `0`          | Lowest atomic % for each element                                        |
-| `--end`      | `100`        | Highest atomic % for each element                                       |
-| `--step`     | `5`          | Composition step size (at%)                                             |
-| `--csv`      | `False`      | Export results as CSV to stdout (same 21-column format as `search csv`) |
+| Option       | Default      | Description                             |
+|--------------|--------------|-----------------------------------------|
+| `--elements` | *(required)* | Space-separated list of element symbols |
+| `--start`    | `0`          | Lowest at% for each element             |
+| `--end`      | `100`        | Highest at% for each element            |
+| `--step`     | `5`          | Composition step size (at%)             |
+| `--csv`      | `False`      | Export results as CSV to stdout         |
+
+Pure single-element compositions (one element at 100 at%, the rest at 0 at%) are included automatically whenever both `--start 0` and `--end 100` are used with a step that divides evenly into 100.
 
 **Examples**
 
@@ -91,7 +93,7 @@ AlCoCrFeNi,quinary
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
 
-**Output columns:** Formula, Density (g/cm³), δ (%), Δχ_Allen (%), Ω, γ, λ, VEC, ΔH_mix (kJ/mol), ΔS_mix (J/K·mol), ΔH_f (meV/atom), min. ΔH_f (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
+**Output columns:** Formula, Density (g/cm^3), Delta (%), Omega, Gamma, Lambda, VEC, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
 
 **Example**
 
@@ -109,7 +111,7 @@ Launch the PyQt6 desktop application:
 HEACalculator gui
 ```
 
-> **Note:** Requires `PyQt6`. Install with `pip install "HEACalculator[gui]"`.
+> **Note:** Requires `PyQt6`. Install with `uv add "HEACalculator[gui]"` or `pip install "HEACalculator[gui]"`.
 
 ![HEACalculator GUI](https://user-images.githubusercontent.com/46679086/205514915-e4ce2dbf-4636-4639-b978-3a018183ba82.png)
 
@@ -134,11 +136,11 @@ from HEACalculator import HEACalculator
 hea = HEACalculator("FeCoCrNi")
 
 # Thermodynamic properties
-print(hea.thermo.mixing_enthalpy)          # kJ/mol
-print(hea.thermo.mixing_entropy)           # J/K·mol
-print(hea.thermo.formation_enthalpy)       # meV/atom
-print(hea.thermo.density)                  # g/cm³
-print(hea.thermo.melting_temperature)      # K
+print(hea.thermo.mixing_enthalpy)               # kJ/mol
+print(hea.thermo.mixing_entropy)                # J/K·mol
+print(hea.thermo.formation_enthalpy)            # meV/atom
+print(hea.thermo.density)                       # g/cm³
+print(hea.thermo.melting_temperature)           # K
 print(hea.thermo.valence_electron_concentration)
 print(hea.thermo.atomic_size_difference)        # %
 print(hea.thermo.electronegativity_difference)  # % (Allen CE scale)
@@ -165,18 +167,6 @@ print(hea)
 
 ```python
 omega_800 = hea.thermo.omega_at(800)  # at 800 K
-```
-
-### Composition unit converter
-
-```python
-from HEACalculator.core.converter import BatchCalculator
-
-calc = BatchCalculator({"Fe": 25.0, "Co": 25.0, "Cr": 25.0, "Ni": 25.0})
-
-wt  = calc.at_to_wt()   # atomic% → weight%
-vol = calc.at_to_vol()  # atomic% → volume%
-at  = calc.wt_to_at()   # weight% → atomic%
 ```
 
 ### Accessing element data directly

@@ -15,9 +15,9 @@ ModuleNotFoundError: No module named 'PyQt6'
 PyQt6 is an optional dependency and is not installed by default. Install it with:
 
 ```bash
+uv add "HEACalculator[gui]"
+# or with pip:
 pip install "HEACalculator[gui]"
-# or with uv:
-uv sync --extra gui
 ```
 
 ---

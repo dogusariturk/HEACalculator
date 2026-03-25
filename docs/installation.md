@@ -42,7 +42,7 @@ git clone https://github.com/dogusariturk/HEACalculator.git
 cd HEACalculator
 
 uv sync                   # Core dependencies (CLI only)
-uv sync --group dev       # Core + development tools (ruff, pytest, pre-commit)
+uv sync --group dev       # Core + development tools (ruff, pytest, prek, ty)
 uv sync --extra gui       # Core + GUI support (PyQt6)
 uv sync --extra docs      # Core + documentation dependencies (mkdocs-material)
 ```

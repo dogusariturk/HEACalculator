@@ -93,7 +93,7 @@ where $M_i$ and $V_i$ are the molar mass and atomic volume of element $i$.
 ### Melting Temperature
 
 $$
-T_m = \sum_{i=1}^{n} x_i\,T_{m,i} \quad [\text{K}]
+\overline{T}_m = \sum_{i=1}^{n} x_i\,T_{m,i} \quad [\text{K}]
 $$
 
 ---
@@ -118,7 +118,7 @@ A microstructure prediction based on VEC is also provided:
 - VEC ≥ 8: FCC
 - VEC < 6.87: BCC
 - 6.87 ≤ VEC < 8: BCC + FCC (mixed)
-- VEC < 5 and certain conditions: HCP
+- 2.5 ≤ VEC < 3.5: HCP
 
 ---
 
