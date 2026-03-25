@@ -35,5 +35,5 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras
 
-      - name: Run tests
-        run: uv run pytest tests/ -v
+      - name: Run tests with display
+        run: xvfb-run -a uv run pytest tests/ -v
