@@ -37,7 +37,7 @@ class TestGuiCommand(TestCase):
     def test_gui_command_calls_gui_runner(self):
         """The gui command imports and invokes HEACalculator.app.run."""
         fake_app_module = ModuleType("HEACalculator.app")
-        fake_app_module.run = MagicMock()
+        fake_app_module.run = MagicMock()  # ty: ignore[unresolved-attribute]
 
         with patch.dict(sys.modules, {"HEACalculator.app": fake_app_module}):
             main_module.gui()

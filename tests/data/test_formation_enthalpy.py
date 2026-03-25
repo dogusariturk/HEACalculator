@@ -25,4 +25,4 @@ class TestFormationEnthalpyLoader:
     def test_invalid_input_raises_type_error(self):
         """A non-tuple input raises TypeError."""
         with pytest.raises(TypeError):
-            FormationEnthalpy(None)
+            FormationEnthalpy(None)  # ty: ignore[invalid-argument-type]
