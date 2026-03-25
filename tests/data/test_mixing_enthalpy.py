@@ -24,4 +24,4 @@ class TestMixingEnthalpyLoader:
     def test_invalid_input_raises_type_error(self):
         """A non-tuple input raises TypeError."""
         with pytest.raises(TypeError):
-            MixingEnthalpy(None)
+            MixingEnthalpy(None)  # ty: ignore[invalid-argument-type]

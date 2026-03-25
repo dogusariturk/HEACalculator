@@ -48,6 +48,7 @@ dev = [
     "prek>=0.3.4",
     "pytest>=9.0.2",
     "ruff>=0.15.4",
+    "ty>=0.0.25",
 ]
 
 [tool.pytest.ini_options]
@@ -111,3 +112,10 @@ pydocstyle.convention = "google"
 quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
+
+[tool.ty.src]
+exclude = [
+    "src/HEACalculator/gui/*",
+    "src/HEACalculator/app.py",
+    "tests/test_app.py"
+]

@@ -32,7 +32,7 @@ class TestElementLoader:
     def test_invalid_input_raises_type_error(self):
         """A non-string input raises TypeError."""
         with pytest.raises(TypeError):
-            Element(None)
+            Element(None)  # ty: ignore[invalid-argument-type]
 
     def test_all_118_elements_accessible(self):
         """The elements database contains exactly 118 entries."""
