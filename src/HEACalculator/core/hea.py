@@ -55,6 +55,7 @@ class HEACalculator:
         for item in [
             t.density,
             t.atomic_size_difference,
+            t.electronegativity_difference,
             t.omega,
             t.gamma,
             t.lambda_,
@@ -88,6 +89,7 @@ class HEACalculator:
             f"{self.formula:=^48}\n"
             f"{'Density':25}: {t.density:>10.2f} g/cm^3\n"
             f"{'Delta':25}: {t.atomic_size_difference:>10.2f} %\n"
+            f"{'Delta Chi (Allen)':25}: {t.electronegativity_difference:>10.2f} %\n"
             f"{'Omega':25}: {t.omega:>10.2f}\n"
             f"{'Gamma':25}: {t.gamma:>10.2f}\n"
             f"{'Lambda':25}: {t.lambda_:>10.2f}\n"

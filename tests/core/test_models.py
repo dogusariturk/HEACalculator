@@ -24,15 +24,15 @@ class TestSolidSolutionPredictorFeCoCrNi:
         assert predictor.model_1 == "Solid Solution"
 
     def test_model_2_solid_solution(self, predictor):
-        """Model 2 (ΔHmix–δ criterion) predicts solid solution for FeCoCrNi."""
+        """Model 2 (deltaHmix-delta criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_2 == "Solid Solution"
 
     def test_model_3_solid_solution(self, predictor):
-        """Model 3 (ΔHmix–ΔSmix criterion) predicts solid solution for FeCoCrNi."""
+        """Model 3 (deltaHmix-deltaSmix criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_3 == "Solid Solution"
 
     def test_model_4_solid_solution(self, predictor):
-        """Model 4 (ΔHmix–VEC criterion) predicts solid solution for FeCoCrNi."""
+        """Model 4 (deltaHmix-VEC criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_4 == "Solid Solution"
 
     def test_model_5_returns_valid_result(self, predictor):
@@ -44,7 +44,7 @@ class TestSolidSolutionPredictorFeCoCrNi:
         assert predictor.model_5 == "Multiple Phases"
 
     def test_model_6_solid_solution(self, predictor):
-        """Model 6 (λ criterion) predicts solid solution for FeCoCrNi."""
+        """Model 6 (lambda criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_6 == "Solid Solution"
 
     def test_model_7_result_is_valid(self, predictor):
@@ -69,7 +69,7 @@ class TestSolidSolutionPredictorFeCoCrNi:
 
 
 class TestModel8KingCriterion:
-    """King et al. (2016): Phi = ΔG_ss / (−|ΔG_max|) >= 1 -> Solid Solution."""
+    """King et al. (2016): Phi = delta_G_ss / (-|delta_G_max|) >= 1 -> Solid Solution."""
 
     def test_model_8_fecocrni_solid_solution(self):
         """King et al. (2016): CoCrFeNi Phi ~= 1.16 >= 1 -> Solid Solution."""
@@ -93,7 +93,7 @@ class TestModel8KingCriterion:
         assert p.model_8 in ("Solid Solution", "Multiple Phases")
 
     def test_model_8_zero_delta_g_max_is_solid_solution(self):
-        """When ΔG_max = 0 (no driving force for IM), model_8 returns Solid Solution."""
+        """When delta_G_max = 0 (no driving force for IM), model_8 returns Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         t.__dict__["delta_g_max"] = 0.0
@@ -249,7 +249,7 @@ class TestPaperValidation:
         assert p.model_1 == "Intermetallic"
 
     def test_model_2_fecocrni_solid_solution(self):
-        """Guo et al. (2013): FeCoCrNi δ and ΔH_mix are within the SS region."""
+        """Guo et al. (2013): FeCoCrNi delta and deltaH_mix are within the SS region."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)

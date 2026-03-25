@@ -101,6 +101,26 @@ class HEAThermodynamics:
         return math.sqrt(_delta) * 100
 
     @cached_property
+    def electronegativity_difference(self) -> float:
+        """Allen electronegativity difference (delta_chi_Allen) of the alloy in %.
+
+        References:
+            Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
+            Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C.
+                J. Am. Chem. Soc. 2000, 122, 5132-5137.
+        """
+        chi_avg = self._c.average_allen_electronegativity
+        _delta_chi = sum(
+            pct * (1 - (x / chi_avg)) ** 2
+            for pct, x in zip(
+                self._c.atomic_percentage.values(),
+                self._c.allen_electronegativity_list,
+                strict=True,
+            )
+        )
+        return math.sqrt(_delta_chi) * 100
+
+    @cached_property
     def min_formation_enthalpy(self) -> float:
         """Minimum binary formation enthalpy in meV/atom."""
         return min(FormationEnthalpy(pair) for pair in self._c.pair_list)
@@ -181,7 +201,7 @@ class HEAThermodynamics:
 
     @cached_property
     def delta_g_max(self) -> float:
-        """ΔG_max: largest-magnitude binary compound energy in kJ/mol (King et al. 2016).
+        """delta_G_max: largest-magnitude binary compound energy in kJ/mol (King et al. 2016).
 
         References:
             King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.

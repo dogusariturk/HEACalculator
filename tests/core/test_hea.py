@@ -54,8 +54,21 @@ class TestHEACalculator:
     def test_str_delta_has_percent_unit(self, calculator):
         """Delta in __str__ includes % unit."""
         lines = str(calculator).splitlines()
-        delta_line = next(line for line in lines if "Delta" in line)
+        delta_line = next(line for line in lines if line.strip().startswith("Delta") and "Chi" not in line)
         assert "%" in delta_line
+
+    def test_str_delta_chi_allen_present(self, calculator):
+        """Delta Chi (Allen) line appears in __str__ with % unit."""
+        lines = str(calculator).splitlines()
+        chi_line = next(line for line in lines if "Delta Chi" in line)
+        assert "%" in chi_line
+
+    def test_electronegativity_difference_in_get_list(self, calculator):
+        """get_list() includes electronegativity_difference as a formatted float string."""
+        lst = calculator.get_list()
+        # index 3: formula(0), density(1), delta(2), delta_chi(3)
+        assert "." in lst[3]
+        assert float(lst[3]) == pytest.approx(4.85, abs=0.01)
 
     def test_str_entropy_unit(self, calculator):
         """Mixing entropy unit in __str__ uses J/K.mol."""
@@ -72,8 +85,8 @@ class TestHEACalculator:
     def test_get_list_melting_temp_no_decimal(self, calculator):
         """Melting temperature in get_list() has no decimal point."""
         lst = calculator.get_list()
-        # Layout: formula(0), 10 floats(1-10), melting(11), microstructure(12), 8 models(13-20)
-        assert "." not in lst[11]
+        # Layout: formula(0), 11 floats(1-11), melting(12), microstructure(13), 8 models(14-21)
+        assert "." not in lst[12]
 
     def test_get_list_model_5_is_string_not_na(self, calculator):
         """Model 5 in get_list() returns a valid phase prediction string."""
