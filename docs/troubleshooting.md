@@ -36,7 +36,7 @@ The formula contains an element symbol that does not exist in the built-in eleme
 
 **Fix**
 
-Check that all element symbols are correctly capitalised (e.g. `Fe`, not `fe` or `FE`) and that they correspond to real chemical elements.
+Check that all element symbols are correctly capitalized (e.g. `Fe`, not `fe` or `FE`) and that they correspond to real chemical elements.
 
 ```bash
 # Wrong
@@ -112,11 +112,11 @@ The formula string cannot be parsed. Common causes:
 
 Use one of the supported notation styles:
 
-| Style | Example |
-|-------|---------|
-| Equimolar (no counts) | `FeCoCrNi` |
-| Explicit atom counts | `Fe25Co25Cr25Ni25` |
-| Nested brackets | `(FeCo)2CrNi` |
+| Style                 | Example            |
+|-----------------------|--------------------|
+| Equimolar (no counts) | `FeCoCrNi`         |
+| Explicit atom counts  | `Fe25Co25Cr25Ni25` |
+| Nested brackets       | `(FeCo)2CrNi`      |
 
 Spaces are not allowed inside the formula string. For `search range`, pass elements as a space-separated list via `--elements "Fe Co Cr Ni"`.
 

@@ -28,23 +28,28 @@ It exposes both a **command-line interface** (CLI) powered by [Typer](https://ty
 
 **Property calculations**
 
-- Density
-- Melting Temperature
-- Mixing Enthalpy ($\Delta H_{\text{mix}}$)
-- Mixing Entropy ($\Delta S_{\text{mix}}$)
-- Formation Enthalpy ($\Delta H_f$)
+- Density (g/cm$^3$)
+- Melting Temperature (K)
+- Mixing Enthalpy, $\Delta H_{\text{mix}}$ (kJ/mol)
+- Mixing Entropy, $\Delta S_{\text{mix}}$ (J/K·mol)
+- Formation Enthalpy, $\Delta H_f$ (meV/atom)
+- Minimum Formation Enthalpy, min. $\Delta H_f$ (meV/atom)
 - Valence Electron Concentration (VEC)
 
 **Structural parameters**
 
-- Expected Microstructure (FCC / BCC / HCP)
-- Atomic Size Difference ($\delta$)
-- Omega ($\Omega$)
-- Gamma ($\gamma$)
-- Lambda ($\lambda$)
+- Atomic Size Difference, $\delta$ (%)
+- Electronegativity Difference, $\Delta\chi_{\text{Allen}}$ (%)
+- Omega, $\Omega$
+- Gamma, $\gamma$
+- Lambda, $\lambda$
+- Phi, $\phi$
+- $\Delta G_{\text{SS}}$
+- $\Delta G_{\text{max}}$
 
 **Solid-solution formation prediction**
 
+- Expected Microstructure (FCC / BCC / HCP / BCC+FCC)
 - 8 independent published models (Yang & Zhang, Guo, Wang, Singh, Ye, Troparevsky, Senkov & Miracle, King)
 
 ---

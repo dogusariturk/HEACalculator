@@ -48,13 +48,13 @@ HEACalculator search range --elements "El1 El2 ..." [OPTIONS]
 
 **Options**
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `--elements` | *(required)* | Space-separated list of element symbols |
-| `--start` | `0` | Lowest atomic % for each element |
-| `--end` | `100` | Highest atomic % for each element |
-| `--step` | `5` | Composition step size (at%) |
-| `--csv` | `False` | Export results as CSV to stdout (same 21-column format as `search csv`) |
+| Option       | Default      | Description                                                             |
+|--------------|--------------|-------------------------------------------------------------------------|
+| `--elements` | *(required)* | Space-separated list of element symbols                                 |
+| `--start`    | `0`          | Lowest atomic % for each element                                        |
+| `--end`      | `100`        | Highest atomic % for each element                                       |
+| `--step`     | `5`          | Composition step size (at%)                                             |
+| `--csv`      | `False`      | Export results as CSV to stdout (same 21-column format as `search csv`) |
 
 **Examples**
 
@@ -91,7 +91,7 @@ AlCoCrFeNi,quinary
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
 
-**Output columns:** Formula, Density (g/cm^3), Delta (%), Omega, Gamma, Lambda, VEC, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
+**Output columns:** Formula, Density (g/cm³), δ (%), Δχ_Allen (%), Ω, γ, λ, VEC, ΔH_mix (kJ/mol), ΔS_mix (J/K·mol), ΔH_f (meV/atom), min. ΔH_f (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
 
 **Example**
 
@@ -140,7 +140,8 @@ print(hea.thermo.formation_enthalpy)       # meV/atom
 print(hea.thermo.density)                  # g/cm³
 print(hea.thermo.melting_temperature)      # K
 print(hea.thermo.valence_electron_concentration)
-print(hea.thermo.atomic_size_difference)   # %
+print(hea.thermo.atomic_size_difference)        # %
+print(hea.thermo.electronegativity_difference)  # % (Allen CE scale)
 print(hea.thermo.omega)
 print(hea.thermo.gamma)
 print(hea.thermo.lambda_)
@@ -184,9 +185,10 @@ at  = calc.wt_to_at()   # weight% → atomic%
 from HEACalculator.data import Element, MixingEnthalpy, FormationEnthalpy
 
 fe = Element("Fe")
-print(fe.atomic_weight)    # 55.845
-print(fe.melting_point)    # 1811 K
-print(fe.atomic_radius)    # 126 pm
+print(fe.atomic_weight)             # 55.845
+print(fe.melting_point)             # 1811 K
+print(fe.atomic_radius)             # 126 pm
+print(fe.allen_electronegativity)   # 1.80 (Pauling units)
 
 dH = MixingEnthalpy(("Fe", "Co"))       # kJ/mol
 dHf = FormationEnthalpy(("Fe", "Co"))   # meV/atom

@@ -52,6 +52,7 @@ markdown_extensions:
   - footnotes
   - def_list
   - tables
+  - attr_list
 
 extra_javascript:
   - javascripts/mathjax.js

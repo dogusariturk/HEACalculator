@@ -19,7 +19,7 @@ Element symbols must start with an uppercase letter (`Fe`, not `fe`). Spaces ins
 
 ## What happens when I don't specify atom fractions?
 
-If you provide a formula without numeric counts (e.g. `FeCoCrNi`), all elements are assumed to be **equimolar**. Internally the formula is treated as `Fe1Co1Cr1Ni1` and the fractions are normalised to sum to 1.
+If you provide a formula without numeric counts (e.g. `FeCoCrNi`), all elements are assumed to be **equimolar**. Internally the formula is treated as `Fe1Co1Cr1Ni1` and the fractions are normalized to sum to 1.
 
 ---
 
