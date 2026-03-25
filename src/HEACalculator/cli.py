@@ -1,20 +1,17 @@
 """CLI search subcommands for HEACalculator."""
 
-import math
-from itertools import combinations_with_replacement, permutations
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import typer
 
 from HEACalculator import HEACalculator
-from HEACalculator.core.helpers import nested_formula_parser
 from HEACalculator.exceptions import (
     ElementNotFoundError,
     MissingFormationEnthalpyError,
     MissingMixingEnthalpyError,
 )
+from HEACalculator.utils import find_all_comps
 
 app = typer.Typer()
 
@@ -139,31 +136,3 @@ def range_search(
                 print(HEACalculator(new_alloy))
         except Exception as e:
             typer.echo(f"# Skipping '{new_alloy}': {e}", err=True)
-
-
-def find_all_comps(alloy: str, start: float, end: float, step: float) -> tuple[dict[str, int | float], set[tuple[float, ...]]]:
-    """Find all valid composition combinations for the given elements and range.
-
-    Args:
-        alloy (str): Alloy formula string defining the elements to screen.
-        start (float): Lowest atomic percent for each element (inclusive).
-        end (float): Highest atomic percent for each element (inclusive).
-        step (float): Composition screening step size.
-
-    Returns:
-        tuple[dict, set]: The parsed formula dict and a set of valid composition tuples.
-    """
-    formula = nested_formula_parser(alloy)
-    no_of_elements = len(formula)
-    composition_set = set()
-    results = [
-        i
-        for i in combinations_with_replacement(np.arange(start, end + step / 2, step), no_of_elements)
-        if math.isclose(sum(i), 100.0, abs_tol=1e-9) and all(x < 100 for x in i)
-    ]
-
-    for result in results:
-        for composition in permutations(result):
-            composition_set.add(composition)
-
-    return formula, composition_set
