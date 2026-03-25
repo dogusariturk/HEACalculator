@@ -104,29 +104,55 @@ class TestNewProperties:
         assert math.isinf(t.phi)
 
     def test_delta_g_ss_fecocrni(self, thermodynamics):
-        """ΔG_ss = ΔH_mix - T_m * ΔS_mix / 1000 for FeCoCrNi."""
+        """delta_G_ss = deltaH_mix - T_m * deltaS_mix / 1000 for FeCoCrNi."""
         expected = thermodynamics.mixing_enthalpy - thermodynamics.melting_temperature * thermodynamics.mixing_entropy / 1000
         assert thermodynamics.delta_g_ss == pytest.approx(expected, abs=1e-10)
 
     def test_delta_g_ss_is_negative_for_fecocrni(self, thermodynamics):
-        """ΔG_ss is negative for FeCoCrNi (entropy term dominates)."""
+        """delta_G_ss is negative for FeCoCrNi (entropy term dominates)."""
         assert thermodynamics.delta_g_ss < 0
 
     def test_delta_g_max_fecocrni_is_negative(self, thermodynamics):
-        """ΔG_max for FeCoCrNi is negative (most stabilizing binary is Cr-Ni)."""
+        """delta_G_max for FeCoCrNi is negative (most stabilizing binary is Cr-Ni)."""
         assert thermodynamics.delta_g_max < 0
 
     def test_delta_g_max_fecocrni_approx(self, thermodynamics):
-        """ΔG_max for FeCoCrNi equals 2× the largest-magnitude pairwise mixing enthalpy."""
+        """delta_G_max for FeCoCrNi equals 2x the largest-magnitude pairwise mixing enthalpy."""
         assert thermodynamics.delta_g_max == pytest.approx(-14.0, abs=0.5)
 
     def test_delta_g_max_is_largest_magnitude(self, thermodynamics):
-        """ΔG_max has the largest absolute value among all binary pair energies."""
+        """delta_G_max has the largest absolute value among all binary pair energies."""
         from HEACalculator.data.mixing_enthalpy import MixingEnthalpy
 
         pair_enthalpies = [MixingEnthalpy(pair) for pair in thermodynamics._c.pair_list]
         expected_max_abs = max(pair_enthalpies, key=abs)
         assert thermodynamics.delta_g_max == pytest.approx(2 * expected_max_abs, abs=1e-10)
+
+
+class TestElectronegativityDifference:
+    """Tests for the Allen electronegativity difference (delta_chi_Allen) property."""
+
+    def test_electronegativity_difference_is_positive(self, thermodynamics):
+        """delta_chi_Allen is strictly positive for a multi-element alloy with distinct CE values."""
+        assert thermodynamics.electronegativity_difference > 0
+
+    def test_electronegativity_difference_fecocrni(self, thermodynamics):
+        """delta_chi_Allen for FeCoCrNi is approximately 4.85% (Allen CE: Fe=1.80, Co=1.84, Cr=1.65, Ni=1.88)."""
+        assert thermodynamics.electronegativity_difference == pytest.approx(4.85, abs=0.01)
+
+    def test_electronegativity_difference_is_float(self, thermodynamics):
+        """delta_chi_Allen is returned as a float."""
+        assert isinstance(thermodynamics.electronegativity_difference, float)
+
+    def test_electronegativity_difference_uses_allen_scale(self, thermodynamics):
+        """Verify that the result is consistent with manual calculation using Allen CE values."""
+        import math
+
+        chi = thermodynamics._c.allen_electronegativity_list
+        pct = list(thermodynamics._c.atomic_percentage.values())
+        chi_avg = sum(c * x for c, x in zip(pct, chi, strict=True))
+        expected = math.sqrt(sum(c * (1 - x / chi_avg) ** 2 for c, x in zip(pct, chi, strict=True))) * 100
+        assert thermodynamics.electronegativity_difference == pytest.approx(expected, abs=1e-10)
 
 
 class TestEdgeCases:

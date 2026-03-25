@@ -26,10 +26,13 @@ class _Element:
         atomic_weight: Relative atomic weight.
         atomic_radius: Atomic radius in pm.
         nvalence: Number of valence electrons.
+        allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
 
     References:
-        IUPAC-CIAAW. Standard atomic weights. http://www.ciaaw.org/atomic-weights.htm.
+        IUPAC-CIAAW. Standard atomic weights. https://www.ciaaw.org/atomic-weights.htm.
         Slater, J.C. Atomic Radii in Crystals. J. Chem. Phys. 1964, 41(10), 3199.
+        Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
+        Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
     """
 
     symbol: str
@@ -39,6 +42,7 @@ class _Element:
     atomic_weight: float
     atomic_radius: float
     nvalence: float
+    allen_electronegativity: float
 
     def __str__(self) -> str:
         """Return a human-readable summary of the element's properties."""
@@ -50,6 +54,7 @@ class _Element:
             f"\tAtomic weight: {self.atomic_weight}\n"
             f"\tAtomic radius: {self.atomic_radius} pm\n"
             f"\tValence electrons: {self.nvalence}\n"
+            f"\tAllen electronegativity: {self.allen_electronegativity}\n"
         )
 
 
@@ -62,6 +67,7 @@ _elements: dict[str, _Element] = {
         atomic_weight=props["atomic_weight"],
         atomic_radius=float(props["atomic_radius"]),
         nvalence=props["nvalence"],
+        allen_electronegativity=float(props["allen_electronegativity"]),
     )
     for name, props in _element_data.items()
 }

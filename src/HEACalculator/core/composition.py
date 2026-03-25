@@ -69,3 +69,13 @@ class AlloyComposition:
     def average_atomic_radius(self) -> float:
         """Weighted average atomic radius using atomic fractions."""
         return sum(pct * r for pct, r in zip(self.atomic_percentage.values(), self.atomic_radius_list, strict=True))
+
+    @cached_property
+    def allen_electronegativity_list(self) -> list[float]:
+        """Allen electronegativity for each element in the same order as ``alloy``."""
+        return [self.elements[elm].allen_electronegativity for elm in self.alloy]
+
+    @cached_property
+    def average_allen_electronegativity(self) -> float:
+        """Composition-weighted average Allen electronegativity."""
+        return sum(pct * x for pct, x in zip(self.atomic_percentage.values(), self.allen_electronegativity_list, strict=True))

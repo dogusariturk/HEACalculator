@@ -65,7 +65,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_2(self) -> str:
-        """Guo et al. criteria: −11.6 < deltaH_mix < 3.2 and δ < 6.6.
+        """Guo et al. criteria: -11.6 < deltaH_mix < 3.2 and delta < 6.6.
 
         References:
             Guo, S.; Hu, Q.; Ng, C.; Liu, C.T. Intermetallics 2013, 41, 96-103.

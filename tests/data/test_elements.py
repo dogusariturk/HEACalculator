@@ -39,3 +39,23 @@ class TestElementLoader:
         from HEACalculator.data.elements import _element_data
 
         assert len(_element_data) == 118
+
+    def test_iron_allen_electronegativity(self, fe_element):
+        """Iron's Allen CE is 1.80 Pauling units (d-block paper, Table 4)."""
+        assert fe_element.allen_electronegativity == pytest.approx(1.80, abs=1e-10)
+
+    def test_nickel_allen_electronegativity(self):
+        """Nickel's Allen CE is 1.88 Pauling units (d-block paper, Table 4)."""
+        assert Element("Ni").allen_electronegativity == pytest.approx(1.88, abs=1e-10)
+
+    def test_lanthanide_allen_electronegativity_is_nan(self):
+        """La has no Allen CE data — value is NaN (lanthanides not covered by Allen papers)."""
+        import math
+
+        assert math.isnan(Element("La").allen_electronegativity)
+
+    def test_actinide_allen_electronegativity_is_nan(self):
+        """Ac has no Allen CE data — value is NaN (actinides not covered by Allen papers)."""
+        import math
+
+        assert math.isnan(Element("Ac").allen_electronegativity)

@@ -64,6 +64,21 @@ class TestAlloyCompositionEquimolar:
         """The weighted average atomic radius is a strictly positive value."""
         assert composition.average_atomic_radius > 0
 
+    def test_allen_electronegativity_list_length(self, composition):
+        """The Allen electronegativity list contains one value per element."""
+        assert len(composition.allen_electronegativity_list) == 4
+
+    def test_allen_electronegativity_list_all_positive(self, composition):
+        """All Allen CE values for FeCoCrNi are finite and positive."""
+        import math
+
+        for x in composition.allen_electronegativity_list:
+            assert math.isfinite(x) and x > 0
+
+    def test_average_allen_electronegativity_fecocrni(self, composition):
+        """Average Allen CE for equimolar FeCoCrNi equals (1.80+1.84+1.65+1.88)/4 = 1.7925."""
+        assert composition.average_allen_electronegativity == pytest.approx(1.7925, abs=1e-4)
+
 
 @pytest.fixture
 def unequal_composition():
