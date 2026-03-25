@@ -32,6 +32,10 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install EGL libraries (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libegl1
+
       - name: Install dependencies
         run: uv sync --all-extras
 
