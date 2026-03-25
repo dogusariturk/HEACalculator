@@ -7,18 +7,43 @@
 **Symptom**
 
 ```
-ModuleNotFoundError: No module named 'PyQt5'
+ModuleNotFoundError: No module named 'PyQt6'
 ```
 
 **Fix**
 
-PyQt5 is an optional dependency and is not installed by default. Install it with:
+PyQt6 is an optional dependency and is not installed by default. Install it with:
 
 ```bash
 pip install "HEACalculator[gui]"
 # or with uv:
 uv sync --extra gui
 ```
+
+---
+
+## GUI won't launch on Linux (missing EGL library)
+
+**Symptom**
+
+```
+ImportError: libEGL.so.1: cannot open shared object file: No such file or directory
+```
+
+**Cause**
+
+PyQt6 requires EGL (Embedded-Process Graphics Library) to initialize its rendering backend. On minimal Linux installations (e.g. CI runners, headless servers, or fresh Docker containers), the `libegl1` system package may not be present.
+
+**Fix**
+
+Install the missing system library via your package manager:
+
+```bash
+# Debian / Ubuntu
+sudo apt-get install -y libegl1
+```
+
+After installing, retry `HEACalculator gui`.
 
 ---
 

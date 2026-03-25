@@ -13,7 +13,7 @@
 [![Tests](https://github.com/dogusariturk/HEACalculator/actions/workflows/tests.yml/badge.svg)](https://github.com/dogusariturk/HEACalculator/actions/workflows/tests.yml)
 [![Lint](https://github.com/dogusariturk/HEACalculator/actions/workflows/lint.yml/badge.svg)](https://github.com/dogusariturk/HEACalculator/actions/workflows/lint.yml)
 
-`HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics to predict the formation of solid solutions in High Entropy Alloys (HEAs). It provides both a CLI (Typer) and GUI (PyQt5) interface.
+`HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics to predict the formation of solid solutions in High Entropy Alloys (HEAs). It provides both a CLI (Typer) and GUI (PyQt6) interface.
 
 <p>
   <a href="https://github.com/dogusariturk/HEACalculator/issues/new?labels=bug">Report a Bug</a> |
@@ -28,7 +28,7 @@
 ## Installation
 
 > [!NOTE]
-> GUI support requires PyQt5, which is an optional dependency. Install with the `[gui]` extra if needed.
+> GUI support requires PyQt6, which is an optional dependency. Install with the `[gui]` extra if needed.
 
 ```sh
 # Recommended — using uv

@@ -23,7 +23,7 @@ pip install HEACalculator
 pip install "HEACalculator[gui]"   # with GUI support
 ```
 
-> **Note:** GUI support requires PyQt5, which is an optional dependency. Only install the `[gui]` extra if you intend to use the graphical interface.
+> **Note:** GUI support requires PyQt6, which is an optional dependency. Only install the `[gui]` extra if you intend to use the graphical interface.
 
 ---
 
@@ -43,7 +43,7 @@ cd HEACalculator
 
 uv sync                   # Core dependencies (CLI only)
 uv sync --group dev       # Core + development tools (ruff, pytest, pre-commit)
-uv sync --extra gui       # Core + GUI support (PyQt5)
+uv sync --extra gui       # Core + GUI support (PyQt6)
 uv sync --extra docs      # Core + documentation dependencies (mkdocs-material)
 ```
 
