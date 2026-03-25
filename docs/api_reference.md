@@ -40,6 +40,12 @@
 
 ---
 
+## Utils
+
+::: HEACalculator.utils.find_all_comps
+
+---
+
 ## Data
 
 ### Element Database
