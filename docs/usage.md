@@ -1,6 +1,6 @@
 # Usage
 
-HEACalculator provides two interfaces, a **command-line interface (CLI)** and a **graphical user interface (GUI)**, both backed by the same calculation core.
+`HEACalculator` provides two interfaces, a **command-line interface (CLI)** and a **graphical user interface (GUI)**, both backed by the same calculation core.
 
 ---
 
@@ -124,7 +124,7 @@ HEACalculator gui
 
 ## Python API
 
-HEACalculator can be used directly as a Python library.
+`HEACalculator` can be used directly as a Python library.
 
 ### Single alloy calculation
 

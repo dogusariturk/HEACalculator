@@ -3,69 +3,57 @@
 ## Requirements
 
 - Python **3.10** or later
-- pip or [uv](https://docs.astral.sh/uv/) (recommended)
+- [uv](https://docs.astral.sh/uv/) (recommended) or pip
 
 ---
 
 ## Installing HEACalculator
 
-### Core install (CLI only)
+### Using uv (recommended)
+
+```bash
+uv add HEACalculator          # CLI only
+uv add "HEACalculator[gui]"   # with GUI support
+```
+
+### Using pip
 
 ```bash
 pip install HEACalculator
+pip install "HEACalculator[gui]"   # with GUI support
 ```
 
-This installs the CLI and all required dependencies (`numpy`, `pandas`, `typer`).
-
-### With GUI support
-
-The graphical user interface requires PyQt5, which is an optional extra:
-
-```bash
-pip install "HEACalculator[gui]"
-```
-
-### From source
-
-```bash
-git clone https://github.com/dogusariturk/HEACalculator.git
-cd HEACalculator
-pip install .
-```
-
-With GUI:
-
-```bash
-pip install ".[gui]"
-```
+> **Note:** GUI support requires PyQt5, which is an optional dependency. Only install the `[gui]` extra if you intend to use the graphical interface.
 
 ---
 
-## Installing with uv (recommended for development)
+## Installing from Source
 
-[uv](https://docs.astral.sh/uv/) is a fast Python package manager. If you don't have it, install it first:
+If you don't have uv, install it first:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Then:
+Then clone and sync:
 
 ```bash
 git clone https://github.com/dogusariturk/HEACalculator.git
 cd HEACalculator
 
-# Core dependencies
-uv sync
+uv sync                   # Core dependencies (CLI only)
+uv sync --group dev       # Core + development tools (ruff, pytest, pre-commit)
+uv sync --extra gui       # Core + GUI support (PyQt5)
+uv sync --extra docs      # Core + documentation dependencies (mkdocs-material)
+```
 
-# Core + development tools (ruff, pytest, pre-commit)
-uv sync --group dev
+Alternatively with pip:
 
-# With GUI support
-uv sync --extra gui
-
-# With documentation dependencies
-uv sync --extra docs
+```bash
+git clone https://github.com/dogusariturk/HEACalculator.git
+cd HEACalculator
+pip install .
+pip install ".[gui]"      # with GUI support
 ```
 
 ---
@@ -76,7 +64,7 @@ uv sync --extra docs
 HEACalculator --help
 ```
 
-You should see output similar to:
+Expected output:
 
 ```
 Usage: HEACalculator [OPTIONS] COMMAND [ARGS]...
@@ -96,7 +84,7 @@ Commands:
 
 ## Quick Start
 
-Calculate all parameters for FeCoCrNi in one command:
+Calculate all parameters for FeCoCrNi:
 
 ```bash
 HEACalculator search single FeCoCrNi
@@ -108,7 +96,7 @@ Screen a composition range for Al-Ti-V:
 HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5
 ```
 
-Calculate parameters from a CSV file:
+Run batch calculations from a CSV file:
 
 ```bash
 HEACalculator search csv alloys.csv
@@ -124,10 +112,29 @@ HEACalculator gui
 
 ## Pre-commit Hooks (development)
 
-If you are contributing to the project, install the pre-commit hooks after cloning:
+Install pre-commit hooks after cloning to enable automatic linting and formatting on every commit:
 
 ```bash
 uv run pre-commit install
 ```
 
-Hooks run `ruff` for linting and formatting on every commit.
+Hooks run `ruff` for linting and formatting.
+
+---
+
+## Citation
+
+If you use `HEACalculator` in your research, please cite:
+
+> Sarıtürk, D. (2019). HEACalculator. Zenodo. https://doi.org/10.5281/zenodo.3590318
+
+```bibtex
+@software{sariturk_2019_3590318,
+  author    = {Sarıtürk, Doğuhan},
+  title     = {HEACalculator},
+  year      = 2019,
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.3590318},
+  url       = {https://doi.org/10.5281/zenodo.3590318},
+}
+```
