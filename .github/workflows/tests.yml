@@ -35,5 +35,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras
 
-      - name: Run tests with display
-        run: xvfb-run -a uv run pytest tests/ -v
+      - name: Run tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: uv run pytest tests/ -v
