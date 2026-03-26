@@ -71,6 +71,16 @@ class AlloyComposition:
         return sum(pct * r for pct, r in zip(self.atomic_percentage.values(), self.atomic_radius_list, strict=True))
 
     @cached_property
+    def atomic_radius_cn12_list(self) -> list[float]:
+        """Goldschmidt CN12 corrected atomic radius for each element in the same order as alloy."""
+        return [self.elements[elm].atomic_radius_cn12 for elm in self.alloy]
+
+    @cached_property
+    def average_atomic_radius_cn12(self) -> float:
+        """Composition-weighted average CN12 corrected atomic radius."""
+        return sum(pct * r for pct, r in zip(self.atomic_percentage.values(), self.atomic_radius_cn12_list, strict=True))
+
+    @cached_property
     def allen_electronegativity_list(self) -> list[float]:
         """Allen electronegativity for each element in the same order as ``alloy``."""
         return [self.elements[elm].allen_electronegativity for elm in self.alloy]

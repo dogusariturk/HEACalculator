@@ -24,13 +24,15 @@ class _Element:
         atomic_number: Atomic number.
         atomic_volume: Atomic volume in cm^3/mol.
         atomic_weight: Relative atomic weight.
-        atomic_radius: Atomic radius in pm.
+        atomic_radius: Slater atomic radius in pm.
+        atomic_radius_cn12: Goldschmidt CN12-corrected metallic radius in pm (NaN if unavailable).
         nvalence: Number of valence electrons.
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
 
     References:
         IUPAC-CIAAW. Standard atomic weights. https://www.ciaaw.org/atomic-weights.htm.
         Slater, J.C. Atomic Radii in Crystals. J. Chem. Phys. 1964, 41(10), 3199.
+        Smithells Metals Reference Book, 8th ed., Table 4.1 (Goldschmidt CN12 corrected).
         Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
         Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
     """
@@ -41,6 +43,7 @@ class _Element:
     atomic_volume: float
     atomic_weight: float
     atomic_radius: float
+    atomic_radius_cn12: float
     nvalence: float
     allen_electronegativity: float
 
@@ -66,6 +69,7 @@ _elements: dict[str, _Element] = {
         atomic_volume=float(props["atomic_volume"]),
         atomic_weight=props["atomic_weight"],
         atomic_radius=float(props["atomic_radius"]),
+        atomic_radius_cn12=float(props["atomic_radius_cn12"]),
         nvalence=props["nvalence"],
         allen_electronegativity=float(props["allen_electronegativity"]),
     )
