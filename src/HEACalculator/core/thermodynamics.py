@@ -101,6 +101,28 @@ class HEAThermodynamics:
         return math.sqrt(_delta) * 100
 
     @cached_property
+    def atomic_size_difference_cn12(self) -> float:
+        """Atomic size difference computed with CN12 (Smithells/Goldschmidt) radii.
+
+        Uses the same Fang et al. (2003) formula as atomic_size_difference but with
+        CN12 corrected radii, enabling direct comparison with Senkov & Miracle (2016)
+        Table 1 delta values.
+
+        References:
+            Fang, S.S.; Xiao, X.S.; Xia, L.; Li, W.H.; Dong, Y.D. J. Non-Cryst. Solids 2003, 321, 120-125.
+            Senkov, O.N.; Miracle, D.B. J. Alloys Compd. 2016, 658, 603-607.
+        """
+        _delta = sum(
+            pct * (1 - (r / self._c.average_atomic_radius_cn12)) ** 2
+            for pct, r in zip(
+                self._c.atomic_percentage.values(),
+                self._c.atomic_radius_cn12_list,
+                strict=True,
+            )
+        )
+        return math.sqrt(_delta) * 100
+
+    @cached_property
     def electronegativity_difference(self) -> float:
         """Allen electronegativity difference (delta_chi_Allen) of the alloy in %.
 
@@ -124,6 +146,11 @@ class HEAThermodynamics:
     def min_formation_enthalpy(self) -> float:
         """Minimum binary formation enthalpy in meV/atom."""
         return min(FormationEnthalpy(pair) for pair in self._c.pair_list)
+
+    @cached_property
+    def max_formation_enthalpy(self) -> float:
+        """Maximum binary formation enthalpy in meV/atom."""
+        return max(FormationEnthalpy(pair) for pair in self._c.pair_list)
 
     @cached_property
     def mixing_entropy(self) -> float:
@@ -179,16 +206,88 @@ class HEAThermodynamics:
             return math.inf
         return self.mixing_entropy / (self.atomic_size_difference**2)
 
+    def _compute_se_at_packing(self, xi: float) -> float:
+        """S_E / k_B at a given packing fraction xi (dimensionless).
+
+        Implements the Manssori-Carnahan-Starling-Leland (MCSL) hard-sphere mixture
+        equations from the Appendix of Ye et al. (eqs. 3A-4B). Returns a dimensionless
+        value that is zero for identical atom sizes and negative otherwise.
+
+        Args:
+            xi (float): Total atomic packing fraction (0.68 for BCC, 0.74 for FCC).
+
+        References:
+            Ye, Y.F. et al. Intermetallics 2015, 59, 75-80. (Appendix, eqs. 3A-4B)
+            Manssori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J.
+                J. Chem. Phys. 1971, 54, 1523.
+        """
+        fractions = list(self._c.atomic_percentage.values())
+        diameters = [2.0 * r for r in self._c.atomic_radius_list]
+        n = len(fractions)
+
+        d3 = [d**3 for d in diameters]
+        denom = sum(c * d3i for c, d3i in zip(fractions, d3, strict=True))
+        xi_i = [xi * c * d3i / denom for c, d3i in zip(fractions, d3, strict=True)]
+
+        k_sum = sum((xi_i[k] / xi) / diameters[k] for k in range(n))
+
+        y1 = y2 = 0.0
+        for i in range(n):
+            for j in range(i + 1, n):
+                di, dj = diameters[i], diameters[j]
+                ci, cj = fractions[i], fractions[j]
+                sqrt_didj = math.sqrt(di * dj)
+                size_term = (di - dj) ** 2 / (di * dj)
+                d_val = (math.sqrt(xi_i[i] * xi_i[j]) / xi) * size_term * math.sqrt(ci * cj)
+                y1 += d_val * (di + dj) / sqrt_didj
+                y2 += d_val * sqrt_didj * k_sum
+        y3 = sum((xi_i[i] / xi) ** (2.0 / 3.0) * fractions[i] ** (1.0 / 3.0) for i in range(n)) ** 3
+
+        z = (1 + xi + xi**2 - 3 * xi * (y1 + y2 * xi) - xi**3 * y3) / (1 - xi) ** 3
+
+        f_ex = (
+            -1.5 * (1 - y1 + y2 + y3)
+            + (3 * y2 + 2 * y3) / (1 - xi)
+            + 1.5 * (1 - y1 - y2 - y3 / 3.0) / (1 - xi) ** 2
+            + (y3 - 1) * math.log(1 - xi)
+        )
+
+        return f_ex - math.log(z) - (3 - 2 * xi) / (1 - xi) ** 2 + 3 + math.log((1 + xi + xi**2 - xi**3) / (1 - xi) ** 3)
+
+    @cached_property
+    def excess_entropy(self) -> float:
+        """Excess configurational entropy S_E in J/K.mol, averaged over BCC and FCC packing.
+
+        Always negative or zero. Zero when all atomic radii are identical.
+
+        References:
+            Ye, Y.F. et al. Intermetallics 2015, 59, 75-80. (Appendix, eqs. 3A-4B)
+            Manssori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J.
+                J. Chem. Phys. 1971, 54, 1523.
+        """
+        se_fcc = self._compute_se_at_packing(0.74)
+        se_bcc = self._compute_se_at_packing(0.68)
+        return GAS_CONSTANT * (se_fcc + se_bcc) / 2
+
     @cached_property
     def phi(self) -> float:
-        """Phi parameter: Omega − 1 (Ye et al. 2015).
+        """Phi parameter: (S_C - S_H) / |S_E|.
+
+        S_H = |H_a| / T_m is the complementary entropy derived from the mixing enthalpy.
+        Large phi indicates entropic dominance and favors solid-solution formation.
+        Critical threshold: phi_c ~= 20.
 
         References:
             Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
+            Ye, Y.F. et al. Intermetallics 2015, 59, 75-80.
         """
-        if not math.isfinite(self.omega):
+        if self.melting_temperature == 0:
             return math.inf
-        return self.omega - 1
+        se = self.excess_entropy
+        if se == 0:
+            return math.inf
+        s_h = abs(self.mixing_enthalpy) * 1000 / self.melting_temperature
+        return (self.mixing_entropy - s_h) / abs(se)
 
     @cached_property
     def delta_g_ss(self) -> float:
@@ -207,4 +306,4 @@ class HEAThermodynamics:
             King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
         """
         pair_enthalpies = [MixingEnthalpy(pair) for pair in self._c.pair_list]
-        return 2 * max(pair_enthalpies, key=abs)
+        return len(self._c.alloy) * max(pair_enthalpies, key=abs)
