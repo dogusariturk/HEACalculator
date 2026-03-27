@@ -90,17 +90,17 @@ class TestNewProperties:
     """Tests for phi, delta_g_ss, and delta_g_max properties."""
 
     def test_phi_fecocrni(self, thermodynamics):
-        """Phi = Omega - 1 for FeCoCrNi (Omega ~= 5.71 -> Phi ~= 4.71)."""
-        assert thermodynamics.phi == pytest.approx(thermodynamics.omega - 1, abs=1e-10)
+        """Phi = (S_C - S_H) / |S_E| for FeCoCrNi; atoms are near-identical in size so phi >> 20."""
+        assert thermodynamics.phi > 20
 
     def test_phi_positive_for_fecocrni(self, thermodynamics):
-        """Phi is positive when Omega > 1."""
+        """Phi is positive for FeCoCrNi (entropy dominates enthalpy)."""
         assert thermodynamics.phi > 0
 
     def test_phi_infinite_when_mixing_enthalpy_zero(self):
-        """Phi = inf when mixing_enthalpy == 0 (Omega = inf)."""
+        """Phi = inf when excess_entropy == 0 (identical atom sizes)."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["mixing_enthalpy"] = 0.0
+        t.__dict__["excess_entropy"] = 0.0
         assert math.isinf(t.phi)
 
     def test_delta_g_ss_fecocrni(self, thermodynamics):

@@ -5,6 +5,8 @@ against the FeCoCrNi reference alloy (expected: FCC solid solution) and
 a NbMoTaW BCC alloy to exercise the BCC branch.
 """
 
+import math
+
 import pytest
 
 from HEACalculator.core.composition import AlloyComposition
@@ -39,9 +41,9 @@ class TestSolidSolutionPredictorFeCoCrNi:
         """Model 5 (Ye et al.) is now implemented and returns a phase prediction."""
         assert predictor.model_5 in ("Solid Solution", "Multiple Phases")
 
-    def test_model_5_is_multiple_phases_for_fecocrni(self, predictor):
-        """FeCoCrNi has Omega ~= 5.7, so Phi ~= 4.7 < 20 -> Multiple Phases."""
-        assert predictor.model_5 == "Multiple Phases"
+    def test_model_5_is_solid_solution_for_fecocrni(self, predictor):
+        """FeCoCrNi has near-identical atomic radii -> tiny |S_E| -> Phi >> 20 -> Solid Solution."""
+        assert predictor.model_5 == "Solid Solution"
 
     def test_model_6_solid_solution(self, predictor):
         """Model 6 (lambda criterion) predicts solid solution for FeCoCrNi."""
@@ -161,29 +163,29 @@ class TestModel4ThreeCategories:
 
 
 class TestModel5PhiParameter:
-    """Ye et al. (2015): Phi = Omega - 1 >= 20 -> Solid Solution."""
+    """Ye et al. (2015): Phi = (S_C - S_H) / |S_E| >= 20 -> Solid Solution."""
 
-    def test_model_5_high_omega_is_solid_solution(self):
-        """When Omega >> 21 (near-zero dH_mix), Phi >> 20 -> Solid Solution."""
+    def test_model_5_high_phi_is_solid_solution(self):
+        """Phi >> 20 -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         thermo = HEAThermodynamics(comp)
-        thermo.__dict__["omega"] = 25.0
+        thermo.__dict__["phi"] = 100.0
         p = SolidSolutionPredictor(comp, thermo)
         assert p.model_5 == "Solid Solution"
 
-    def test_model_5_low_omega_is_multiple_phases(self):
-        """When Omega < 21 (e.g. FeCoCrNi Omega ~= 5.7), Phi < 20 -> Multiple Phases."""
+    def test_model_5_low_phi_is_multiple_phases(self):
+        """Phi < 20 -> Multiple Phases."""
         comp = AlloyComposition("FeCoCrNi")
         thermo = HEAThermodynamics(comp)
-        thermo.__dict__["omega"] = 5.0
+        thermo.__dict__["phi"] = 5.0
         p = SolidSolutionPredictor(comp, thermo)
         assert p.model_5 == "Multiple Phases"
 
-    def test_model_5_infinite_omega_is_solid_solution(self):
-        """Omega = inf (dH_mix = 0) -> Phi = inf -> Solid Solution."""
+    def test_model_5_infinite_phi_is_solid_solution(self):
+        """Phi = inf (e.g. zero excess entropy) -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         thermo = HEAThermodynamics(comp)
-        thermo.__dict__["mixing_enthalpy"] = 0.0
+        thermo.__dict__["phi"] = math.inf
         p = SolidSolutionPredictor(comp, thermo)
         assert p.model_5 == "Solid Solution"
 
@@ -204,7 +206,7 @@ class TestZeroMixingEnthalpyModels:
         assert zero_enthalpy_predictor.model_1 == "Solid Solution"
 
     def test_model_3_zero_enthalpy_checks_only_gamma(self, zero_enthalpy_predictor):
-        """When Omega = inf, model_3 entropy criterion is satisfied; only gamma governs."""
+        """When mixing enthalpy = 0, model_3 depends solely on gamma."""
         assert zero_enthalpy_predictor.model_3 == "Solid Solution"
 
     def test_model_7_zero_enthalpy_returns_intermetallic(self, zero_enthalpy_predictor):
@@ -277,31 +279,23 @@ class TestPaperValidation:
         assert p.model_2 == "Intermetallic"
 
     def test_model_3_fecocrni_solid_solution(self):
-        """Wang et al. (2015): FeCoCrNi has gamma < 1.175 and Omega >= 1.1."""
+        """Wang et al. (2015): FeCoCrNi has gamma < 1.175 -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_3 == "Solid Solution"
 
     def test_model_3_cantor_alloy_solid_solution(self):
-        """Wang et al. (2015): CoCrFeMnNi (Omega=5.76, gamma~1.03) -> Solid Solution."""
+        """Wang et al. (2015): CoCrFeMnNi (gamma~1.03 < 1.175) -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_3 == "Solid Solution"
 
-    def test_model_3_alni_intermetallic_omega_failure(self):
-        """Wang et al. (2015): AlNi (Omega=0.35 < 1.1) fails Omega criterion -> Intermetallic."""
-        comp = AlloyComposition("AlNi")
-        t = HEAThermodynamics(comp)
-        p = SolidSolutionPredictor(comp, t)
-        assert p.model_3 == "Intermetallic"
-
     def test_model_3_high_gamma_intermetallic(self):
-        """Wang et al. (2015): gamma >= 1.175 falls in IM region even if Omega >= 1.1."""
+        """Wang et al. (2015): gamma >= 1.175 falls in IM region."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
-        t.__dict__["omega"] = 5.0
         t.__dict__["gamma"] = 1.2
         p = SolidSolutionPredictor(comp, t)
         assert p.model_3 == "Intermetallic"
@@ -341,16 +335,23 @@ class TestPaperValidation:
         p = SolidSolutionPredictor(comp, t)
         assert p.model_5 == "Solid Solution"
 
-    def test_model_5_cantor_alloy_multiple_phases(self):
-        """Ye et al. (2015): CoCrFeMnNi (Omega=5.76 -> Phi=4.76 < 20) -> Multiple Phases."""
+    def test_model_5_cantor_alloy_solid_solution(self):
+        """Ye et al. (2015): CoCrFeMnNi has near-identical radii -> tiny |S_E| -> Phi >> 20 -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
-        assert p.model_5 == "Multiple Phases"
+        assert p.model_5 == "Solid Solution"
 
-    def test_model_5_nbmotaw_multiple_phases(self):
-        """Ye et al. (2015): NbMoTaW (Omega~5.6 -> Phi~4.6 < 20) -> Multiple Phases."""
+    def test_model_5_nbmotaw_solid_solution(self):
+        """Ye et al. (2015): NbMoTaW has small size mismatch -> Phi >> 20 -> Solid Solution."""
         comp = AlloyComposition("NbMoTaW")
+        t = HEAThermodynamics(comp)
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_5 == "Solid Solution"
+
+    def test_model_5_fecrkunizr_multiple_phases(self):
+        """Ye et al. (2015) Fig. 2: FeCrCuNiZr has large size mismatch (Zr) -> Phi < 20 -> Multiple Phases."""
+        comp = AlloyComposition("FeCrCuNiZr")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_5 == "Multiple Phases"

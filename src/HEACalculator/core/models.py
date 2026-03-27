@@ -6,8 +6,9 @@ import math
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-_KJ_PER_MOL_TO_EV_PER_ATOM = 0.0103642688  # 1 kJ/mol = 0.010364 eV/atom
-_J_PER_MOL_TO_EV_PER_ATOM = _KJ_PER_MOL_TO_EV_PER_ATOM / 1000
+_J_PER_MOL_TO_MEV_PER_ATOM = _KJ_PER_MOL_TO_EV_PER_ATOM = (
+    0.0103642688  # 1 J/mol = 0.010364 meV/atom | 1 kJ/mol = 0.010364 eV/atom
+)
 _MEV_PER_ATOM_TO_KJ_PER_MOL = 1e-3 / _KJ_PER_MOL_TO_EV_PER_ATOM
 
 if TYPE_CHECKING:
@@ -78,12 +79,12 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_3(self) -> str:
-        """Wang et al. criteria: Omega >= 1.1 and Gamma < 1.175.
+        """Wang et al. criteria: Gamma < 1.175.
 
         References:
             Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T. Scr. Mater. 2015, 94, 28-31.
         """
-        return "Solid Solution" if self._t.omega >= 1.1 and self._t.gamma < 1.175 else "Intermetallic"
+        return "Solid Solution" if self._t.gamma < 1.175 else "Intermetallic"
 
     @cached_property
     def model_4(self) -> str:
@@ -101,29 +102,28 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_5(self) -> str:
-        """Ye et al. criteria: Phi = Omega - 1 >= 20.
+        """Ye et al. criteria: Phi = (S_C - S_H) / |S_E| >= 20.
 
         References:
             Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
         """
-        omega = self._t.omega
-        if not math.isfinite(omega):
+        phi = self._t.phi
+        if not math.isfinite(phi):
             return "Solid Solution"
-        return "Solid Solution" if omega - 1 >= 20 else "Multiple Phases"
+        return "Solid Solution" if phi >= 20 else "Multiple Phases"
 
     @cached_property
     def model_6(self) -> str:
-        """Troparevsky et al. criteria: formation enthalpy window at 0.55 T_m.
+        """Troparevsky et al. criteria: all binary delta_H_f within [-T_crit*delta_S_mix, 37 meV/atom].
 
         References:
             Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
         """
         critical_temperature = self._t.melting_temperature * 0.55
+        lower_bound = -critical_temperature * self._t.mixing_entropy * _J_PER_MOL_TO_MEV_PER_ATOM
         return (
             "Solid Solution"
-            if (-1 * 1000 * critical_temperature * self._t.mixing_entropy * _J_PER_MOL_TO_EV_PER_ATOM)
-            < float(self._t.min_formation_enthalpy)
-            < 37
+            if lower_bound < self._t.min_formation_enthalpy and self._t.max_formation_enthalpy < 37.0
             else "Multiple Phases"
         )
 
@@ -137,15 +137,13 @@ class SolidSolutionPredictor:
         Args:
             k_2 (float): Ratio of intermetallic and mixing entropies. Defaults to 0.6.
             annealing_temperature (float, optional): Temperature for the Omega calculation.
-                Defaults to 60% of T_m.
+                Defaults to 55% of T_m.
 
         References:
             Senkov, O.N.; Miracle, D.B. J. Alloys Compd. 2016, 658, 603-607.
         """
-        if self._t.mixing_enthalpy == 0:
-            return "Intermetallic"
         if annealing_temperature is None:
-            annealing_temperature = self._t.melting_temperature * 0.6
+            annealing_temperature = self._t.melting_temperature * 0.55
         k_1 = (self._t.formation_enthalpy * _MEV_PER_ATOM_TO_KJ_PER_MOL) / self._t.mixing_enthalpy
         omega = self._t.omega_at(annealing_temperature)
         k_1_cr = omega * (1 - k_2) + 1
