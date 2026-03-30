@@ -41,10 +41,10 @@ class SolidSolutionPredictor:
         """Expected crystal structure based on VEC.
 
         Returns:
-            str: One of ``"FCC"``, ``"BCC"``, ``"HCP"``, or ``"BCC+FCC"``.
+            One of ``"FCC"``, ``"BCC"``, ``"HCP"``, or ``"BCC+FCC"``.
 
         References:
-            Guo, S.; Ng, C.; Lu, J.; Liu, C.T. J. Appl. Phys. 2011, 109, 103505.
+            - Guo, S.; Ng, C.; Lu, J.; Liu, C.T. J. Appl. Phys. 2011, 109, 103505.
         """
         vec = self._t.valence_electron_concentration
         if 2.5 <= vec <= 3.5:
@@ -57,19 +57,25 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_1(self) -> str:
-        """Yang & Zhang criteria: Omega >= 1.1 and delta <= 6.6.
+        r"""Yang & Zhang criteria: $\Omega$ >= 1.1 and $\delta$ <= 6.6.
+
+        Returns:
+            ``"Solid Solution"`` or ``"Intermetallic"``.
 
         References:
-            Yang, X.; Zhang, Y. Mater. Chem. Phys. 2012, 132, 233-238.
+            - Yang, X.; Zhang, Y. Mater. Chem. Phys. 2012, 132, 233-238.
         """
         return "Solid Solution" if self._t.omega >= 1.1 and self._t.atomic_size_difference <= 6.6 else "Intermetallic"
 
     @cached_property
     def model_2(self) -> str:
-        """Guo et al. criteria: -11.6 < deltaH_mix < 3.2 and delta < 6.6.
+        r"""Guo *et al.* criteria: -11.6 < $\Delta H_{\text{mix}}$ < 3.2 and $\delta$ < 6.6.
+
+        Returns:
+            ``"Solid Solution"`` or ``"Intermetallic"``.
 
         References:
-            Guo, S.; Hu, Q.; Ng, C.; Liu, C.T. Intermetallics 2013, 41, 96-103.
+            - Guo, S.; Hu, Q.; Ng, C.; Liu, C.T. Intermetallics 2013, 41, 96-103.
         """
         return (
             "Solid Solution"
@@ -79,19 +85,25 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_3(self) -> str:
-        """Wang et al. criteria: Gamma < 1.175.
+        r"""Wang *et al.* criteria: $\gamma$ < 1.175.
+
+        Returns:
+            ``"Solid Solution"`` or ``"Intermetallic"``.
 
         References:
-            Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T. Scr. Mater. 2015, 94, 28-31.
+            - Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T. Scr. Mater. 2015, 94, 28-31.
         """
         return "Solid Solution" if self._t.gamma < 1.175 else "Intermetallic"
 
     @cached_property
     def model_4(self) -> str:
-        """Singh et al. criteria: Lambda > 0.96 (DSS), 0.24 <= Lambda <= 0.96 (DSS + Compound), Lambda < 0.24 (Compound).
+        r"""Singh *et al.* criteria: $\lambda$ > 0.96 (DSS), 0.24 <= $\lambda$ <= 0.96 (DSS + Compound), $\lambda$ < 0.24 (Compound).
+
+        Returns:
+            ``"Solid Solution"``, ``"Multiple Phases"``, or ``"Intermetallic"``.
 
         References:
-            Singh, A.K.; Kumar, N.; Dwivedi, A.; Subramaniam, A. Intermetallics 2014, 53, 112-119.
+            - Singh, A.K.; Kumar, N.; Dwivedi, A.; Subramaniam, A. Intermetallics 2014, 53, 112-119.
         """
         lam = self._t.lambda_
         if lam > 0.96:
@@ -102,10 +114,13 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_5(self) -> str:
-        """Ye et al. criteria: Phi = (S_C - S_H) / |S_E| >= 20.
+        r"""Ye *et al.* criteria: $\phi = (S_C - S_H) / |S_E| >= 20$.
+
+        Returns:
+            ``"Solid Solution"`` or ``"Multiple Phases"``.
 
         References:
-            Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
+            - Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
         """
         phi = self._t.phi
         if not math.isfinite(phi):
@@ -114,12 +129,15 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_6(self) -> str:
-        """Troparevsky et al. criteria: all binary delta_H_f within [-T_crit*delta_S_mix, 37 meV/atom].
+        r"""Troparevsky *et al.* criteria: all binary $\Delta H_f$ within [$-T_{crit}*\Delta S_{\text{mix}}$, 37 meV/atom].
+
+        Returns:
+            ``"Solid Solution"`` or ``"Multiple Phases"``.
 
         References:
-            Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
+            - Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
         """
-        critical_temperature = self._t.melting_temperature * 0.55
+        critical_temperature = self._t.critical_temperature
         lower_bound = -critical_temperature * self._t.mixing_entropy * _J_PER_MOL_TO_MEV_PER_ATOM
         return (
             "Solid Solution"
@@ -127,36 +145,67 @@ class SolidSolutionPredictor:
             else "Multiple Phases"
         )
 
+    def model_7_k1(self) -> float:
+        r"""Model 7 $k_1 = \Delta H_{\text{IM}}$ / $\Delta H_{\text{mix}}$.
+
+        Returns:
+            The dimensionless ``k1`` ratio, or ``math.inf`` when ``deltaH_mix`` is zero.
+        """
+        if self._t.mixing_enthalpy == 0:
+            return math.inf
+        return (self._t.formation_enthalpy * _MEV_PER_ATOM_TO_KJ_PER_MOL) / self._t.mixing_enthalpy
+
+    def model_7_k1_critical(
+        self,
+        k_2: float = 0.6,
+        annealing_temperature: float | None = None,
+    ) -> float:
+        r"""Model 7 critical $k_1$ threshold at the given annealing temperature.
+
+        Returns:
+            Dimensionless critical ``k1`` threshold for the supplied annealing condition.
+        """
+        if annealing_temperature is None:
+            annealing_temperature = self._t.critical_temperature
+        omega = self._t.omega_at(annealing_temperature)
+        return omega * (1 - k_2) + 1
+
     def model_7(
         self,
         k_2: float = 0.6,
         annealing_temperature: float | None = None,
     ) -> str:
-        """Senkov & Miracle criteria.
+        r"""Senkov & Miracle criteria.
 
         Args:
             k_2 (float): Ratio of intermetallic and mixing entropies. Defaults to 0.6.
-            annealing_temperature (float, optional): Temperature for the Omega calculation.
-                Defaults to 55% of T_m.
+            annealing_temperature (float, optional): Temperature in Kelvin for the Omega calculation.
+                Defaults to 55% of $T_m$.
+
+        Returns:
+            ``"Solid Solution"`` or ``"Intermetallic"``.
 
         References:
-            Senkov, O.N.; Miracle, D.B. J. Alloys Compd. 2016, 658, 603-607.
+            - Senkov, O.N.; Miracle, D.B. J. Alloys Compd. 2016, 658, 603-607.
         """
         if annealing_temperature is None:
-            annealing_temperature = self._t.melting_temperature * 0.55
-        k_1 = (self._t.formation_enthalpy * _MEV_PER_ATOM_TO_KJ_PER_MOL) / self._t.mixing_enthalpy
-        omega = self._t.omega_at(annealing_temperature)
-        k_1_cr = omega * (1 - k_2) + 1
-        return "Solid Solution" if k_1_cr > k_1 else "Intermetallic"
+            annealing_temperature = self._t.critical_temperature
+        if self._t.mixing_enthalpy == 0:
+            return "Intermetallic"
+        return (
+            "Solid Solution"
+            if self.model_7_k1_critical(k_2=k_2, annealing_temperature=annealing_temperature) > self.model_7_k1()
+            else "Intermetallic"
+        )
 
     @cached_property
     def model_8(self) -> str:
-        """King et al. criteria: Phi = deltaG_ss / (−|deltaG_max|) >= 1.
+        r"""King *et al.* criteria: $\phi = $\Delta G_{\text{SS}}$ / (−|$\Delta G_{\text{max}}$|) >= 1$.
+
+        Returns:
+            ``"Solid Solution"`` or ``"Multiple Phases"``.
 
         References:
-            King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
+            - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
         """
-        if self._t.delta_g_max == 0:
-            return "Solid Solution"
-        phi = self._t.delta_g_ss / (-abs(self._t.delta_g_max))
-        return "Solid Solution" if phi >= 1 else "Multiple Phases"
+        return "Solid Solution" if self._t.f_parameter >= 1 else "Multiple Phases"
