@@ -24,6 +24,10 @@ class TestElementLoader:
         """Nickel has 10 valence electrons (d-band metal)."""
         assert Element("Ni").nvalence == 10.0
 
+    def test_neodymium_symbol_is_available(self):
+        """Neodymium is stored under its correct IUPAC symbol, Nd."""
+        assert Element("Nd").atomic_number == 60.0
+
     def test_missing_element_raises_key_error(self):
         """An unrecognized element symbol raises KeyError."""
         with pytest.raises(KeyError):

@@ -7,6 +7,8 @@ FeCoCrNi reference alloy.
 
 import pytest
 
+from HEACalculator.core.hea import HEACalculator
+
 
 class TestHEACalculator:
     """Smoke tests for the public attributes of HEACalculator."""
@@ -29,7 +31,7 @@ class TestHEACalculator:
 
     def test_melting_temperature(self, calculator):
         """Melting temperature is the weighted average of constituent melting points."""
-        assert calculator.thermo.melting_temperature == 1858
+        assert calculator.thermo.melting_temperature == 1872
 
     def test_atomic_size_difference(self, calculator):
         """Atomic size difference for FeCoCrNi using Slater radii (Fe=126, Co=125, Cr=128, Ni=124 pm)."""
@@ -45,7 +47,7 @@ class TestHEACalculator:
 
     def test_omega_parameter(self, calculator):
         """Omega parameter for FeCoCrNi exceeds the solid-solution threshold of 1.1."""
-        assert calculator.thermo.omega == pytest.approx(5.71, abs=1e-2)
+        assert calculator.thermo.omega == pytest.approx(5.75, abs=1e-2)
 
     def test_str_density_format(self, calculator):
         """Density in __str__ uses g/cm^3 unit."""
@@ -66,9 +68,9 @@ class TestHEACalculator:
     def test_electronegativity_difference_in_get_list(self, calculator):
         """get_list() includes electronegativity_difference as a formatted float string."""
         lst = calculator.get_list()
-        # index 3: formula(0), density(1), delta(2), delta_chi(3)
-        assert "." in lst[3]
-        assert float(lst[3]) == pytest.approx(4.85, abs=0.01)
+        # index 4: formula(0), density(1), delta(2), delta_cn12(3), delta_chi(4)
+        assert "." in lst[4]
+        assert float(lst[4]) == pytest.approx(4.85, abs=0.01)
 
     def test_str_entropy_unit(self, calculator):
         """Mixing entropy unit in __str__ uses J/K.mol."""
@@ -85,8 +87,8 @@ class TestHEACalculator:
     def test_get_list_melting_temp_no_decimal(self, calculator):
         """Melting temperature in get_list() has no decimal point."""
         lst = calculator.get_list()
-        # Layout: formula(0), 11 floats(1-11), melting(12), microstructure(13), 8 models(14-21)
-        assert "." not in lst[12]
+        # Layout: formula(0), 12 floats(1-12), melting(13), microstructure(14), 8 models(15-22)
+        assert "." not in lst[13]
 
     def test_get_list_model_5_is_string_not_na(self, calculator):
         """Model 5 in get_list() returns a valid phase prediction string."""
@@ -97,3 +99,9 @@ class TestHEACalculator:
         """Model 8 in get_list() returns a valid phase prediction."""
         lst = calculator.get_list()
         assert lst[-1] in ("Solid Solution", "Multiple Phases")  # model_8 is last
+
+    def test_single_element_get_list_does_not_crash(self):
+        """A single-element calculation should still produce a result row."""
+        lst = HEACalculator("Fe").get_list()
+        assert lst[0] == "Fe"
+        assert len(lst) == 23

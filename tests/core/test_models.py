@@ -66,7 +66,7 @@ class TestSolidSolutionPredictorFeCoCrNi:
         assert predictor.model_8 in ("Solid Solution", "Multiple Phases")
 
     def test_model_8_fecocrni_solid_solution(self, predictor):
-        """King et al. (2016): FeCoCrNi has Phi ~= 1.16 >= 1 -> Solid Solution."""
+        """King et al. (2016): FeCoCrNi Phi >= 1 -> Solid Solution."""
         assert predictor.model_8 == "Solid Solution"
 
 
@@ -74,7 +74,7 @@ class TestModel8KingCriterion:
     """King et al. (2016): Phi = delta_G_ss / (-|delta_G_max|) >= 1 -> Solid Solution."""
 
     def test_model_8_fecocrni_solid_solution(self):
-        """King et al. (2016): CoCrFeNi Phi ~= 1.16 >= 1 -> Solid Solution."""
+        """King et al. (2016): CoCrFeNi Phi >= 1 -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
@@ -399,7 +399,7 @@ class TestPaperValidation:
         assert p.model_7() == "Solid Solution"
 
     def test_model_8_fecocrni_solid_solution(self):
-        """King et al. (2016) Table 1: CoCrFeNi Phi ~= 1.16 >= 1 -> Solid Solution."""
+        """King et al. (2016) Table 1: CoCrFeNi Phi >= 1 -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)

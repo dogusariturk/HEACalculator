@@ -18,7 +18,16 @@ PyQt6 = pytest.importorskip("PyQt6", reason="PyQt6 not installed")
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QMessageBox
 
-from HEACalculator.app import AlignDelegate, HEACalculatorMainWindow, ItemDelegate, NotificationBar, ParametersPage, run
+from HEACalculator.app import (
+    AlignDelegate,
+    BatchCalculationsPage,
+    HEACalculatorMainWindow,
+    ItemDelegate,
+    NotificationBar,
+    ParametersPage,
+    run,
+)
+from HEACalculator.core.hea import HEACalculator
 
 
 class TestAppImportGuard(TestCase):
@@ -290,6 +299,54 @@ def qapp():
     yield app
 
 
+class TestResultsTreeConfiguration:
+    """Tests for GUI result-table column alignment."""
+
+    EXPECTED_HEADERS = [
+        "Formula",
+        "Density",
+        "δ",
+        "δ (CN12)",
+        "Δχ (Allen)",
+        "Omega",
+        "Gamma",
+        "Lambda",
+        "VEC",
+        "Mixing Enthalpy",
+        "Mixing Entropy",
+        "Formation Enthalpy",
+        "Min. Formation Enthalpy",
+        "Melting Temperature",
+        "Crystal Structure",
+        "Model 1",
+        "Model 2",
+        "Model 3",
+        "Model 4",
+        "Model 5",
+        "Model 6",
+        "Model 7",
+        "Model 8",
+    ]
+
+    @staticmethod
+    def _assert_results_tree(tree_widget):
+        values = HEACalculator("CoCrFeMnNi").get_list()
+        headers = [tree_widget.headerItem().text(index) for index in range(tree_widget.columnCount())]
+
+        assert tree_widget.columnCount() == len(values)
+        assert headers == TestResultsTreeConfiguration.EXPECTED_HEADERS
+
+    def test_parameters_page_results_tree_matches_calculation_payload(self, qapp):
+        """The Parameters page headers align with HEACalculator.get_list()."""
+        page = ParametersPage()
+        self._assert_results_tree(page.parametersPage.resultsTreeWidget)
+
+    def test_batch_page_results_tree_matches_calculation_payload(self, qapp):
+        """The Batch page headers align with HEACalculator.get_list()."""
+        page = BatchCalculationsPage()
+        self._assert_results_tree(page.ui.resultsTreeWidget)
+
+
 class TestCleanErrorMessage(TestCase):
     """Tests for the ParametersPage._clean_error_message static method."""
 
@@ -311,6 +368,7 @@ class TestFormatCalculationError(TestCase):
     """Tests for the _format_calculation_error instance method."""
 
     def _make_page(self):
+        """Create a lightweight ParametersPage-like object for calculation error tests."""
         p = SimpleNamespace()
         p._ERROR_PREFIXES = ParametersPage._ERROR_PREFIXES
         p._clean_error_message = ParametersPage._clean_error_message
@@ -364,6 +422,7 @@ class TestUpdateActionButtons(TestCase):
     """Tests for ParametersPage._update_action_buttons."""
 
     def _call(self, selected_elements, tree_count):
+        """Invoke _update_action_buttons on a lightweight page stub and return it."""
         tree = MagicMock()
         tree.topLevelItemCount.return_value = tree_count
         p = SimpleNamespace(
@@ -450,6 +509,7 @@ class TestHandleCalculateButton(TestCase):
     """Tests for ParametersPage.handleCalculateButton."""
 
     def _make_page(self, selected_elements):
+        """Create a lightweight ParametersPage-like object for calculate-button tests."""
         notifications = []
         calculate_calls = []
         p = SimpleNamespace(
@@ -498,6 +558,7 @@ class TestHandleElementClicked(TestCase):
     """Tests for ParametersPage.handleElementClicked."""
 
     def _make_page(self, selected_elements=None, row_count=0):
+        """Create a lightweight ParametersPage-like object for element-toggle tests."""
         table = MagicMock()
         table.rowCount.return_value = row_count
         p = SimpleNamespace(
@@ -574,6 +635,7 @@ class TestHandleClearAllButton(TestCase):
     """Tests for ParametersPage.handleClearAllButton."""
 
     def _make_page(self, selected_elements=None, tree_count=0):
+        """Create a lightweight ParametersPage-like object for clear-all tests."""
         tree = MagicMock()
         tree.topLevelItemCount.return_value = tree_count
         p = SimpleNamespace(
@@ -633,6 +695,7 @@ class TestHandleSaveButton(TestCase):
     """Tests for ParametersPage.handleSaveButton."""
 
     def _make_page(self, tree_count, notifications=None):
+        """Create a lightweight ParametersPage-like object for save-button tests."""
         if notifications is None:
             notifications = []
         tree = MagicMock()
@@ -693,6 +756,7 @@ class TestCalculateAdditional(TestCase):
     """Additional tests for ParametersPage.calculate."""
 
     def _make_page(self, notifications=None):
+        """Create a lightweight ParametersPage-like object for calculation tests."""
         if notifications is None:
             notifications = []
         p = SimpleNamespace(
@@ -742,6 +806,7 @@ class TestBtnParametersClicked(TestCase):
     """Tests for HEACalculatorMainWindow.btn_parameters_clicked."""
 
     def _make_window(self):
+        """Create a lightweight main-window-like object for navigation tests."""
         w = SimpleNamespace(
             BTN_BACKGROUND_COLOR_HIGHLIGHTED=HEACalculatorMainWindow.BTN_BACKGROUND_COLOR_HIGHLIGHTED,
             BTN_BACKGROUND_COLOR_DEFAULT=HEACalculatorMainWindow.BTN_BACKGROUND_COLOR_DEFAULT,
@@ -777,16 +842,16 @@ class TestBtnParametersClicked(TestCase):
 class TestMouseEvents(TestCase):
     """Tests for frameless-window drag-to-move mouse event handlers."""
 
-    def test_mouse_press_records_global_position(self):
-        """mousePressEvent stores the current global cursor position in oldPos."""
+    def test_mouse_press_records_pyqt6_global_position(self):
+        """MousePressEvent stores the PyQt6 globalPosition cursor position in oldPos."""
         w = SimpleNamespace(oldPos=None)
-        event = MagicMock()
-        event.globalPos.return_value = "pos_sentinel"
+        point = object()
+        event = SimpleNamespace(globalPosition=lambda: SimpleNamespace(toPoint=lambda: point))
         HEACalculatorMainWindow.mousePressEvent(w, event)
-        assert w.oldPos == "pos_sentinel"
+        assert w.oldPos is point
 
     def test_mouse_move_moves_window_by_delta(self):
-        """mouseMoveEvent moves the window by the delta between old and new positions."""
+        """MouseMoveEvent moves the window by the delta between old and new positions."""
         mock_delta = MagicMock()
         mock_delta.x.return_value = 10
         mock_delta.y.return_value = -5
@@ -797,8 +862,7 @@ class TestMouseEvents(TestCase):
         w.y = MagicMock(return_value=100)
         w.move = MagicMock()
 
-        event = MagicMock()
-        event.globalPos.return_value = new_pos
+        event = SimpleNamespace(globalPosition=lambda: SimpleNamespace(toPoint=lambda: new_pos))
 
         with patch("HEACalculator.app.QtCore.QPoint", return_value=mock_delta):
             HEACalculatorMainWindow.mouseMoveEvent(w, event)
@@ -806,7 +870,7 @@ class TestMouseEvents(TestCase):
         w.move.assert_called_once_with(210, 95)
 
     def test_mouse_move_updates_old_pos_to_new_position(self):
-        """mouseMoveEvent updates oldPos to the event's globalPos for the next drag step."""
+        """MouseMoveEvent updates oldPos to the event's globalPos for the next drag step."""
         mock_delta = MagicMock()
         mock_delta.x.return_value = 0
         mock_delta.y.return_value = 0
@@ -817,19 +881,39 @@ class TestMouseEvents(TestCase):
         w.y = MagicMock(return_value=0)
         w.move = MagicMock()
 
-        event = MagicMock()
-        event.globalPos.return_value = new_pos
+        event = SimpleNamespace(globalPosition=lambda: SimpleNamespace(toPoint=lambda: new_pos))
 
         with patch("HEACalculator.app.QtCore.QPoint", return_value=mock_delta):
             HEACalculatorMainWindow.mouseMoveEvent(w, event)
 
         assert w.oldPos is new_pos
 
+    def test_mouse_move_uses_pyqt6_global_position(self):
+        """MouseMoveEvent supports the PyQt6 globalPosition API."""
+        mock_delta = MagicMock()
+        mock_delta.x.return_value = 3
+        mock_delta.y.return_value = 4
+
+        point = MagicMock()
+        w = SimpleNamespace(oldPos=MagicMock())
+        w.x = MagicMock(return_value=10)
+        w.y = MagicMock(return_value=20)
+        w.move = MagicMock()
+
+        event = SimpleNamespace(globalPosition=lambda: SimpleNamespace(toPoint=lambda: point))
+
+        with patch("HEACalculator.app.QtCore.QPoint", return_value=mock_delta):
+            HEACalculatorMainWindow.mouseMoveEvent(w, event)
+
+        w.move.assert_called_once_with(13, 24)
+        assert w.oldPos is point
+
 
 class TestNotificationBarSeverityStyles(TestCase):
     """Tests for warning and info notification color schemes."""
 
     def _make_bar(self):
+        """Create a lightweight NotificationBar-like object for style tests."""
         return SimpleNamespace(
             STYLES=NotificationBar.STYLES,
             AUTO_DISMISS_MS=NotificationBar.AUTO_DISMISS_MS,
@@ -882,7 +966,7 @@ class TestItemDelegate:
     """Tests for ItemDelegate cell editor creation."""
 
     def test_create_editor_returns_line_edit(self, qapp):
-        """createEditor returns a QLineEdit widget."""
+        """CreateEditor returns a QLineEdit widget."""
         delegate = ItemDelegate()
         parent = QtWidgets.QWidget()
         editor = delegate.createEditor(parent, None, None)
@@ -902,7 +986,7 @@ class TestAlignDelegate:
     """Tests for AlignDelegate text alignment initialization."""
 
     def test_init_style_option_sets_align_center(self, qapp):
-        """initStyleOption overrides the display alignment to AlignCenter."""
+        """InitStyleOption overrides the display alignment to AlignCenter."""
         delegate = AlignDelegate()
         option = QtWidgets.QStyleOptionViewItem()
         index = QtCore.QModelIndex()
