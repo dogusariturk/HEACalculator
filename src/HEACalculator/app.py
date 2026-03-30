@@ -39,13 +39,18 @@ class ItemDelegate(QtWidgets.QStyledItemDelegate):
     """Item delegate that restricts table cell editing to doubles in [0.0, 100.0] with 3 decimal places."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the delegate and force the C locale for decimal parsing."""
         super().__init__(*args, **kwargs)
         QtCore.QLocale.setDefault(QtCore.QLocale(QtCore.QLocale.Language.C))
 
     def createEditor(
         self, parent: QtWidgets.QWidget, option: QtWidgets.QStyleOptionViewItem, index: QtCore.QModelIndex
     ) -> QtWidgets.QWidget:
-        """Return a QLineEdit that only accepts doubles in the range [0.0, 100.0]."""
+        """Return a QLineEdit that only accepts doubles in the range [0.0, 100.0].
+
+        Returns:
+            Configured line edit used for in-place table editing.
+        """
         lineEdt = QtWidgets.QLineEdit(parent)
         lineEdt.setValidator(QtGui.QDoubleValidator(0.0, 100.0, 3))
         return lineEdt
@@ -57,7 +62,11 @@ class BatchAmountDelegate(QtWidgets.QStyledItemDelegate):
     def createEditor(
         self, parent: QtWidgets.QWidget, option: QtWidgets.QStyleOptionViewItem, index: QtCore.QModelIndex
     ) -> QtWidgets.QWidget:
-        """Return a QLineEdit that only accepts doubles in the range (0, 999999]."""
+        """Return a QLineEdit that only accepts doubles in the range (0, 999999].
+
+        Returns:
+            Configured line edit used for batch amount editing.
+        """
         editor = QtWidgets.QLineEdit(parent)
         editor.setValidator(QtGui.QDoubleValidator(0.0001, 999999.0, 4))
         return editor
@@ -87,6 +96,7 @@ class NotificationBar(QtWidgets.QFrame):
     }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Create the notification bar widgets and configure auto-dismiss behavior."""
         super().__init__(*args, **kwargs)
 
         self.setVisible(False)
@@ -189,12 +199,13 @@ class BatchCalculationsPage(QtWidgets.QWidget):
     notificationRequested = QtCore.pyqtSignal(str, str)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the batch page UI, element button wiring, and range controls."""
         super().__init__(*args, **kwargs)
         self.ui = Ui_BatchCalculationsPage()
         self.ui.setupUi(self)
         self.selectedElements: list[str] = []
         self.ui.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-        self.ui.resultsTreeWidget.header().setSectionResizeMode(5, QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.ui.resultsTreeWidget.header().setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.ui.resultsTreeWidget.header().setStretchLastSection(False)
 
         self._element_buttons = [btn for btn in self.findChildren(QtWidgets.QPushButton) if btn.objectName().startswith("ebtn")]
@@ -334,6 +345,7 @@ class ParametersPage(QtWidgets.QWidget):
     }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters page UI, delegates, and button wiring."""
         super().__init__(*args, **kwargs)
 
         self.parametersPage = Ui_ParametersPage()
@@ -342,6 +354,8 @@ class ParametersPage(QtWidgets.QWidget):
         self.selectedElements = {}
 
         self.parametersPage.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        self.parametersPage.resultsTreeWidget.header().setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.parametersPage.resultsTreeWidget.header().setStretchLastSection(False)
 
         itemDelegate = ItemDelegate(self.parametersPage.tableWidget)
         self.parametersPage.tableWidget.setItemDelegate(itemDelegate)
@@ -362,14 +376,22 @@ class ParametersPage(QtWidgets.QWidget):
 
     @staticmethod
     def _clean_error_message(error: Exception) -> str:
-        """Return the first string argument of an exception, or its str() representation."""
+        """Return the first string argument of an exception, or its str() representation.
+
+        Returns:
+            User-facing error detail extracted from the exception.
+        """
         if error.args and isinstance(error.args[0], str):
             return error.args[0]
         return str(error)
 
     @staticmethod
     def _format_formula_for_notification(formula: str) -> str:
-        """HTML-escape a formula string and wrap numeric parts in <sub> tags."""
+        """HTML-escape a formula string and wrap numeric parts in <sub> tags.
+
+        Returns:
+            HTML-safe formula string with numeric parts rendered as subscripts.
+        """
         escaped_formula = html.escape(formula)
         return re.sub(r"(\d+(?:\.\d+)?)", r"<sub>\1</sub>", escaped_formula)
 
@@ -378,7 +400,11 @@ class ParametersPage(QtWidgets.QWidget):
         self.notificationRequested.emit(message, severity)
 
     def _format_calculation_error(self, error: Exception) -> str:
-        """Return a user-friendly error message for a failed HEA calculation."""
+        """Return a user-friendly error message for a failed HEA calculation.
+
+        Returns:
+            User-facing explanation of the calculation failure.
+        """
         detail = self._clean_error_message(error)
         for keyword, prefix in self._ERROR_PREFIXES.items():
             if keyword in detail:
@@ -386,7 +412,11 @@ class ParametersPage(QtWidgets.QWidget):
         return f"Calculation failed. {detail}"
 
     def _format_save_error(self, error: Exception) -> str:
-        """Return a user-friendly error message for a failed CSV save operation."""
+        """Return a user-friendly error message for a failed CSV save operation.
+
+        Returns:
+            User-facing explanation of the save failure.
+        """
         return f"Could not save the results file. {self._clean_error_message(error)}"
 
     def _update_total_label(self) -> None:
@@ -599,6 +629,7 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
                                       QPushButton:pressed{background-color: #748CAB;}"""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Create the main window, initialize child pages, and connect navigation controls."""
         super().__init__(*args, **kwargs)
 
         self.ui = Ui_HEACalculator()
@@ -662,13 +693,14 @@ class HEACalculatorMainWindow(QtWidgets.QMainWindow):
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         """Record the cursor position to support frameless window dragging."""
-        self.oldPos = event.globalPos()
+        self.oldPos = event.globalPosition().toPoint()
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
         """Move the window by the delta since the last recorded mouse position."""
-        delta = QtCore.QPoint(event.globalPos() - self.oldPos)
+        new_pos = event.globalPosition().toPoint()
+        delta = QtCore.QPoint(new_pos - self.oldPos)
         self.move(self.x() + delta.x(), self.y() + delta.y())
-        self.oldPos = event.globalPos()
+        self.oldPos = new_pos
 
 
 def run() -> None:
