@@ -22,14 +22,14 @@ def FormationEnthalpy(pair: tuple[str, str] | list[str]) -> float:
         pair (tuple or list): The element pair, e.g. ``("Fe", "Co")``.
 
     Returns:
-        float: The pair formation enthalpy in meV/atom.
+        The pair formation enthalpy in meV/atom.
 
     Raises:
         TypeError: If the input is not a tuple or list.
         MissingFormationEnthalpyError: If the requested pair does not exist in the database.
 
     References:
-        Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
+        - Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
     """
     if not isinstance(pair, tuple | list):
         raise TypeError("Usage: FormationEnthalpy(('X', 'Y')) where X and Y are element names.")

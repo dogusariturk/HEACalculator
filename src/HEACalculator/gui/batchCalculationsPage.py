@@ -24,10 +24,9 @@ class Ui_BatchCalculationsPage(object):
         action buttons (Search, Clear, Export), and the results table.
         Applies the dark-theme stylesheet throughout.
 
-        Parameters
-        ----------
-        BatchCalculationsPage:
-            The ``QWidget`` instance that owns this UI.
+        Args:
+            BatchCalculationsPage: The ``QWidget`` instance that owns this
+                UI.
         """
         BatchCalculationsPage.setObjectName("BatchCalculationsPage")
         BatchCalculationsPage.resize(1000, 658)
@@ -3279,7 +3278,7 @@ class Ui_BatchCalculationsPage(object):
         self.resultsTreeWidget.setHeaderHidden(False)
         self.resultsTreeWidget.setExpandsOnDoubleClick(True)
         self.resultsTreeWidget.setObjectName("resultsTreeWidget")
-        for _col in range(21):
+        for _col in range(23):
             self.resultsTreeWidget.headerItem().setTextAlignment(_col, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsTreeWidget.header().setVisible(True)
         self.resultsTreeWidget.header().setCascadingSectionResizes(False)
@@ -3379,11 +3378,9 @@ class Ui_BatchCalculationsPage(object):
         headers, and action button captions through Qt's translation
         mechanism.
 
-        Parameters
-        ----------
-        BatchCalculationsPage:
-            The ``QWidget`` instance whose child text properties are being
-            populated.
+        Args:
+            BatchCalculationsPage: The ``QWidget`` instance whose child text
+                properties are being populated.
         """
         _translate = QtCore.QCoreApplication.translate
         BatchCalculationsPage.setWindowTitle(_translate("BatchCalculationsPage", "Form"))
@@ -3419,7 +3416,7 @@ class Ui_BatchCalculationsPage(object):
         self.ebtnBi.setText(_translate("BatchCalculationsPage", "Bi"))
         self.ebtnIn.setText(_translate("BatchCalculationsPage", "In"))
         self.ebtnS.setText(_translate("BatchCalculationsPage", "S"))
-        self.ebtnAnd.setText(_translate("BatchCalculationsPage", "And"))
+        self.ebtnAnd.setText(_translate("BatchCalculationsPage", "Nd"))
         self.ebtnNa.setText(_translate("BatchCalculationsPage", "Na"))
         self.ebtnIr.setText(_translate("BatchCalculationsPage", "Ir"))
         self.ebtnOs.setText(_translate("BatchCalculationsPage", "Os"))
@@ -3508,31 +3505,33 @@ class Ui_BatchCalculationsPage(object):
             ),
         )
         hi.setText(2, _translate("BatchCalculationsPage", "\u03b4"))
-        hi.setText(3, _translate("BatchCalculationsPage", "Omega"))
-        hi.setText(4, _translate("BatchCalculationsPage", "Gamma"))
-        hi.setToolTip(4, _translate("BatchCalculationsPage", "<html><head/><body><p>\u03b3</p></body></html>"))
-        hi.setText(5, _translate("BatchCalculationsPage", "Lambda"))
-        hi.setToolTip(5, _translate("BatchCalculationsPage", "<html><head/><body><p>\u03bb</p></body></html>"))
-        hi.setText(6, _translate("BatchCalculationsPage", "VEC"))
-        hi.setText(7, _translate("BatchCalculationsPage", "Mixing Enthalpy"))
-        hi.setToolTip(7, _translate("BatchCalculationsPage", "<html><head/><body><p>kJ/mol</p></body></html>"))
-        hi.setText(8, _translate("BatchCalculationsPage", "Mixing Entropy"))
-        hi.setToolTip(8, _translate("BatchCalculationsPage", "<html><head/><body><p>J/K.mol</p></body></html>"))
-        hi.setText(9, _translate("BatchCalculationsPage", "Formation Enthalpy"))
-        hi.setToolTip(9, _translate("BatchCalculationsPage", "<html><head/><body><p>meV/atom</p></body></html>"))
-        hi.setText(10, _translate("BatchCalculationsPage", "Min. Formation Enthalpy"))
-        hi.setToolTip(10, _translate("BatchCalculationsPage", "<html><head/><body><p>meV/atom</p></body></html>"))
-        hi.setText(11, _translate("BatchCalculationsPage", "Melting Temperature"))
-        hi.setToolTip(11, _translate("BatchCalculationsPage", "<html><head/><body><p>K</p></body></html>"))
-        hi.setText(12, _translate("BatchCalculationsPage", "Crystal Structure"))
-        hi.setText(13, _translate("BatchCalculationsPage", "Model 1"))
-        hi.setText(14, _translate("BatchCalculationsPage", "Model 2"))
-        hi.setText(15, _translate("BatchCalculationsPage", "Model 3"))
-        hi.setText(16, _translate("BatchCalculationsPage", "Model 4"))
-        hi.setText(17, _translate("BatchCalculationsPage", "Model 5"))
-        hi.setText(18, _translate("BatchCalculationsPage", "Model 6"))
-        hi.setText(19, _translate("BatchCalculationsPage", "Model 7"))
-        hi.setText(20, _translate("BatchCalculationsPage", "Model 8"))
+        hi.setText(3, _translate("BatchCalculationsPage", "\u03b4 (CN12)"))
+        hi.setText(4, _translate("BatchCalculationsPage", "\u0394\u03c7 (Allen)"))
+        hi.setText(5, _translate("BatchCalculationsPage", "Omega"))
+        hi.setText(6, _translate("BatchCalculationsPage", "Gamma"))
+        hi.setToolTip(6, _translate("BatchCalculationsPage", "<html><head/><body><p>\u03b3</p></body></html>"))
+        hi.setText(7, _translate("BatchCalculationsPage", "Lambda"))
+        hi.setToolTip(7, _translate("BatchCalculationsPage", "<html><head/><body><p>\u03bb</p></body></html>"))
+        hi.setText(8, _translate("BatchCalculationsPage", "VEC"))
+        hi.setText(9, _translate("BatchCalculationsPage", "Mixing Enthalpy"))
+        hi.setToolTip(9, _translate("BatchCalculationsPage", "<html><head/><body><p>kJ/mol</p></body></html>"))
+        hi.setText(10, _translate("BatchCalculationsPage", "Mixing Entropy"))
+        hi.setToolTip(10, _translate("BatchCalculationsPage", "<html><head/><body><p>J/K.mol</p></body></html>"))
+        hi.setText(11, _translate("BatchCalculationsPage", "Formation Enthalpy"))
+        hi.setToolTip(11, _translate("BatchCalculationsPage", "<html><head/><body><p>meV/atom</p></body></html>"))
+        hi.setText(12, _translate("BatchCalculationsPage", "Min. Formation Enthalpy"))
+        hi.setToolTip(12, _translate("BatchCalculationsPage", "<html><head/><body><p>meV/atom</p></body></html>"))
+        hi.setText(13, _translate("BatchCalculationsPage", "Melting Temperature"))
+        hi.setToolTip(13, _translate("BatchCalculationsPage", "<html><head/><body><p>K</p></body></html>"))
+        hi.setText(14, _translate("BatchCalculationsPage", "Crystal Structure"))
+        hi.setText(15, _translate("BatchCalculationsPage", "Model 1"))
+        hi.setText(16, _translate("BatchCalculationsPage", "Model 2"))
+        hi.setText(17, _translate("BatchCalculationsPage", "Model 3"))
+        hi.setText(18, _translate("BatchCalculationsPage", "Model 4"))
+        hi.setText(19, _translate("BatchCalculationsPage", "Model 5"))
+        hi.setText(20, _translate("BatchCalculationsPage", "Model 6"))
+        hi.setText(21, _translate("BatchCalculationsPage", "Model 7"))
+        hi.setText(22, _translate("BatchCalculationsPage", "Model 8"))
         self.lblStart.setText(_translate("BatchCalculationsPage", "Start:"))
         self.lblEnd.setText(_translate("BatchCalculationsPage", "End:"))
         self.lblStep.setText(_translate("BatchCalculationsPage", "Step:"))

@@ -36,56 +36,100 @@ class AlloyComposition:
 
     @cached_property
     def alloy(self) -> dict[str, float]:
-        """Mapping of element symbol to raw atom count."""
+        """Mapping of element symbol to raw atom count.
+
+        Returns:
+            Parsed element counts from the input formula.
+        """
         return nested_formula_parser(self.formula)
 
     @cached_property
     def elements(self) -> dict[str, _Element]:
-        """Cached element data keyed by element symbol."""
+        """Cached element data keyed by element symbol.
+
+        Returns:
+            Element records for each symbol in the alloy.
+        """
         return {elm: Element(elm) for elm in self.alloy}
 
     @cached_property
     def atomic_percentage(self) -> dict[str, float]:
-        """Mapping of element symbol to atomic fraction (values sum to 1)."""
+        """Mapping of element symbol to atomic fraction (values sum to 1).
+
+        Returns:
+            Atomic fractions keyed by element symbol.
+        """
         total = sum(self.alloy.values())
         return {elm: num / total for elm, num in self.alloy.items()}
 
     @cached_property
     def pair_list(self) -> list[tuple[str, str]]:
-        """All unique binary element pairs."""
+        """All unique binary element pairs.
+
+        Returns:
+            Unique unordered element pairs from the alloy.
+        """
         return list(itertools.combinations(self.alloy, 2))
 
     @cached_property
     def pair_percentage(self) -> list[float]:
-        """Probability of each pair (product of the two atomic fractions)."""
+        """Probability of each pair (product of the two atomic fractions).
+
+        Returns:
+            Pair probabilities aligned with ``pair_list``.
+        """
         return [self.atomic_percentage[a] * self.atomic_percentage[b] for a, b in self.pair_list]
 
     @cached_property
     def atomic_radius_list(self) -> list[float]:
-        """Atomic radius for each element in the same order as ``alloy``."""
+        """Atomic radius for each element in the same order as ``alloy``.
+
+        Returns:
+            Atomic radii in pm aligned with the alloy element order.
+        """
         return [self.elements[elm].atomic_radius for elm in self.alloy]
 
     @cached_property
     def average_atomic_radius(self) -> float:
-        """Weighted average atomic radius using atomic fractions."""
+        """Weighted average atomic radius using atomic fractions.
+
+        Returns:
+            Composition-weighted average atomic radius in pm.
+        """
         return sum(pct * r for pct, r in zip(self.atomic_percentage.values(), self.atomic_radius_list, strict=True))
 
     @cached_property
     def atomic_radius_cn12_list(self) -> list[float]:
-        """Goldschmidt CN12 corrected atomic radius for each element in the same order as alloy."""
+        """Goldschmidt CN12 corrected atomic radius for each element in the same order as alloy.
+
+        Returns:
+            CN12 radii in pm aligned with the alloy element order.
+        """
         return [self.elements[elm].atomic_radius_cn12 for elm in self.alloy]
 
     @cached_property
     def average_atomic_radius_cn12(self) -> float:
-        """Composition-weighted average CN12 corrected atomic radius."""
+        """Composition-weighted average CN12 corrected atomic radius.
+
+        Returns:
+            Composition-weighted average CN12 radius in pm.
+        """
         return sum(pct * r for pct, r in zip(self.atomic_percentage.values(), self.atomic_radius_cn12_list, strict=True))
 
     @cached_property
     def allen_electronegativity_list(self) -> list[float]:
-        """Allen electronegativity for each element in the same order as ``alloy``."""
+        """Allen electronegativity for each element in the same order as ``alloy``.
+
+        Returns:
+            Allen electronegativities in Pauling units aligned with the alloy element order.
+        """
         return [self.elements[elm].allen_electronegativity for elm in self.alloy]
 
     @cached_property
     def average_allen_electronegativity(self) -> float:
-        """Composition-weighted average Allen electronegativity."""
+        """Composition-weighted average Allen electronegativity.
+
+        Returns:
+            Composition-weighted average Allen electronegativity in Pauling units.
+        """
         return sum(pct * x for pct, x in zip(self.atomic_percentage.values(), self.allen_electronegativity_list, strict=True))

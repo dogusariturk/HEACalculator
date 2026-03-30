@@ -24,10 +24,8 @@ class Ui_HEACalculator(object):
         stylesheet, constructs the top bar and side-menu frames, and
         embeds a ``QStackedWidget`` for page switching.
 
-        Parameters
-        ----------
-        HEACalculator:
-            The ``QMainWindow`` instance that owns this UI.
+        Args:
+            HEACalculator: The ``QMainWindow`` instance that owns this UI.
         """
         HEACalculator.setObjectName("HEACalculator")
         HEACalculator.resize(1125, 600)
@@ -263,11 +261,9 @@ class Ui_HEACalculator(object):
         Applies window title and button/label text through Qt's translation
         mechanism so the UI can be localised without touching layout code.
 
-        Parameters
-        ----------
-        HEACalculator:
-            The ``QMainWindow`` instance whose child text properties are
-            being populated.
+        Args:
+            HEACalculator: The ``QMainWindow`` instance whose child text
+                properties are being populated.
         """
         _translate = QtCore.QCoreApplication.translate
         HEACalculator.setWindowTitle(_translate("HEACalculator", "HEACalculator | MDL"))
