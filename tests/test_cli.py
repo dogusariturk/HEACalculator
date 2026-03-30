@@ -11,6 +11,7 @@ from unittest import TestCase
 
 from typer.testing import CliRunner
 
+from HEACalculator import HEACalculator
 from HEACalculator.cli import app
 
 runner = CliRunner()
@@ -128,6 +129,26 @@ class TestRangeSearch(TestCase):
         assert result.exit_code == 0
         assert "Formula" in result.output
 
+    def test_csv_flag_header_matches_result_schema(self):
+        """The --csv header row matches HEACalculator.get_headers() exactly."""
+        result = runner.invoke(
+            app,
+            [
+                "range",
+                "--elements",
+                "FeNi",
+                "--start",
+                "0",
+                "--end",
+                "100",
+                "--step",
+                "50",
+                "--csv",
+            ],
+        )
+        assert result.exit_code == 0
+        assert result.output.splitlines()[0] == ", ".join(HEACalculator.get_headers())
+
     def test_range_excludes_pure_single_component_results(self):
         """Range search should not print pure-element endpoints when screening alloys."""
         result = runner.invoke(
@@ -173,6 +194,18 @@ class TestCsvSearch(TestCase):
         try:
             result = runner.invoke(app, ["csv", tmp_path])
             assert "Formula" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_valid_csv_output_header_matches_result_schema(self):
+        """The csv subcommand prints the shared result header row."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path])
+            assert result.exit_code == 0
+            assert result.output.splitlines()[0] == ", ".join(HEACalculator.get_headers())
         finally:
             Path(tmp_path).unlink()
 

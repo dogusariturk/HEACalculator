@@ -10,6 +10,32 @@ __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
 __version__ = "2.0.0"
 
+RESULT_HEADERS = (
+    "Formula",
+    "Density (g/cm^3)",
+    "Delta (%)",
+    "Delta (CN12) (%)",
+    "Delta Chi (Allen) (%)",
+    "Omega",
+    "Gamma",
+    "Lambda",
+    "VEC",
+    "Mixing Enthalpy (kJ/mol)",
+    "Mixing Entropy (J/K.mol)",
+    "Formation Enthalpy (meV/atom)",
+    "Min. Formation Enthalpy (meV/atom)",
+    "Melting Temperature (K)",
+    "Crystal Structure",
+    "Model 1",
+    "Model 2",
+    "Model 3",
+    "Model 4",
+    "Model 5",
+    "Model 6",
+    "Model 7",
+    "Model 8",
+)
+
 
 class HEACalculator:
     """General class for high entropy alloy calculations.
@@ -46,6 +72,11 @@ class HEACalculator:
         composition = AlloyComposition(formula)
         self.thermo = HEAThermodynamics(composition)
         self.predictor = SolidSolutionPredictor(composition, self.thermo)
+
+    @classmethod
+    def get_headers(cls) -> list[str]:
+        """Return the tabular result headers in the same order as ``get_list()``."""
+        return list(RESULT_HEADERS)
 
     def get_list(self) -> list:
         """Return all calculated properties as a formatted list.

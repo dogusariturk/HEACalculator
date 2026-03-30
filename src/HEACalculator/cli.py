@@ -23,30 +23,7 @@ def csv_search(csv_file: str = typer.Argument(...)) -> None:
     if not csv_path.exists():
         raise typer.BadParameter(f"File not found: {csv_file}")
 
-    header = [
-        "Formula",
-        "Density (g/cm^3)",
-        "Delta (%)",
-        "Omega",
-        "Gamma",
-        "Lambda",
-        "VEC",
-        "Mixing Enthalpy (kJ/mol)",
-        "Mixing Entropy (J/K.mol)",
-        "Formation Enthalpy (meV/atom)",
-        "Min. Formation Enthalpy (meV/atom)",
-        "Melting Temperature (K)",
-        "Crystal Structure",
-        "Model 1",
-        "Model 2",
-        "Model 3",
-        "Model 4",
-        "Model 5",
-        "Model 6",
-        "Model 7",
-        "Model 8",
-    ]
-    print(", ".join(header))
+    print(", ".join(HEACalculator.get_headers()))
 
     df = pd.read_csv(csv_path)
     col_map = {c.lower(): c for c in df.columns}
@@ -94,30 +71,7 @@ def range_search(
         raise typer.BadParameter("Step must be greater than 0.")
 
     if csv:
-        header = [
-            "Formula",
-            "Density (g/cm^3)",
-            "Delta (%)",
-            "Omega",
-            "Gamma",
-            "Lambda",
-            "VEC",
-            "Mixing Enthalpy (kJ/mol)",
-            "Mixing Entropy (J/K.mol)",
-            "Formation Enthalpy (meV/atom)",
-            "Min. Formation Enthalpy (meV/atom)",
-            "Melting Temperature (K)",
-            "Crystal Structure",
-            "Model 1",
-            "Model 2",
-            "Model 3",
-            "Model 4",
-            "Model 5",
-            "Model 6",
-            "Model 7",
-            "Model 8",
-        ]
-        print(", ".join(header))
+        print(", ".join(HEACalculator.get_headers()))
 
     formula, composition_set = find_all_comps(elements, start, end, step)
     for composition in composition_set:
