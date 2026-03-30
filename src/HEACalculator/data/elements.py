@@ -30,7 +30,7 @@ class _Element:
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
 
     References:
-        1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm}(https://www.ciaaw.org/atomic-weights.htm).
+        1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm](https://www.ciaaw.org/atomic-weights.htm).
         2. Slater, J.C. Atomic Radii in Crystals. J. Chem. Phys. 1964, 41(10), 3199.
         3. Smithells Metals Reference Book, 8th ed., Table 4.1 (Goldschmidt CN12 corrected).
         4. Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.

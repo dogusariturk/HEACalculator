@@ -952,7 +952,7 @@ class TestNotificationBarInit:
         assert bar.dismissTimer.isSingleShot()
 
     def test_close_button_label_is_x(self, qapp):
-        """The manual-dismiss button is labelled 'x'."""
+        """The manual-dismiss button is labeled 'x'."""
         bar = NotificationBar()
         assert bar.closeButton.text() == "x"
 
