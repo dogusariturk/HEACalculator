@@ -39,6 +39,7 @@ It exposes both a **command-line interface** (CLI) powered by [Typer](https://ty
 **Structural parameters**
 
 - Atomic Size Difference, $\delta$ (%)
+- Atomic Size Difference (CN12), $\delta_{\text{CN12}}$ (%)
 - Electronegativity Difference, $\Delta\chi_{\text{Allen}}$ (%)
 - Omega, $\Omega$
 - Gamma, $\gamma$

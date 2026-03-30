@@ -128,7 +128,7 @@ AlCoCrFeNi,quinary
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
 
-**Output columns:** Formula, Density (g/cm^3), Delta (%), Omega, Gamma, Lambda, VEC, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
+**Output columns:** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Omega, Gamma, Lambda, VEC, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
 
 **Example**
 
@@ -150,11 +150,22 @@ HEACalculator gui
 
 ![HEACalculator GUI](https://user-images.githubusercontent.com/46679086/205514915-e4ce2dbf-4636-4639-b978-3a018183ba82.png)
 
-**Workflow:**
+The GUI has two pages, switched via the navigation buttons on the left:
+
+**Parameters page (single alloy)**
+
+1. Select elements from the periodic table (percentages are distributed equally by default)
+2. Adjust the at% values in the composition table as needed
+3. Click **Calculate**
+4. Click **Save** to export results as a CSV file
+
+**Batch Calculations page (range screening)**
+
+Equivalent to the CLI `search range` command.
 
 1. Select elements from the periodic table
-2. Enter the desired at% values in the table at the corresponding cells
-3. Click **Calculate**
+2. Set the composition range and step size
+3. Click **Search**
 4. Click **Save** to export results as a CSV file
 
 ---
@@ -178,6 +189,7 @@ print(hea.thermo.density)                       # g/cm³
 print(hea.thermo.melting_temperature)           # K
 print(hea.thermo.valence_electron_concentration)
 print(hea.thermo.atomic_size_difference)        # %
+print(hea.thermo.atomic_size_difference_cn12)   # % (CN12-corrected radii)
 print(hea.thermo.electronegativity_difference)  # % (Allen CE scale)
 print(hea.thermo.omega)
 print(hea.thermo.gamma)
