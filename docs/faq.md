@@ -75,6 +75,18 @@ If you use `HEACalculator` in your research, please cite:
 
 > Doğuhan Sarıtürk. *HEACalculator*. (2019). doi:[10.5281/zenodo.3590318](https://doi.org/10.5281/zenodo.3590318)
 
+???+ quote "BibTeX"
+    ```bibtex
+    @software{sariturk_2019_3590318,
+      author    = {Sarıtürk, Doğuhan},
+      title     = {HEACalculator},
+      year      = 2019,
+      publisher = {Zenodo},
+      doi       = {10.5281/zenodo.3590318},
+      url       = {https://doi.org/10.5281/zenodo.3590318},
+    }
+    ```
+
 You should also cite the original papers for any specific prediction models you rely on. See the [Overview](overview.md#references) page for the full reference list.
 
 ---
