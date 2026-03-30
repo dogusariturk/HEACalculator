@@ -66,6 +66,16 @@
 
 ---
 
+### Miedema Enthalpy
+
+::: HEACalculator.data.miedema_enthalpy.MiedemaEnthalpy
+
+---
+
+::: HEACalculator.data.miedema_enthalpy.MiedemaIntEnthalpy
+
+---
+
 ## Exceptions
 
 ::: HEACalculator.exceptions

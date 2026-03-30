@@ -18,6 +18,24 @@ $$
 
 where $x_i$ is the mole fraction of element $i$ and $\Delta H_{AB}^{\text{mix}}$ is the binary mixing enthalpy from Miedema's model.[^1]
 
+### Miedema Mixing Enthalpy
+
+$$
+\Delta H_{\text{mix}}^{\text{Miedema}} = \sum_{i \neq j} x_i x_j
+\bigl(x_j H_{\text{chem},ij} + x_i H_{\text{chem},ji}
++ x_j H_{\text{el},ij} + x_i H_{\text{el},ji}
++ x_j H_{\text{struct},ij} + x_i H_{\text{struct},ji}\bigr)
+\quad [\text{kJ/mol}]
+$$
+
+where the three contributions for each ordered pair $(i \to j)$ are:
+
+- **Chemical interface term** $H_{\text{chem}}$: from the Miedema macroscopic atom model (de Boer *et al.* 1988)[^14]
+- **Elastic mismatch term** $H_{\text{el}}$: from Eshelby theory applied to atomic size and bulk/shear modulus mismatches
+- **Structural term** $H_{\text{struct}}$: from Niessen and Miedema (1983)[^15] via tabulated valence-dependent energies
+
+This three-term formula follows King *et al.* Supplementary Eq. S8.[^11] It is used for the Model 8 solid-solution criterion.
+
 ### Mixing Entropy
 
 $$
@@ -137,3 +155,5 @@ A microstructure prediction based on VEC is also provided:
 [^11]: King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. *Acta Mater.* **2016**, *104*, 172–179.
 [^12]: Mann, J.B.; Meek, T.L.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 2780–2783.
 [^13]: Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 5132–5137.
+[^14]: de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. *Cohesion in Metals: Transition Metal Alloys.* North-Holland, Amsterdam, 1988.
+[^15]: Niessen, A.K.; Miedema, A.R. *Ber. Bunsenges. Phys. Chem.* **1983**, *87*, 717–723.
