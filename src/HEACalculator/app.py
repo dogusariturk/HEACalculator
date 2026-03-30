@@ -16,7 +16,9 @@ try:
     from PyQt6 import QtCore, QtGui, QtWidgets
     from PyQt6.QtWidgets import QMessageBox
 except ImportError:
-    raise SystemExit("PyQt6 is required for GUI mode. Install with: pip install HEACalculator[gui]") from None
+    raise SystemExit(
+        'PyQt6 is required for GUI mode. Install with: uv add "HEACalculator[gui]" or pip install "HEACalculator[gui]"'
+    ) from None
 
 from HEACalculator.utils import find_all_comps
 from HEACalculator.core.hea import HEACalculator, __version__
