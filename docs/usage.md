@@ -56,7 +56,7 @@ HEACalculator search range --elements "El1 El2 ..." [OPTIONS]
 | `--step`     | `5`          | Composition step size (at%)             |
 | `--csv`      | `False`      | Export results as CSV to stdout         |
 
-Pure single-element compositions (one element at 100 at%, the rest at 0 at%) are included automatically whenever both `--start 0` and `--end 100` are used with a step that divides evenly into 100.
+Pure single-element compositions (one element at 100 at%, the rest at 0 at%) are excluded from `search range` results, even when both `--start 0` and `--end 100` are used with a step that lands on those endpoints.
 
 **Examples**
 

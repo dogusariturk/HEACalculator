@@ -56,7 +56,8 @@ def find_all_comps(alloy: str, start: float, end: float, step: float) -> tuple[d
 
     Returns:
         The parsed formula dict and a set of valid composition tuples.
-            Pure single-element compositions are excluded.
+            Pure single-element compositions are always excluded, even when
+            the range includes both 0 and 100.
     """
     formula = nested_formula_parser(alloy)
     n = len(formula)
