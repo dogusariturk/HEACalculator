@@ -16,13 +16,13 @@ with (_data_dir / "elements.json").open() as _f:
 
 @dataclass(frozen=True)
 class _Element:
-    """Container for physical and chemical properties of a single element.
+    r"""Container for physical and chemical properties of a single element.
 
     Attributes:
         symbol: Chemical symbol.
         melting_point: Melting temperature in Kelvin.
         atomic_number: Atomic number.
-        atomic_volume: Atomic volume in cm^3/mol.
+        atomic_volume: Atomic volume in cm$^3$/mol.
         atomic_weight: Relative atomic weight.
         atomic_radius: Slater atomic radius in pm.
         atomic_radius_cn12: Goldschmidt CN12-corrected metallic radius in pm (NaN if unavailable).
@@ -30,11 +30,11 @@ class _Element:
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
 
     References:
-        IUPAC-CIAAW. Standard atomic weights. https://www.ciaaw.org/atomic-weights.htm.
-        Slater, J.C. Atomic Radii in Crystals. J. Chem. Phys. 1964, 41(10), 3199.
-        Smithells Metals Reference Book, 8th ed., Table 4.1 (Goldschmidt CN12 corrected).
-        Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
-        Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
+        1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm}(https://www.ciaaw.org/atomic-weights.htm).
+        2. Slater, J.C. Atomic Radii in Crystals. J. Chem. Phys. 1964, 41(10), 3199.
+        3. Smithells Metals Reference Book, 8th ed., Table 4.1 (Goldschmidt CN12 corrected).
+        4. Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
+        5. Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
     """
 
     symbol: str
@@ -48,7 +48,11 @@ class _Element:
     allen_electronegativity: float
 
     def __str__(self) -> str:
-        """Return a human-readable summary of the element's properties."""
+        """Return a human-readable summary of the element's properties.
+
+        Returns:
+            Multi-line summary of the stored element properties.
+        """
         return (
             f"\n{self.symbol}\n"
             f"\tMelting point: {self.melting_point} K\n"
@@ -84,7 +88,7 @@ def Element(name: str) -> _Element:
         name: The element symbol, e.g. ``"Fe"``.
 
     Returns:
-        _Element: Frozen dataclass containing the element's properties.
+        Frozen dataclass containing the element's properties.
 
     Raises:
         TypeError: If the input is not a string.

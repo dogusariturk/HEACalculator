@@ -26,12 +26,12 @@ def nested_formula_parser(formula: str, check: bool = True) -> dict[str, int | f
             it is not. Defaults to True.
 
     Returns:
-        dict: Dictionary of counts of individual atoms, indexed by symbol with
+        Dictionary of counts of individual atoms, indexed by symbol with
             proper capitalization.
 
     References:
-        Bell, C.; Cortes-Pena, Y.R.; and Contributors. Chemicals: Chemical Engineering Design Library (ChEDL).
-        2016-2021. https://github.com/CalebBell/chemicals.
+        - Bell, C.; Cortes-Pena, Y.R.; and Contributors. Chemicals: Chemical Engineering Design Library (ChEDL).
+        2016-2021. [https://github.com/CalebBell/chemicals](https://github.com/CalebBell/chemicals).
     """
     formula = formula.replace("[", "").replace("]", "")
     charge_splits = bracketed_charge_re.split(formula)
