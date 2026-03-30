@@ -105,3 +105,32 @@ class TestHEACalculator:
         lst = HEACalculator("Fe").get_list()
         assert lst[0] == "Fe"
         assert len(lst) == 23
+
+    def test_headers_align_with_get_list(self, calculator):
+        """Shared result headers stay in lockstep with the tabular payload."""
+        assert HEACalculator.get_headers() == [
+            "Formula",
+            "Density (g/cm^3)",
+            "Delta (%)",
+            "Delta (CN12) (%)",
+            "Delta Chi (Allen) (%)",
+            "Omega",
+            "Gamma",
+            "Lambda",
+            "VEC",
+            "Mixing Enthalpy (kJ/mol)",
+            "Mixing Entropy (J/K.mol)",
+            "Formation Enthalpy (meV/atom)",
+            "Min. Formation Enthalpy (meV/atom)",
+            "Melting Temperature (K)",
+            "Crystal Structure",
+            "Model 1",
+            "Model 2",
+            "Model 3",
+            "Model 4",
+            "Model 5",
+            "Model 6",
+            "Model 7",
+            "Model 8",
+        ]
+        assert len(HEACalculator.get_headers()) == len(calculator.get_list())
