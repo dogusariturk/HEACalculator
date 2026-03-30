@@ -200,7 +200,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_8(self) -> str:
-        r"""King *et al.* criteria: $\phi = $\Delta G_{\text{SS}}$ / (−|$\Delta G_{\text{max}}$|) >= 1$.
+        r"""King *et al.* criteria: $\phi = \Delta G_{\text{SS}} / (−|\Delta G_{\text{max}}|) >= 1$.
 
         Returns:
             ``"Solid Solution"`` or ``"Multiple Phases"``.
