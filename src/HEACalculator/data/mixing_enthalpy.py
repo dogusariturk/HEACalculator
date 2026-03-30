@@ -22,14 +22,16 @@ def MixingEnthalpy(pair: tuple[str, str] | list[str]) -> float:
         pair (tuple or list): The element pair, e.g. ``("Fe", "Co")``.
 
     Returns:
-        float: The pair mixing enthalpy in kJ/mol.
+        The pair mixing enthalpy in kJ/mol.
 
     Raises:
         TypeError: If the input is not a tuple or list.
         MissingMixingEnthalpyError: If the requested pair does not exist in the database.
 
     References:
-        de Boer, F.R.; Pettifor, D.G. Cohesion in Metals. Elsevier Science Publishers B.V., Netherlands, 1988.
+        - Takeuchi, A.; Inoue, A. Classification of Bulk Metallic Glasses by Atomic Size Difference,
+            Heat of Mixing and Period of Constituent Elements and Its Application to Characterization
+            of the Main Alloying Element. Mater. Trans. 2005, 46(12), 2817-2829. Table 1.
     """
     if not isinstance(pair, tuple | list):
         raise TypeError("Usage: MixingEnthalpy(('X', 'Y')) where X and Y are element names.")

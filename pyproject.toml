@@ -97,9 +97,13 @@ ignore = [
     "E402", # module level import not at top of file
     "E501", # line-too-long
     "N802", # function name should be lowercase
+    "N803", # argument name should be lowercase
+    "N806", # variable in function should be lowercase
+    "N815", # mixedCase variable in class scope
     "N999", # invalid-module-name
     "PLC0415", # `import` should be at the top-level of a file
     "PLR0912", # too-many-branches in complex functions
+    "PLR0913", # too-many-arguments in function definition
     "PLR2004", # magic value used in comparison
 ]
 pydocstyle.convention = "google"

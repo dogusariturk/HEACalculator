@@ -8,11 +8,31 @@ import numpy as np
 from HEACalculator.core.helpers import nested_formula_parser
 
 
+def _has_multiple_components(composition: tuple[float, ...]) -> bool:
+    """Return True when at least two composition entries are meaningfully non-zero.
+
+    Args:
+        composition (tuple[float, ...]): Atomic fractions or percentages for all
+            elements in the alloy.
+
+    Returns:
+        True if two or more entries exceed the zero threshold (abs_tol=1e-9),
+            False otherwise.
+    """
+    return sum(1 for value in composition if not math.isclose(value, 0.0, abs_tol=1e-9)) >= 2
+
+
 def _gen_compositions(n: int, values: tuple[float, ...], target: float) -> Iterator[tuple[float, ...]]:
     """Recursively yield every ordered n-tuple from values that sums to target.
 
-    Values must be sorted ascending. Each valid composition is yielded exactly
-    once -- no permutation step or deduplication required.
+    Args:
+        n (int): Number of components remaining to fill in the tuple.
+        values (tuple[float, ...]): Sorted candidate values for each position.
+        target (float): Required sum for the remaining n positions.
+
+    Returns:
+        Ordered n-tuples drawn from values whose
+            elements sum to target within abs_tol=1e-9.
     """
     if n == 1:
         for v in values:
@@ -35,11 +55,10 @@ def find_all_comps(alloy: str, start: float, end: float, step: float) -> tuple[d
         step (float): Composition screening step size.
 
     Returns:
-        tuple[dict, set]: The parsed formula dict and a set of valid composition tuples.
-            Pure single-element compositions (one element at 100 at%, rest at 0 at%)
-            are included when they fall naturally within the range.
+        The parsed formula dict and a set of valid composition tuples.
+            Pure single-element compositions are excluded.
     """
     formula = nested_formula_parser(alloy)
     n = len(formula)
     values = tuple(round(float(v), 10) for v in np.arange(start, end + step / 2, step))
-    return formula, set(_gen_compositions(n, values, 100.0))
+    return formula, {composition for composition in _gen_compositions(n, values, 100.0) if _has_multiple_components(composition)}
