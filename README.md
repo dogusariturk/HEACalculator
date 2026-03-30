@@ -93,6 +93,7 @@ HEACalculator gui
   - Density
   - Melting Temperature
   - Mixing Enthalpy [^1]
+  - Miedema Mixing Enthalpy [^11]
   - Mixing Entropy
   - Formation Enthalpy [^2]
   - Valence Electron Concentration (VEC)
