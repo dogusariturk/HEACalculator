@@ -57,8 +57,7 @@ It exposes both a **command-line interface** (CLI) powered by [Typer](https://ty
 ## Quick Start
 
 ```bash
-pip install HEACalculator
-HEACalculator search single FeCoCrNi
+uvx HEACalculator search single FeCoCrNi
 ```
 
-See [Installation & Quick Start](installation.md) for detailed setup instructions and [Usage](usage.md) for all available commands.
+See [Installation & Quick Start](installation.md) for project installs, `uv` tool installs, and pip-based setups. See [Usage](usage.md) for command examples and the `uv` tool workflow.

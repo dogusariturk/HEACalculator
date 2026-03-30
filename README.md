@@ -30,14 +30,52 @@
 > [!NOTE]
 > GUI support requires PyQt6, which is an optional dependency. Install with the `[gui]` extra if needed.
 
-```sh
-# Recommended — using uv
-uv add HEACalculator          # CLI only
-uv add "HEACalculator[gui]"   # with GUI support
+Choose the workflow that matches how you want to use `HEACalculator`.
 
-# Alternative — using pip
-pip install HEACalculator
-pip install "HEACalculator[gui]"
+### Add to a Project with `uv`
+
+Use this when `HEACalculator` should be installed inside a project's environment.
+
+```sh
+uv add HEACalculator
+uv add "HEACalculator[gui]"
+```
+
+### Use as a Standalone Tool with `uv`
+
+Use this when you want `uv` to manage `HEACalculator` as a CLI tool rather than a project dependency.
+
+Persistent install:
+
+```sh
+uv tool install HEACalculator
+HEACalculator --help
+```
+
+One-off run without installing permanently:
+
+```sh
+uvx HEACalculator search single FeCoCrNi
+```
+
+With GUI support:
+
+```sh
+uv tool install "HEACalculator[gui]"
+HEACalculator gui
+```
+or
+```sh
+uvx --from "HEACalculator[gui]" HEACalculator gui
+```
+
+### Install with `pip`
+
+Use this if you are not using `uv`.
+
+```sh
+pip install HEACalculator          # CLI only
+pip install "HEACalculator[gui]"   # with GUI support
 ```
 
 ---

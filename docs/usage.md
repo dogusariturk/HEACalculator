@@ -4,6 +4,41 @@
 
 ---
 
+## Usage as a Tool
+
+If you are using the `uv` tool workflow, you can run `HEACalculator` without adding it to a project's dependency list.
+
+For a persistent installation managed by `uv`:
+
+```bash
+uv tool install HEACalculator
+HEACalculator --help
+HEACalculator search single FeCoCrNi
+```
+
+For a one-off invocation:
+
+```bash
+uvx HEACalculator search single FeCoCrNi
+```
+
+If you need the desktop GUI, install or run the package with the `gui` extra:
+
+```bash
+uv tool install "HEACalculator[gui]"
+HEACalculator gui
+```
+
+Or run the GUI without installing permanently:
+
+```bash
+uvx --from "HEACalculator[gui]" HEACalculator gui
+```
+
+Use `uv add` instead when `HEACalculator` should live inside a project's environment as a dependency.
+
+---
+
 ## Command-Line Interface
 
 Running `HEACalculator` without arguments displays the help screen:

@@ -9,21 +9,57 @@
 
 ## Installing HEACalculator
 
-### Using uv (recommended)
+> **Note:** GUI support requires PyQt6, which is an optional dependency. Install with the `[gui]` extra only if you intend to use the graphical interface.
+
+Choose the workflow that matches how you want to use `HEACalculator`.
+
+### Add to a Project with `uv`
+
+Use this when `HEACalculator` should be installed inside a project's environment.
 
 ```bash
 uv add HEACalculator          # CLI only
 uv add "HEACalculator[gui]"   # with GUI support
 ```
 
-### Using pip
+### Use as a Standalone Tool with `uv`
+
+Use this when you want `uv` to manage `HEACalculator` as a CLI tool rather than a project dependency.
+
+Persistent install:
 
 ```bash
-pip install HEACalculator
-pip install "HEACalculator[gui]"   # with GUI support
+uv tool install HEACalculator
+HEACalculator --help
 ```
 
-> **Note:** GUI support requires PyQt6, which is an optional dependency. Only install the `[gui]` extra if you intend to use the graphical interface.
+One-off run without installing permanently:
+
+```bash
+uvx HEACalculator search single FeCoCrNi
+```
+
+With GUI support:
+
+```bash
+uv tool install "HEACalculator[gui]"
+HEACalculator gui
+```
+
+Or run the GUI without installing permanently:
+
+```bash
+uvx --from "HEACalculator[gui]" HEACalculator gui
+```
+
+### Install with `pip`
+
+Use this if you are not using `uv`.
+
+```bash
+pip install HEACalculator          # CLI only
+pip install "HEACalculator[gui]"   # with GUI support
+```
 
 ---
 
@@ -128,13 +164,14 @@ If you use `HEACalculator` in your research, please cite:
 
 > Sarıtürk, D. (2019). HEACalculator. Zenodo. https://doi.org/10.5281/zenodo.3590318
 
-```bibtex
-@software{sariturk_2019_3590318,
-  author    = {Sarıtürk, Doğuhan},
-  title     = {HEACalculator},
-  year      = 2019,
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.3590318},
-  url       = {https://doi.org/10.5281/zenodo.3590318},
-}
-```
+???+ quote "BibTeX"
+    ```bibtex
+    @software{sariturk_2019_3590318,
+      author    = {Sarıtürk, Doğuhan},
+      title     = {HEACalculator},
+      year      = 2019,
+      publisher = {Zenodo},
+      doi       = {10.5281/zenodo.3590318},
+      url       = {https://doi.org/10.5281/zenodo.3590318},
+    }
+    ```
