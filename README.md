@@ -118,9 +118,22 @@ HEACalculator gui
 
 ![HEACalculator_GUI](https://user-images.githubusercontent.com/46679086/205514915-e4ce2dbf-4636-4639-b978-3a018183ba82.png)
 
-1. Select elements from the periodic table
-2. Enter at% values in the table
+The GUI has two pages, switched via the navigation buttons on the left:
+
+**Parameters page (single alloy)**
+
+1. Select elements from the periodic table (percentages are distributed equally by default)
+2. Adjust the at% values in the composition table as needed
 3. Click **Calculate**
+4. Click **Save** to export results as CSV
+
+**Batch Calculations page (range screening)**
+
+Equivalent to `search range`.
+
+1. Select elements from the periodic table
+2. Set the composition range and step size
+3. Click **Search**
 4. Click **Save** to export results as CSV
 
 ---
@@ -139,6 +152,8 @@ HEACalculator gui
 - Parameters and predictions
   - Expected Microstructure [^3]
   - Delta Parameter (Atomic Size Difference) [^4]
+  - Delta Parameter (CN12-corrected Atomic Size Difference) [^4]
+  - Electronegativity Difference (Allen CE scale)
   - Omega Parameter [^5]
   - Gamma Parameter [^6]
   - Lambda Parameter [^7]
