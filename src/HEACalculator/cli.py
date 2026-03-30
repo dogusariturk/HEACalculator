@@ -57,7 +57,7 @@ def single_search(alloy: str = typer.Argument(...)) -> None:
 
 @app.command(name="range")
 def range_search(
-    elements: str = typer.Option(..., help="List elements to search"),
+    elements: str = typer.Option(..., help="List elements to screen for multi-component alloys"),
     start: float = typer.Option(0, min=0, max=100, help="Lowest composition for each element"),
     end: float = typer.Option(100, min=0, max=100, help="Highest composition for each element"),
     step: float = typer.Option(5, min=0, help="Composition screening step for each element"),
