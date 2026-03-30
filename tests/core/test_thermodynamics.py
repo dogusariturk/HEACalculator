@@ -39,7 +39,7 @@ class TestHEAThermodynamics:
 
     def test_melting_temperature(self, thermodynamics):
         """Melting temperature equals the weighted average of constituent melting points."""
-        assert thermodynamics.melting_temperature == 1858
+        assert thermodynamics.melting_temperature == 1872
 
     def test_melting_temperature_is_int(self, thermodynamics):
         """Melting temperature is returned as an integer (rounded Kelvin value)."""
@@ -67,16 +67,16 @@ class TestHEAThermodynamics:
 
     def test_omega_parameter_default(self, thermodynamics):
         """Omega at the alloy's weighted melting temperature exceeds the SS threshold."""
-        assert thermodynamics.omega == pytest.approx(5.71, abs=1e-1)
+        assert thermodynamics.omega == pytest.approx(5.75, abs=1e-1)
 
     def test_omega_scales_linearly_with_temperature(self, thermodynamics):
         """Omega is directly proportional to temperature, so doubling T doubles omega."""
         assert thermodynamics.omega_at(2000) / thermodynamics.omega_at(1000) == pytest.approx(2.0, abs=1e-5)
 
     def test_lambda_parameter(self, thermodynamics):
-        """Lambda parameter is positive and matches the expected value for FeCoCrNi."""
+        """Lambda parameter is positive and matches the expected value for FeCoCrNi (CN12 radii)."""
         result = thermodynamics.lambda_
-        assert result == pytest.approx(8.33, abs=1e-1)
+        assert result == pytest.approx(126.28, abs=1.0)
         assert result > 0
 
     def test_properties_are_cached(self, thermodynamics):
@@ -97,16 +97,32 @@ class TestNewProperties:
         """Phi is positive for FeCoCrNi (entropy dominates enthalpy)."""
         assert thermodynamics.phi > 0
 
-    def test_phi_infinite_when_mixing_enthalpy_zero(self):
-        """Phi = inf when excess_entropy == 0 (identical atom sizes)."""
+    def test_phi_infinite_when_packing_specific_phi_is_infinite(self):
+        """Phi = inf when either packing-specific phi becomes infinite."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["excess_entropy"] = 0.0
+        t.__dict__["phi_bcc"] = math.inf
+        t.__dict__["phi_fcc"] = math.inf
         assert math.isinf(t.phi)
 
     def test_delta_g_ss_fecocrni(self, thermodynamics):
-        """delta_G_ss = deltaH_mix - T_m * deltaS_mix / 1000 for FeCoCrNi."""
-        expected = thermodynamics.mixing_enthalpy - thermodynamics.melting_temperature * thermodynamics.mixing_entropy / 1000
+        """delta_G_ss = deltaH_mix(Miedema) - T_m * deltaS_mix / 1000 for FeCoCrNi."""
+        expected = (
+            thermodynamics.mixing_enthalpy_miedema - thermodynamics.melting_temperature * thermodynamics.mixing_entropy / 1000
+        )
         assert thermodynamics.delta_g_ss == pytest.approx(expected, abs=1e-10)
+
+    def test_mixing_enthalpy_miedema_uses_model_8_weighting(self, thermodynamics):
+        """Model 8 uses King et al. Eq. S8 rather than 4*sum(c_i*c_j*H_ij)."""
+        from HEACalculator.data.miedema_enthalpy import MiedemaEnthalpy
+
+        expected = 0.0
+        for element_i, x_i in thermodynamics._c.atomic_percentage.items():
+            for element_k, x_k in thermodynamics._c.atomic_percentage.items():
+                if element_i == element_k:
+                    continue
+                expected += x_i * (x_k / (1 - x_i)) * MiedemaEnthalpy((element_i, element_k), x_i, x_k / (1 - x_i))
+
+        assert thermodynamics.mixing_enthalpy_miedema == pytest.approx(expected, abs=1e-10)
 
     def test_delta_g_ss_is_negative_for_fecocrni(self, thermodynamics):
         """delta_G_ss is negative for FeCoCrNi (entropy term dominates)."""
@@ -117,16 +133,16 @@ class TestNewProperties:
         assert thermodynamics.delta_g_max < 0
 
     def test_delta_g_max_fecocrni_approx(self, thermodynamics):
-        """delta_G_max for FeCoCrNi equals 2x the largest-magnitude pairwise mixing enthalpy."""
-        assert thermodynamics.delta_g_max == pytest.approx(-14.0, abs=0.5)
+        """delta_G_max for FeCoCrNi equals (n_elements/2) x the largest-magnitude intermetallic (H_chem) pair enthalpy."""
+        assert thermodynamics.delta_g_max == pytest.approx(-20.1, abs=0.5)
 
     def test_delta_g_max_is_largest_magnitude(self, thermodynamics):
-        """delta_G_max has the largest absolute value among all binary pair energies."""
-        from HEACalculator.data.mixing_enthalpy import MixingEnthalpy
+        """delta_G_max uses MiedemaIntEnthalpy (H_chem only, Eq. S.9) scaled by j//2."""
+        from HEACalculator.data.miedema_enthalpy import MiedemaIntEnthalpy
 
-        pair_enthalpies = [MixingEnthalpy(pair) for pair in thermodynamics._c.pair_list]
+        pair_enthalpies = [MiedemaIntEnthalpy(pair) for pair in thermodynamics._c.pair_list]
         expected_max_abs = max(pair_enthalpies, key=abs)
-        assert thermodynamics.delta_g_max == pytest.approx(2 * expected_max_abs, abs=1e-10)
+        assert thermodynamics.delta_g_max == pytest.approx((len(thermodynamics._c.alloy) // 2) * expected_max_abs, abs=1e-10)
 
 
 class TestElectronegativityDifference:
@@ -171,9 +187,9 @@ class TestEdgeCases:
         assert math.isinf(t.omega)
 
     def test_lambda_zero_atomic_size_difference_returns_inf(self):
-        """lambda_ returns math.inf when atomic_size_difference == 0 (no size mismatch)."""
+        """lambda_ returns math.inf when atomic_size_difference_cn12 == 0 (no size mismatch)."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["atomic_size_difference"] = 0.0
+        t.__dict__["atomic_size_difference_cn12"] = 0.0
         assert math.isinf(t.lambda_)
 
     def test_omega_at_zero_temperature_returns_zero(self):
@@ -214,3 +230,13 @@ class TestSingleElementThermodynamics:
         """Lambda is infinite for a pure element because atomic_size_difference == 0."""
         t = HEAThermodynamics(AlloyComposition("Fe"))
         assert math.isinf(t.lambda_)
+
+    def test_min_formation_enthalpy_is_zero(self):
+        """A pure element has no binary pairs, so min formation enthalpy defaults to zero."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.min_formation_enthalpy == pytest.approx(0.0, abs=1e-10)
+
+    def test_max_formation_enthalpy_is_zero(self):
+        """A pure element has no binary pairs, so max formation enthalpy defaults to zero."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.max_formation_enthalpy == pytest.approx(0.0, abs=1e-10)

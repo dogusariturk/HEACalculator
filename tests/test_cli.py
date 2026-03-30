@@ -128,6 +128,28 @@ class TestRangeSearch(TestCase):
         assert result.exit_code == 0
         assert "Formula" in result.output
 
+    def test_range_excludes_pure_single_component_results(self):
+        """Range search should not print pure-element endpoints when screening alloys."""
+        result = runner.invoke(
+            app,
+            [
+                "range",
+                "--elements",
+                "FeNi",
+                "--start",
+                "0",
+                "--end",
+                "100",
+                "--step",
+                "50",
+                "--csv",
+            ],
+        )
+        assert result.exit_code == 0
+        assert "Fe100.0" not in result.output
+        assert "Ni100.0" not in result.output
+        assert "Fe50.0Ni50.0" in result.output
+
 
 class TestCsvSearch(TestCase):
     """Tests for the ``csv`` subcommand."""

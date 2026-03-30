@@ -45,11 +45,11 @@ class TestFindAllComps(TestCase):
         for comp in comps:
             assert abs(sum(comp) - 100.0) < 1e-9
 
-    def test_pure_element_compositions_included_when_in_range(self):
-        """When start=0 and end=100, pure single-element tuples appear in the results."""
+    def test_pure_element_compositions_excluded_when_in_range(self):
+        """Pure single-element tuples are excluded even when the range includes 0 and 100."""
         _, comps = find_all_comps("FeNi", 0, 100, 50)
-        assert (100.0, 0.0) in comps
-        assert (0.0, 100.0) in comps
+        assert (100.0, 0.0) not in comps
+        assert (0.0, 100.0) not in comps
 
     def test_pure_element_compositions_excluded_when_not_in_range(self):
         """When start > 0, pure single-element tuples are absent from the results."""
@@ -57,11 +57,11 @@ class TestFindAllComps(TestCase):
         for comp in comps:
             assert all(x < 100 for x in comp)
 
-    def test_ternary_includes_pure_element_compositions(self):
-        """A ternary range with start=0 and end=100 includes pure single-element tuples."""
+    def test_ternary_excludes_pure_element_compositions(self):
+        """A ternary range excludes single-component tuples."""
         _, comps = find_all_comps("AlTiV", 0, 100, 50)
         pure_element_comps = [c for c in comps if sum(1 for x in c if x > 0) == 1]
-        assert len(pure_element_comps) == 3
+        assert pure_element_comps == []
 
     def test_start_equals_end_yields_one_composition(self):
         """When start == end, exactly one composition is produced (both elements at that value)."""
