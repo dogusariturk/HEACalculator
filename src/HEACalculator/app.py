@@ -74,6 +74,16 @@ class BatchAmountDelegate(QtWidgets.QStyledItemDelegate):
         return editor
 
 
+def configure_results_tree_header(tree_widget: QtWidgets.QTreeWidget) -> None:
+    """Apply consistent initial column sizing to a results tree widget."""
+    header = tree_widget.header()
+    default_width = header.defaultSectionSize()
+    header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+    header.setStretchLastSection(False)
+    header.setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeMode.Interactive)
+    header.resizeSection(7, default_width)
+
+
 class NotificationBar(QtWidgets.QFrame):
     """Dismissible notification banner displayed above page content.
 
@@ -206,9 +216,7 @@ class BatchCalculationsPage(QtWidgets.QWidget):
         self.ui = Ui_BatchCalculationsPage()
         self.ui.setupUi(self)
         self.selectedElements: list[str] = []
-        self.ui.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-        self.ui.resultsTreeWidget.header().setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.ui.resultsTreeWidget.header().setStretchLastSection(False)
+        configure_results_tree_header(self.ui.resultsTreeWidget)
 
         self._element_buttons = [btn for btn in self.findChildren(QtWidgets.QPushButton) if btn.objectName().startswith("ebtn")]
         for btn in self._element_buttons:
@@ -355,9 +363,7 @@ class ParametersPage(QtWidgets.QWidget):
 
         self.selectedElements = {}
 
-        self.parametersPage.resultsTreeWidget.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-        self.parametersPage.resultsTreeWidget.header().setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.parametersPage.resultsTreeWidget.header().setStretchLastSection(False)
+        configure_results_tree_header(self.parametersPage.resultsTreeWidget)
 
         itemDelegate = ItemDelegate(self.parametersPage.tableWidget)
         self.parametersPage.tableWidget.setItemDelegate(itemDelegate)

@@ -346,6 +346,22 @@ class TestResultsTreeConfiguration:
         page = BatchCalculationsPage()
         self._assert_results_tree(page.ui.resultsTreeWidget)
 
+    def test_results_tree_initial_section_sizes_match_between_pages(self, qapp):
+        """The two GUI pages start with the same result-column widths."""
+        parameters_page = ParametersPage()
+        batch_page = BatchCalculationsPage()
+
+        parameters_header = parameters_page.parametersPage.resultsTreeWidget.header()
+        batch_header = batch_page.ui.resultsTreeWidget.header()
+
+        parameter_sizes = [
+            parameters_header.sectionSize(index)
+            for index in range(parameters_page.parametersPage.resultsTreeWidget.columnCount())
+        ]
+        batch_sizes = [batch_header.sectionSize(index) for index in range(batch_page.ui.resultsTreeWidget.columnCount())]
+
+        assert parameter_sizes == batch_sizes
+
 
 class TestCleanErrorMessage(TestCase):
     """Tests for the ParametersPage._clean_error_message static method."""
