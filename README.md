@@ -116,11 +116,11 @@ HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5 --c
 HEACalculator gui
 ```
 
-![HEACalculator_GUI](https://user-images.githubusercontent.com/46679086/205514915-e4ce2dbf-4636-4639-b978-3a018183ba82.png)
-
 The GUI has two pages, switched via the navigation buttons on the left:
 
 **Parameters page (single alloy)**
+
+<img width="2342" height="1292" alt="HEACalculator_GUI-Parameters" src="https://github.com/user-attachments/assets/d13744ee-b60f-4922-a758-53b89876a7f5" />
 
 1. Select elements from the periodic table (percentages are distributed equally by default)
 2. Adjust the at% values in the composition table as needed
@@ -128,6 +128,8 @@ The GUI has two pages, switched via the navigation buttons on the left:
 4. Click **Save** to export results as CSV
 
 **Batch Calculations page (range screening)**
+
+<img width="2342" height="1292" alt="HEACalculator_GUI-RangeSearch" src="https://github.com/user-attachments/assets/f829e67b-c069-4857-9b13-56068f63f816" />
 
 Equivalent to `search range`.
 
