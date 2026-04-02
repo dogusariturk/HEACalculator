@@ -189,7 +189,7 @@ This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENS
 
 ## Citation
 
-If you use HEACalculator in your research, please cite the following:
+We are currently preparing a preprint for publication. If you use `HEACalculator` in your research, please cite the following:
 
 > Sarıtürk, D. (2019). HEACalculator. Zenodo. https://doi.org/10.5281/zenodo.3590318
 
