@@ -18,6 +18,7 @@ from HEACalculator.data.miedema_enthalpy import (
 )
 from HEACalculator.data.mixing_enthalpy import MixingEnthalpy
 from HEACalculator.data.model_radii import model_atomic_radius_cn12
+from HEACalculator.exceptions import MissingFormationEnthalpyError, MissingMiedemaDataError, MissingMixingEnthalpyError
 
 __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
@@ -72,7 +73,10 @@ class HEAThermodynamics:
         References:
             - Zhang, Y.; Zuo, T.T.; Tang, Z.; Gao, M.C.; Dahmen, K.A.; Liaw, P.K.; Lu, Z.P. Prog. Mater. Sci. 2014, 61, 1-93.
         """
-        pair_mixing_enthalpy = [MixingEnthalpy(pair) for pair in self._c.pair_list]
+        try:
+            pair_mixing_enthalpy = [MixingEnthalpy(pair) for pair in self._c.pair_list]
+        except MissingMixingEnthalpyError:
+            return float("nan")
         return 4 * sum(pct * h for pct, h in zip(self._c.pair_percentage, pair_mixing_enthalpy, strict=True))
 
     @cached_property
@@ -87,15 +91,18 @@ class HEAThermodynamics:
             - de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. Cohesion in Metals: Transition Metal Alloys. North-Holland, Amsterdam, 1988.
         """
         total = 0.0
-        for element_i, x_i in self._c.atomic_percentage.items():
-            if x_i >= 1.0:
-                continue
-            remaining_fraction = 1.0 - x_i
-            for element_k, x_k in self._c.atomic_percentage.items():
-                if element_k == element_i or x_k == 0.0:
+        try:
+            for element_i, x_i in self._c.atomic_percentage.items():
+                if x_i >= 1.0:
                     continue
-                x_k_f = x_k / remaining_fraction
-                total += x_i * x_k_f * MiedemaEnthalpy((element_i, element_k), x_i, x_k_f)
+                remaining_fraction = 1.0 - x_i
+                for element_k, x_k in self._c.atomic_percentage.items():
+                    if element_k == element_i or x_k == 0.0:
+                        continue
+                    x_k_f = x_k / remaining_fraction
+                    total += x_i * x_k_f * MiedemaEnthalpy((element_i, element_k), x_i, x_k_f)
+        except MissingMiedemaDataError:
+            return float("nan")
         return total
 
     @cached_property
@@ -108,7 +115,10 @@ class HEAThermodynamics:
         References:
             - Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
         """
-        pair_formation_enthalpy = [FormationEnthalpy(pair) for pair in self._c.pair_list]
+        try:
+            pair_formation_enthalpy = [FormationEnthalpy(pair) for pair in self._c.pair_list]
+        except MissingFormationEnthalpyError:
+            return float("nan")
         return 4 * sum(pct * h for pct, h in zip(self._c.pair_percentage, pair_formation_enthalpy, strict=True))
 
     @cached_property
@@ -219,7 +229,10 @@ class HEAThermodynamics:
         """
         if not self._c.pair_list:
             return 0.0
-        return min(FormationEnthalpy(pair) for pair in self._c.pair_list)
+        try:
+            return min(FormationEnthalpy(pair) for pair in self._c.pair_list)
+        except MissingFormationEnthalpyError:
+            return float("nan")
 
     @cached_property
     def max_formation_enthalpy(self) -> float:
@@ -230,7 +243,10 @@ class HEAThermodynamics:
         """
         if not self._c.pair_list:
             return 0.0
-        return max(FormationEnthalpy(pair) for pair in self._c.pair_list)
+        try:
+            return max(FormationEnthalpy(pair) for pair in self._c.pair_list)
+        except MissingFormationEnthalpyError:
+            return float("nan")
 
     @cached_property
     def mixing_entropy(self) -> float:
@@ -418,9 +434,13 @@ class HEAThermodynamics:
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80.
             - Takeuchi, A.; Inoue, A. Mater. Trans. JIM 2000, 41, 1372-1378.
         """
-        if not math.isfinite(self.phi_fcc) or not math.isfinite(self.phi_bcc):
+        phi_fcc = self.phi_fcc
+        phi_bcc = self.phi_bcc
+        if math.isnan(phi_fcc) or math.isnan(phi_bcc):
+            return float("nan")
+        if not math.isfinite(phi_fcc) or not math.isfinite(phi_bcc):
             return math.inf
-        return (self.phi_fcc + self.phi_bcc) / 2
+        return (phi_fcc + phi_bcc) / 2
 
     @cached_property
     def critical_temperature(self) -> float:
@@ -459,19 +479,22 @@ class HEAThermodynamics:
             - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
         """
         pair_enthalpies: list[float] = []
-        for pair in self._c.pair_list:
-            ca, cb = self._c.atomic_percentage[pair[0]], self._c.atomic_percentage[pair[1]]
-            total = ca + cb
-            if total <= 0:
-                continue
-            c_a, c_b = ca / total, cb / total
-            h_dir_ab, h_dir_ba = _directional_ordered_enthalpies(pair[0], pair[1], c_a, c_b)
-            miedema_pair = MiedemaIntEnthalpy(pair, ca, cb)
-            direction_sign = h_dir_ab if abs(h_dir_ab) >= abs(h_dir_ba) else h_dir_ba
-            if direction_sign == 0:
-                pair_enthalpies.append(miedema_pair)
-            else:
-                pair_enthalpies.append(math.copysign(abs(miedema_pair), direction_sign))
+        try:
+            for pair in self._c.pair_list:
+                ca, cb = self._c.atomic_percentage[pair[0]], self._c.atomic_percentage[pair[1]]
+                total = ca + cb
+                if total <= 0:
+                    continue
+                c_a, c_b = ca / total, cb / total
+                h_dir_ab, h_dir_ba = _directional_ordered_enthalpies(pair[0], pair[1], c_a, c_b)
+                miedema_pair = MiedemaIntEnthalpy(pair, ca, cb)
+                direction_sign = h_dir_ab if abs(h_dir_ab) >= abs(h_dir_ba) else h_dir_ba
+                if direction_sign == 0:
+                    pair_enthalpies.append(miedema_pair)
+                else:
+                    pair_enthalpies.append(math.copysign(abs(miedema_pair), direction_sign))
+        except MissingMiedemaDataError:
+            return float("nan")
         if not pair_enthalpies:
             return 0.0
         return (len(self._c.alloy) // 2) * max(pair_enthalpies, key=abs)
