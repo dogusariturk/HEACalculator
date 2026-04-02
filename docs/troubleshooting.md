@@ -154,14 +154,3 @@ The `search single` command accepts any valid formula. If no atom counts are spe
 ```bash
 HEACalculator search single Fe10Co30Cr30Ni30
 ```
-
----
-
-## Ruff linting errors during development
-
-Pre-commit hooks run `ruff` automatically. To check and auto-fix before committing:
-
-```bash
-uv run ruff check --fix .
-uv run ruff format .
-```

@@ -75,7 +75,7 @@ If you use `HEACalculator` in your research, please cite:
 
 > Doğuhan Sarıtürk. *HEACalculator*. (2019). doi:[10.5281/zenodo.3590318](https://doi.org/10.5281/zenodo.3590318)
 
-???+ quote "BibTeX"
+??? quote "BibTeX"
     ```bibtex
     @software{sariturk_2019_3590318,
       author    = {Sarıtürk, Doğuhan},

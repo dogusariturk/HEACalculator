@@ -154,7 +154,7 @@ Install pre-commit hooks after cloning to enable automatic linting and formattin
 uv run pre-commit install
 ```
 
-Hooks run `ruff` for linting and formatting.
+Hooks run `uv-lock` (lockfile sync), `ruff` (linting and formatting), `ty` (type checking), and several file-hygiene checks (trailing whitespace, end-of-file, YAML/TOML validation, etc.).
 
 ---
 
