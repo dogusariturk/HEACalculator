@@ -4,6 +4,8 @@ repo_name: dogusariturk/HEACalculator
 
 theme:
   name: material
+  logo: img/icon.png
+  favicon: img/icon.png
   palette:
     - media: "(prefers-color-scheme)"
       scheme: slate
