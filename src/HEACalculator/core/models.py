@@ -47,6 +47,8 @@ class SolidSolutionPredictor:
             - Guo, S.; Ng, C.; Lu, J.; Liu, C.T. J. Appl. Phys. 2011, 109, 103505.
         """
         vec = self._t.valence_electron_concentration
+        if math.isnan(vec):
+            return "N/A"
         if 2.5 <= vec <= 3.5:
             return "HCP"
         if vec >= 8.0:
@@ -65,7 +67,11 @@ class SolidSolutionPredictor:
         References:
             - Yang, X.; Zhang, Y. Mater. Chem. Phys. 2012, 132, 233-238.
         """
-        return "Solid Solution" if self._t.omega >= 1.1 and self._t.atomic_size_difference <= 6.6 else "Intermetallic"
+        omega = self._t.omega
+        delta = self._t.atomic_size_difference
+        if math.isnan(omega) or math.isnan(delta):
+            return "N/A"
+        return "Solid Solution" if omega >= 1.1 and delta <= 6.6 else "Intermetallic"
 
     @cached_property
     def model_2(self) -> str:
@@ -77,11 +83,11 @@ class SolidSolutionPredictor:
         References:
             - Guo, S.; Hu, Q.; Ng, C.; Liu, C.T. Intermetallics 2013, 41, 96-103.
         """
-        return (
-            "Solid Solution"
-            if -11.6 < self._t.mixing_enthalpy < 3.2 and self._t.atomic_size_difference < 6.6
-            else "Intermetallic"
-        )
+        mixing_enthalpy = self._t.mixing_enthalpy
+        delta = self._t.atomic_size_difference
+        if math.isnan(mixing_enthalpy) or math.isnan(delta):
+            return "N/A"
+        return "Solid Solution" if -11.6 < mixing_enthalpy < 3.2 and delta < 6.6 else "Intermetallic"
 
     @cached_property
     def model_3(self) -> str:
@@ -93,7 +99,10 @@ class SolidSolutionPredictor:
         References:
             - Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T. Scr. Mater. 2015, 94, 28-31.
         """
-        return "Solid Solution" if self._t.gamma < 1.175 else "Intermetallic"
+        gamma = self._t.gamma
+        if math.isnan(gamma):
+            return "N/A"
+        return "Solid Solution" if gamma < 1.175 else "Intermetallic"
 
     @cached_property
     def model_4(self) -> str:
@@ -106,6 +115,8 @@ class SolidSolutionPredictor:
             - Singh, A.K.; Kumar, N.; Dwivedi, A.; Subramaniam, A. Intermetallics 2014, 53, 112-119.
         """
         lam = self._t.lambda_
+        if math.isnan(lam):
+            return "N/A"
         if lam > 0.96:
             return "Solid Solution"
         if lam >= 0.24:
@@ -123,6 +134,8 @@ class SolidSolutionPredictor:
             - Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
         """
         phi = self._t.phi
+        if math.isnan(phi):
+            return "N/A"
         if not math.isfinite(phi):
             return "Solid Solution"
         return "Solid Solution" if phi >= 20 else "Multiple Phases"
@@ -137,6 +150,8 @@ class SolidSolutionPredictor:
         References:
             - Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
         """
+        if math.isnan(self._t.min_formation_enthalpy) or math.isnan(self._t.max_formation_enthalpy):
+            return "N/A"
         critical_temperature = self._t.critical_temperature
         lower_bound = -critical_temperature * self._t.mixing_entropy * _J_PER_MOL_TO_MEV_PER_ATOM
         return (
@@ -149,8 +164,11 @@ class SolidSolutionPredictor:
         r"""Model 7 $k_1 = \Delta H_{\text{IM}}$ / $\Delta H_{\text{mix}}$.
 
         Returns:
-            The dimensionless ``k1`` ratio, or ``math.inf`` when ``deltaH_mix`` is zero.
+            The dimensionless ``k1`` ratio, or ``math.inf`` when ``deltaH_mix`` is zero,
+            or ``math.nan`` when formation enthalpy data is unavailable.
         """
+        if math.isnan(self._t.formation_enthalpy):
+            return float("nan")
         if self._t.mixing_enthalpy == 0:
             return math.inf
         return (self._t.formation_enthalpy * _MEV_PER_ATOM_TO_KJ_PER_MOL) / self._t.mixing_enthalpy
@@ -192,9 +210,12 @@ class SolidSolutionPredictor:
             annealing_temperature = self._t.critical_temperature
         if self._t.mixing_enthalpy == 0:
             return "Intermetallic"
+        k1 = self.model_7_k1()
+        if math.isnan(k1):
+            return "N/A"
         return (
             "Solid Solution"
-            if self.model_7_k1_critical(k_2=k_2, annealing_temperature=annealing_temperature) > self.model_7_k1()
+            if self.model_7_k1_critical(k_2=k_2, annealing_temperature=annealing_temperature) > k1
             else "Intermetallic"
         )
 
@@ -208,4 +229,7 @@ class SolidSolutionPredictor:
         References:
             - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
         """
-        return "Solid Solution" if self._t.f_parameter >= 1 else "Multiple Phases"
+        f = self._t.f_parameter
+        if math.isnan(f):
+            return "N/A"
+        return "Solid Solution" if f >= 1 else "Multiple Phases"

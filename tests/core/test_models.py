@@ -411,3 +411,111 @@ class TestPaperValidation:
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_8 == "Multiple Phases"
+
+
+class TestNaNInputsReturnNA:
+    """All models and microstructure return 'N/A' when their key input is NaN."""
+
+    @pytest.fixture
+    def comp_thermo(self):
+        """Return a (AlloyComposition, HEAThermodynamics) pair for FeCoCrNi."""
+        comp = AlloyComposition("FeCoCrNi")
+        return comp, HEAThermodynamics(comp)
+
+    def test_microstructure_na_when_vec_is_nan(self, comp_thermo):
+        """microstructure returns 'N/A' when VEC is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["valence_electron_concentration"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.microstructure == "N/A"
+
+    def test_model_1_na_when_omega_is_nan(self, comp_thermo):
+        """model_1 returns 'N/A' when omega is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["omega"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_1 == "N/A"
+
+    def test_model_1_na_when_delta_is_nan(self, comp_thermo):
+        """model_1 returns 'N/A' when atomic_size_difference is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["atomic_size_difference"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_1 == "N/A"
+
+    def test_model_2_na_when_mixing_enthalpy_is_nan(self, comp_thermo):
+        """model_2 returns 'N/A' when mixing_enthalpy is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["mixing_enthalpy"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_2 == "N/A"
+
+    def test_model_2_na_when_delta_is_nan(self, comp_thermo):
+        """model_2 returns 'N/A' when atomic_size_difference is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["atomic_size_difference"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_2 == "N/A"
+
+    def test_model_3_na_when_gamma_is_nan(self, comp_thermo):
+        """model_3 returns 'N/A' when gamma is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["gamma"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_3 == "N/A"
+
+    def test_model_4_na_when_lambda_is_nan(self, comp_thermo):
+        """model_4 returns 'N/A' when lambda_ is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["lambda_"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_4 == "N/A"
+
+    def test_model_5_na_when_phi_is_nan(self, comp_thermo):
+        """model_5 returns 'N/A' when phi is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["phi"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_5 == "N/A"
+
+    def test_model_5_still_solid_solution_when_phi_is_inf(self, comp_thermo):
+        """model_5 still returns 'Solid Solution' for legitimate inf phi (no NaN confusion)."""
+        comp, t = comp_thermo
+        t.__dict__["phi"] = math.inf
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_5 == "Solid Solution"
+
+    def test_model_6_na_when_min_formation_enthalpy_is_nan(self, comp_thermo):
+        """model_6 returns 'N/A' when min_formation_enthalpy is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["min_formation_enthalpy"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_6 == "N/A"
+
+    def test_model_6_na_when_max_formation_enthalpy_is_nan(self, comp_thermo):
+        """model_6 returns 'N/A' when max_formation_enthalpy is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["max_formation_enthalpy"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_6 == "N/A"
+
+    def test_model_7_na_when_formation_enthalpy_is_nan(self, comp_thermo):
+        """model_7 returns 'N/A' when formation_enthalpy is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["formation_enthalpy"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_7() == "N/A"
+
+    def test_model_7_k1_nan_when_formation_enthalpy_is_nan(self, comp_thermo):
+        """model_7_k1 returns NaN when formation_enthalpy is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["formation_enthalpy"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert math.isnan(p.model_7_k1())
+
+    def test_model_8_na_when_f_parameter_is_nan(self, comp_thermo):
+        """model_8 returns 'N/A' when f_parameter is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["f_parameter"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_8 == "N/A"

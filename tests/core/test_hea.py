@@ -5,6 +5,8 @@ of the ``HEACalculator`` thin facade match expected values for the
 FeCoCrNi reference alloy.
 """
 
+import math
+
 import pytest
 
 from HEACalculator.core.hea import HEACalculator
@@ -106,6 +108,10 @@ class TestHEACalculator:
         assert lst[0] == "Fe"
         assert len(lst) == 23
 
+    def test_get_list_length_is_23(self, calculator):
+        """get_list() always returns exactly 23 entries regardless of missing data."""
+        assert len(HEACalculator("Fe50Ga50").get_list()) == 23
+
     def test_headers_align_with_get_list(self, calculator):
         """Shared result headers stay in lockstep with the tabular payload."""
         assert HEACalculator.get_headers() == [
@@ -134,3 +140,109 @@ class TestHEACalculator:
             "Model 8",
         ]
         assert len(HEACalculator.get_headers()) == len(calculator.get_list())
+
+
+class TestFmtHelper:
+    """Unit tests for the _fmt formatting helper."""
+
+    def test_nan_with_width_spec_is_right_aligned(self):
+        """NaN formatted with '>10.2f' gives right-aligned 'N/A' in a width-10 field."""
+        result = HEACalculator._fmt(float("nan"), ">10.2f")
+        assert result == f"{'N/A':>10}"
+        assert len(result) == 10
+
+    def test_nan_with_precision_only_spec_is_bare_na(self):
+        """NaN formatted with '.2f' (no width) returns the bare string 'N/A'."""
+        assert HEACalculator._fmt(float("nan"), ".2f") == "N/A"
+
+    def test_nan_default_spec_is_right_aligned(self):
+        """NaN with the default spec ('>10.2f') is right-aligned to width 10."""
+        result = HEACalculator._fmt(float("nan"))
+        assert result == f"{'N/A':>10}"
+
+    def test_normal_float_uses_spec(self):
+        """A finite float is formatted with the given spec unchanged."""
+        assert HEACalculator._fmt(7.84, ".2f") == "7.84"
+        assert HEACalculator._fmt(7.84, ">10.2f") == f"{7.84:>10.2f}"
+
+    def test_int_passes_through(self):
+        """An integer value is not treated as NaN."""
+        assert HEACalculator._fmt(1872, ">10") == f"{1872:>10}"
+
+    def test_inf_passes_through(self):
+        """math.inf is not NaN and is formatted normally."""
+        assert HEACalculator._fmt(math.inf, ".2f") == "inf"
+
+
+class TestNaNIntegration:
+    """Integration tests: alloys with genuinely missing database entries."""
+
+    def test_fega_formation_enthalpy_na_in_get_list(self):
+        """FeGa has no Troparevsky formation enthalpy data; get_list shows 'N/A'."""
+        lst = HEACalculator("Fe50Ga50").get_list()
+        assert lst[11] == "N/A"
+
+    def test_fega_min_formation_enthalpy_na_in_get_list(self):
+        """FeGa min formation enthalpy column is 'N/A'."""
+        lst = HEACalculator("Fe50Ga50").get_list()
+        assert lst[12] == "N/A"
+
+    def test_fega_model_6_na_in_get_list(self):
+        """Model 6 for FeGa is 'N/A' because it depends on formation enthalpy."""
+        lst = HEACalculator("Fe50Ga50").get_list()
+        assert lst[20] == "N/A"
+
+    def test_fega_model_7_na_in_get_list(self):
+        """Model 7 for FeGa is 'N/A' because it depends on formation enthalpy."""
+        lst = HEACalculator("Fe50Ga50").get_list()
+        assert lst[21] == "N/A"
+
+    def test_fega_other_properties_are_not_na(self):
+        """Properties that do not require formation enthalpy data remain finite for FeGa."""
+        lst = HEACalculator("Fe50Ga50").get_list()
+        for idx in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+            assert lst[idx] != "N/A", f"index {idx} unexpectedly shows N/A"
+
+    def test_femnga_ternary_get_list_length(self):
+        """FeMnGa ternary with missing formation enthalpy still yields a 23-element list."""
+        assert len(HEACalculator("Fe33.3Mn33.3Ga33.4").get_list()) == 23
+
+    def test_fega_str_shows_na_for_formation_enthalpy(self):
+        """__str__ for FeGa shows 'N/A' in the Formation Enthalpy line."""
+        output = str(HEACalculator("Fe50Ga50"))
+        fe_line = next(
+            line for line in output.splitlines() if "Formation Enthalpy" in line and "Min" not in line and "Max" not in line
+        )
+        assert "N/A" in fe_line
+
+    def test_fega_str_shows_na_for_model_6(self):
+        """__str__ for FeGa shows 'N/A' in the Model 6 line."""
+        output = str(HEACalculator("Fe50Ga50"))
+        m6_line = next(line for line in output.splitlines() if line.strip().startswith("Model 6"))
+        assert "N/A" in m6_line
+
+    def test_missing_mixing_enthalpy_propagates_na_to_model_1(self):
+        """When mixing_enthalpy is NaN (mocked), Model 1 shows 'N/A'."""
+        from unittest.mock import patch
+
+        from HEACalculator.exceptions import MissingMixingEnthalpyError
+
+        with patch(
+            "HEACalculator.core.thermodynamics.MixingEnthalpy",
+            side_effect=MissingMixingEnthalpyError("no data"),
+        ):
+            lst = HEACalculator("FeCoCrNi").get_list()
+        assert lst[15] == "N/A"
+
+    def test_missing_mixing_enthalpy_propagates_na_to_model_2(self):
+        """When mixing_enthalpy is NaN (mocked), Model 2 shows 'N/A'."""
+        from unittest.mock import patch
+
+        from HEACalculator.exceptions import MissingMixingEnthalpyError
+
+        with patch(
+            "HEACalculator.core.thermodynamics.MixingEnthalpy",
+            side_effect=MissingMixingEnthalpyError("no data"),
+        ):
+            lst = HEACalculator("FeCoCrNi").get_list()
+        assert lst[16] == "N/A"

@@ -71,6 +71,7 @@ omit = [
 
 [tool.ruff]
 line-length = 130
+include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
 
 [tool.ruff.lint]
 select = [

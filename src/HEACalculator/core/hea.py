@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 from HEACalculator.core.composition import AlloyComposition
 from HEACalculator.core.models import SolidSolutionPredictor
 from HEACalculator.core.thermodynamics import HEAThermodynamics
@@ -9,6 +11,7 @@ from HEACalculator.core.thermodynamics import HEAThermodynamics
 __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
 __version__ = "2.0.0"
+
 
 RESULT_HEADERS = (
     "Formula",
@@ -66,6 +69,23 @@ class HEACalculator:
         11. King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
     """
 
+    @staticmethod
+    def _fmt(value: float | int, spec: str = ">10.2f") -> str:
+        """Format *value* with *spec*, returning 'N/A' for NaN.
+
+        When *spec* carries an alignment character and explicit width (e.g. ``">10.2f"``),
+        'N/A' is padded to that width.  Bare precision specs like ``".2f"`` return the
+        unpadded string ``"N/A"``.
+        """
+        if isinstance(value, float) and math.isnan(value):
+            align = spec[0] if spec and spec[0] in "><^=" else None
+            rest = spec[1:] if align else spec
+            width = rest.split(".")[0] if rest else ""
+            if align and width.isdigit():
+                return format("N/A", f"{align}{width}")
+            return "N/A"
+        return format(value, spec)
+
     def __init__(self, formula: str) -> None:
         """Initialize with *formula*. All properties are computed lazily via ``thermo`` and ``predictor``."""
         self.formula = formula
@@ -101,7 +121,7 @@ class HEACalculator:
             t.formation_enthalpy,
             t.min_formation_enthalpy,
         ]:
-            result.append(f"{item:.2f}")
+            result.append(self._fmt(item, ".2f"))
         result.append(str(t.melting_temperature))
         result.append(p.microstructure)
         for item in [
@@ -127,34 +147,34 @@ class HEACalculator:
         p = self.predictor
         return (
             f"{self.formula:=^48}\n"
-            f"{'Density':25}: {t.density:>10.2f} g/cm^3\n"
-            f"{'Delta':25}: {t.atomic_size_difference:>10.2f} %\n"
-            f"{'Delta (CN12)':25}: {t.atomic_size_difference_cn12:>10.2f} %\n"
-            f"{'Delta Chi (Allen)':25}: {t.electronegativity_difference:>10.2f} %\n"
-            f"{'Omega':25}: {t.omega:>10.2f}\n"
-            f"{'Gamma':25}: {t.gamma:>10.2f}\n"
-            f"{'Lambda':25}: {t.lambda_:>10.2f}\n"
-            f"{'VEC':25}: {t.valence_electron_concentration:>10.2f}\n"
-            f"{'Mixing Enthalpy':25}: {t.mixing_enthalpy:>10.2f} kJ/mol\n"
-            f"{'Mixing Entropy':25}: {t.mixing_entropy:>10.2f} J/K.mol\n"
-            f"{'Formation Enthalpy':25}: {t.formation_enthalpy:>10.2f} meV/atom\n"
-            f"{'Min. Formation Enthalpy':25}: {t.min_formation_enthalpy:>10.2f} meV/atom\n"
-            f"{'Max. Formation Enthalpy':25}: {t.max_formation_enthalpy:>10.2f} meV/atom\n"
-            f"{'Melting Temperature':25}: {t.melting_temperature:>10} K\n"
-            f"{'Critical Temperature':25}: {t.critical_temperature:>10.2f} K\n"
-            f"{'Phi (BCC)':25}: {t.phi_bcc:>10.2f}\n"
-            f"{'Phi (FCC)':25}: {t.phi_fcc:>10.2f}\n"
-            f"{'Delta G_ss':25}: {t.delta_g_ss:>10.2f} kJ/mol\n"
-            f"{'Delta G_max':25}: {t.delta_g_max:>10.2f} kJ/mol\n"
-            f"{'F Parameter':25}: {t.f_parameter:>10.2f}\n"
+            f"{'Density':25}: {self._fmt(t.density)} g/cm^3\n"
+            f"{'Delta':25}: {self._fmt(t.atomic_size_difference)} %\n"
+            f"{'Delta (CN12)':25}: {self._fmt(t.atomic_size_difference_cn12)} %\n"
+            f"{'Delta Chi (Allen)':25}: {self._fmt(t.electronegativity_difference)} %\n"
+            f"{'Omega':25}: {self._fmt(t.omega)}\n"
+            f"{'Gamma':25}: {self._fmt(t.gamma)}\n"
+            f"{'Lambda':25}: {self._fmt(t.lambda_)}\n"
+            f"{'VEC':25}: {self._fmt(t.valence_electron_concentration)}\n"
+            f"{'Mixing Enthalpy':25}: {self._fmt(t.mixing_enthalpy)} kJ/mol\n"
+            f"{'Mixing Entropy':25}: {self._fmt(t.mixing_entropy)} J/K.mol\n"
+            f"{'Formation Enthalpy':25}: {self._fmt(t.formation_enthalpy)} meV/atom\n"
+            f"{'Min. Formation Enthalpy':25}: {self._fmt(t.min_formation_enthalpy)} meV/atom\n"
+            f"{'Max. Formation Enthalpy':25}: {self._fmt(t.max_formation_enthalpy)} meV/atom\n"
+            f"{'Melting Temperature':25}: {self._fmt(t.melting_temperature, '>10')} K\n"
+            f"{'Critical Temperature':25}: {self._fmt(t.critical_temperature)} K\n"
+            f"{'Phi (BCC)':25}: {self._fmt(t.phi_bcc)}\n"
+            f"{'Phi (FCC)':25}: {self._fmt(t.phi_fcc)}\n"
+            f"{'Delta G_ss':25}: {self._fmt(t.delta_g_ss)} kJ/mol\n"
+            f"{'Delta G_max':25}: {self._fmt(t.delta_g_max)} kJ/mol\n"
+            f"{'F Parameter':25}: {self._fmt(t.f_parameter)}\n"
             f"\n{'Predictions':=^48}\n"
             f"{'Microstructure':25}:     {p.microstructure}\n"
-            f"{'Model 1':25}:     {p.model_1} (Omega={t.omega:.2f}, Delta={t.atomic_size_difference:.2f})\n"
-            f"{'Model 2':25}:     {p.model_2} (DeltaHmix={t.mixing_enthalpy:.2f}, Delta={t.atomic_size_difference:.2f})\n"
-            f"{'Model 3':25}:     {p.model_3} (Gamma={t.gamma:.2f})\n"
-            f"{'Model 4':25}:     {p.model_4} (Lambda={t.lambda_:.2f})\n"
-            f"{'Model 5':25}:     {p.model_5} (Phi={t.phi:.2f})\n"
-            f"{'Model 6':25}:     {p.model_6} (Hf_min={t.min_formation_enthalpy:.2f}, Hf_max={t.max_formation_enthalpy:.2f})\n"
-            f"{'Model 7':25}:     {p.model_7()} (k1={p.model_7_k1():.2f}, k1_cr={p.model_7_k1_critical():.2f})\n"
-            f"{'Model 8':25}:     {p.model_8} (F={t.f_parameter:.2f})\n"
+            f"{'Model 1':25}:     {p.model_1} (Omega={self._fmt(t.omega, '.2f')}, Delta={self._fmt(t.atomic_size_difference, '.2f')})\n"
+            f"{'Model 2':25}:     {p.model_2} (DeltaHmix={self._fmt(t.mixing_enthalpy, '.2f')}, Delta={self._fmt(t.atomic_size_difference, '.2f')})\n"
+            f"{'Model 3':25}:     {p.model_3} (Gamma={self._fmt(t.gamma, '.2f')})\n"
+            f"{'Model 4':25}:     {p.model_4} (Lambda={self._fmt(t.lambda_, '.2f')})\n"
+            f"{'Model 5':25}:     {p.model_5} (Phi={self._fmt(t.phi, '.2f')})\n"
+            f"{'Model 6':25}:     {p.model_6} (Hf_min={self._fmt(t.min_formation_enthalpy, '.2f')}, Hf_max={self._fmt(t.max_formation_enthalpy, '.2f')})\n"
+            f"{'Model 7':25}:     {p.model_7()} (k1={self._fmt(p.model_7_k1(), '.2f')}, k1_cr={self._fmt(p.model_7_k1_critical(), '.2f')})\n"
+            f"{'Model 8':25}:     {p.model_8} (F={self._fmt(t.f_parameter, '.2f')})\n"
         )

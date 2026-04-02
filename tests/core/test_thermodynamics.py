@@ -5,11 +5,13 @@ for the FeCoCrNi reference alloy, including edge cases and invariants.
 """
 
 import math
+from unittest.mock import patch
 
 import pytest
 
 from HEACalculator.core.composition import AlloyComposition
 from HEACalculator.core.thermodynamics import HEAThermodynamics
+from HEACalculator.exceptions import MissingMiedemaDataError, MissingMixingEnthalpyError
 
 
 class TestHEAThermodynamics:
@@ -240,3 +242,70 @@ class TestSingleElementThermodynamics:
         """A pure element has no binary pairs, so max formation enthalpy defaults to zero."""
         t = HEAThermodynamics(AlloyComposition("Fe"))
         assert t.max_formation_enthalpy == pytest.approx(0.0, abs=1e-10)
+
+
+class TestMissingDataNaN:
+    """Properties return NaN when the underlying database entry is absent."""
+
+    def test_mixing_enthalpy_nan_on_missing_pair(self):
+        """mixing_enthalpy returns NaN when MissingMixingEnthalpyError is raised."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        with patch(
+            "HEACalculator.core.thermodynamics.MixingEnthalpy",
+            side_effect=MissingMixingEnthalpyError("no data"),
+        ):
+            assert math.isnan(t.mixing_enthalpy)
+
+    def test_mixing_enthalpy_miedema_nan_on_missing_element(self):
+        """mixing_enthalpy_miedema returns NaN when MissingMiedemaDataError is raised."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        with patch(
+            "HEACalculator.core.thermodynamics.MiedemaEnthalpy",
+            side_effect=MissingMiedemaDataError("no data"),
+        ):
+            assert math.isnan(t.mixing_enthalpy_miedema)
+
+    def test_delta_g_max_nan_on_missing_miedema_data(self):
+        """delta_g_max returns NaN when MissingMiedemaDataError is raised."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        with patch(
+            "HEACalculator.core.thermodynamics.MiedemaIntEnthalpy",
+            side_effect=MissingMiedemaDataError("no data"),
+        ):
+            assert math.isnan(t.delta_g_max)
+
+    def test_formation_enthalpy_nan_for_fega(self):
+        """formation_enthalpy returns NaN for FeGa (Ga absent from Troparevsky DB)."""
+        t = HEAThermodynamics(AlloyComposition("Fe50Ga50"))
+        assert math.isnan(t.formation_enthalpy)
+
+    def test_min_formation_enthalpy_nan_for_fega(self):
+        """min_formation_enthalpy returns NaN for FeGa (Ga absent from Troparevsky DB)."""
+        t = HEAThermodynamics(AlloyComposition("Fe50Ga50"))
+        assert math.isnan(t.min_formation_enthalpy)
+
+    def test_max_formation_enthalpy_nan_for_fega(self):
+        """max_formation_enthalpy returns NaN for FeGa (Ga absent from Troparevsky DB)."""
+        t = HEAThermodynamics(AlloyComposition("Fe50Ga50"))
+        assert math.isnan(t.max_formation_enthalpy)
+
+    def test_phi_nan_when_phi_fcc_is_nan(self):
+        """phi returns NaN (not inf) when phi_fcc is NaN."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        t.__dict__["phi_fcc"] = float("nan")
+        t.__dict__["phi_bcc"] = 5.0
+        assert math.isnan(t.phi)
+
+    def test_phi_nan_when_phi_bcc_is_nan(self):
+        """phi returns NaN (not inf) when phi_bcc is NaN."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        t.__dict__["phi_fcc"] = 5.0
+        t.__dict__["phi_bcc"] = float("nan")
+        assert math.isnan(t.phi)
+
+    def test_phi_inf_when_components_are_inf(self):
+        """phi still returns inf (not NaN) when phi_fcc and phi_bcc are legitimately infinite."""
+        t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
+        t.__dict__["phi_fcc"] = math.inf
+        t.__dict__["phi_bcc"] = math.inf
+        assert math.isinf(t.phi)
