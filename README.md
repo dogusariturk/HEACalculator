@@ -96,7 +96,7 @@ HEACalculator search single FeCoCrNi
 
 ![HEACalculator_SearchSingle](https://user-images.githubusercontent.com/46679086/205514947-ca25fb25-c726-4de9-a79b-1cccf354b4e3.png)
 
-`HEACalculator search range` calculates all parameters and predictions for a composition range over a set of elements.
+`HEACalculator search range` calculates all parameters and predictions for a composition range over a set of elements. Compositions are evaluated in parallel across all available CPU cores, so large screens complete significantly faster.
 
 ```sh
 HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5

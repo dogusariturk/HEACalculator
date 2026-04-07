@@ -63,3 +63,24 @@ def find_all_comps(alloy: str, start: float, end: float, step: float) -> tuple[d
     n = len(formula)
     values = tuple(round(float(v), 10) for v in np.arange(start, end + step / 2, step))
     return formula, {composition for composition in _gen_compositions(n, values, 100.0) if _has_multiple_components(composition)}
+
+
+def _range_worker(formula: str) -> tuple[list | None, str | None]:
+    """Compute HEA parameters for a single alloy formula.
+
+    Intended as a ProcessPoolExecutor worker for range searches. Defined at
+    module level so it is picklable by the multiprocessing machinery. Imports
+    HEACalculator lazily so worker processes do not pay unnecessary import costs.
+
+    Args:
+        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
+
+    Returns:
+        (get_list() result, None) on success, or (None, error_message) on failure.
+    """
+    from HEACalculator.core.hea import HEACalculator
+
+    try:
+        return HEACalculator(formula).get_list(), None
+    except Exception as e:
+        return None, str(e)

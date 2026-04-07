@@ -49,7 +49,7 @@ class TestMiedemaEnthalpyLoaders:
     def test_invalid_input_raises_type_error(self, factory):
         """A non-sequence pair input raises TypeError."""
         with pytest.raises(TypeError):
-            factory(None)  # ty: ignore[invalid-argument-type]
+            factory(None)
 
     @pytest.mark.parametrize("factory", MIEDEMA_FACTORIES)
     def test_fractions_are_normalized_before_calculation(self, factory, fe_co_pair):

@@ -1,5 +1,7 @@
 """CLI search subcommands for HEACalculator."""
 
+import os
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -14,6 +16,40 @@ from HEACalculator.exceptions import (
 from HEACalculator.utils import find_all_comps
 
 app = typer.Typer()
+
+
+def _worker_str(formula: str) -> tuple[str | None, str | None]:
+    """Compute the human-readable report for a single alloy formula.
+
+    Intended as a ProcessPoolExecutor worker.
+
+    Args:
+        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
+
+    Returns:
+        (output, None) on success, or (None, error_message) on failure.
+    """
+    try:
+        return str(HEACalculator(formula)), None
+    except Exception as e:
+        return None, f"# Skipping '{formula}': {e}"
+
+
+def _worker_csv(formula: str) -> tuple[str | None, str | None]:
+    """Compute a comma-separated result row for a single alloy formula.
+
+    Intended as a ProcessPoolExecutor worker.
+
+    Args:
+        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
+
+    Returns:
+        (output, None) on success, or (None, error_message) on failure.
+    """
+    try:
+        return ", ".join(HEACalculator(formula).get_list()), None
+    except Exception as e:
+        return None, f"# Skipping '{formula}': {e}"
 
 
 @app.command(name="csv")
@@ -74,19 +110,21 @@ def range_search(
         print(", ".join(HEACalculator.get_headers()))
 
     formula, composition_set = find_all_comps(elements, start, end, step)
-    for composition in composition_set:
-        new_alloy = "".join(
-            f"{k}{v}"
-            for k, v in {
-                **formula,
-                **dict(zip(formula.keys(), composition, strict=True)),
-            }.items()
-            if v != 0
-        )
-        try:
-            if csv:
-                print(", ".join(HEACalculator(new_alloy).get_list()))
+    alloys = [
+        "".join(f"{k}{v}" for k, v in {**formula, **dict(zip(formula.keys(), composition, strict=True))}.items() if v != 0)
+        for composition in composition_set
+    ]
+
+    if not alloys:
+        return
+
+    workers = min(os.cpu_count() or 1, len(alloys))
+    chunksize = max(1, len(alloys) // (workers * 4))
+    worker_fn = _worker_csv if csv else _worker_str
+
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        for output, err in executor.map(worker_fn, alloys, chunksize=chunksize):
+            if err:
+                typer.echo(err, err=True)
             else:
-                print(HEACalculator(new_alloy))
-        except Exception as e:
-            typer.echo(f"# Skipping '{new_alloy}': {e}", err=True)
+                print(output)
