@@ -144,25 +144,27 @@ class TestNewProperties:
 
         pair_enthalpies = [MiedemaIntEnthalpy(pair) for pair in thermodynamics._c.pair_list]
         expected_max_abs = max(pair_enthalpies, key=abs)
-        assert thermodynamics.delta_g_max == pytest.approx((len(thermodynamics._c.alloy) // 2) * expected_max_abs, abs=1e-10)
+        assert thermodynamics.delta_g_max == pytest.approx(
+            (len(thermodynamics._c.alloy) // 2) * float(expected_max_abs), abs=1e-10
+        )
 
 
-class TestElectronegativityDifference:
+class TestAllenElectronegativityDifference:
     """Tests for the Allen electronegativity difference (delta_chi_Allen) property."""
 
-    def test_electronegativity_difference_is_positive(self, thermodynamics):
+    def test_allen_electronegativity_difference_is_positive(self, thermodynamics):
         """delta_chi_Allen is strictly positive for a multi-element alloy with distinct CE values."""
-        assert thermodynamics.electronegativity_difference > 0
+        assert thermodynamics.allen_electronegativity_difference > 0
 
-    def test_electronegativity_difference_fecocrni(self, thermodynamics):
+    def test_allen_electronegativity_difference_fecocrni(self, thermodynamics):
         """delta_chi_Allen for FeCoCrNi is approximately 4.85% (Allen CE: Fe=1.80, Co=1.84, Cr=1.65, Ni=1.88)."""
-        assert thermodynamics.electronegativity_difference == pytest.approx(4.85, abs=0.01)
+        assert thermodynamics.allen_electronegativity_difference == pytest.approx(4.85, abs=0.01)
 
-    def test_electronegativity_difference_is_float(self, thermodynamics):
+    def test_allen_electronegativity_difference_is_float(self, thermodynamics):
         """delta_chi_Allen is returned as a float."""
-        assert isinstance(thermodynamics.electronegativity_difference, float)
+        assert isinstance(thermodynamics.allen_electronegativity_difference, float)
 
-    def test_electronegativity_difference_uses_allen_scale(self, thermodynamics):
+    def test_allen_electronegativity_difference_uses_allen_scale(self, thermodynamics):
         """Verify that the result is consistent with manual calculation using Allen CE values."""
         import math
 
@@ -170,7 +172,33 @@ class TestElectronegativityDifference:
         pct = list(thermodynamics._c.atomic_percentage.values())
         chi_avg = sum(c * x for c, x in zip(pct, chi, strict=True))
         expected = math.sqrt(sum(c * (1 - x / chi_avg) ** 2 for c, x in zip(pct, chi, strict=True))) * 100
-        assert thermodynamics.electronegativity_difference == pytest.approx(expected, abs=1e-10)
+        assert thermodynamics.allen_electronegativity_difference == pytest.approx(expected, abs=1e-10)
+
+
+class TestPaulingElectronegativityDifference:
+    """Tests for the Pauling electronegativity difference (delta_chi_Pauling) property."""
+
+    def test_pauling_electronegativity_difference_is_positive(self, thermodynamics):
+        """delta_chi_Pauling is strictly positive for a multi-element alloy with distinct values."""
+        assert thermodynamics.pauling_electronegativity_difference > 0
+
+    def test_pauling_electronegativity_difference_fecocrni(self, thermodynamics):
+        """delta_chi_Pauling for FeCoCrNi is approximately 5.31% (Pauling: Fe=1.83, Co=1.88, Cr=1.66, Ni=1.91)."""
+        assert thermodynamics.pauling_electronegativity_difference == pytest.approx(5.31, abs=0.01)
+
+    def test_pauling_electronegativity_difference_is_float(self, thermodynamics):
+        """delta_chi_Pauling is returned as a float."""
+        assert isinstance(thermodynamics.pauling_electronegativity_difference, float)
+
+    def test_pauling_electronegativity_difference_uses_pauling_scale(self, thermodynamics):
+        """Verify that the result is consistent with manual calculation using Pauling values."""
+        import math
+
+        chi = thermodynamics._c.pauling_electronegativity_list
+        pct = list(thermodynamics._c.atomic_percentage.values())
+        chi_avg = sum(c * x for c, x in zip(pct, chi, strict=True))
+        expected = math.sqrt(sum(c * (1 - x / chi_avg) ** 2 for c, x in zip(pct, chi, strict=True))) * 100
+        assert thermodynamics.pauling_electronegativity_difference == pytest.approx(expected, abs=1e-10)
 
 
 class TestEdgeCases:
@@ -218,10 +246,15 @@ class TestSingleElementThermodynamics:
         t = HEAThermodynamics(AlloyComposition("Fe"))
         assert t.atomic_size_difference == pytest.approx(0.0, abs=1e-10)
 
-    def test_electronegativity_difference_is_zero(self):
-        """A single-element alloy has zero electronegativity difference."""
+    def test_allen_electronegativity_difference_is_zero(self):
+        """A single-element alloy has zero Allen electronegativity difference."""
         t = HEAThermodynamics(AlloyComposition("Fe"))
-        assert t.electronegativity_difference == pytest.approx(0.0, abs=1e-10)
+        assert t.allen_electronegativity_difference == pytest.approx(0.0, abs=1e-10)
+
+    def test_pauling_electronegativity_difference_is_zero(self):
+        """A single-element alloy has zero Pauling electronegativity difference."""
+        t = HEAThermodynamics(AlloyComposition("Fe"))
+        assert t.pauling_electronegativity_difference == pytest.approx(0.0, abs=1e-10)
 
     def test_omega_is_inf_for_single_element(self):
         """Omega is infinite for a pure element because mixing_enthalpy == 0."""
