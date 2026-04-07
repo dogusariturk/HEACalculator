@@ -75,7 +75,7 @@ The formula parser handles equimolar notation (`FeCoCrNi`), explicit atom counts
 
 ### `search range` - Composition Range Screening
 
-Screen all composition combinations within a given range for a set of elements:
+Screen all composition combinations within a given range for a set of elements. Each composition is independent, so calculations are parallelized across all available CPU cores automatically.
 
 ```bash
 HEACalculator search range --elements "El1 El2 ..." [OPTIONS]

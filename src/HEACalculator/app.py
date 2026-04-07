@@ -9,6 +9,7 @@ import html
 import os
 import re
 import sys
+from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 from typing import Any
 
@@ -200,6 +201,40 @@ QMessageBox QPushButton:pressed {
 """
 
 
+class RangeSearchWorker(QtCore.QThread):
+    """Background worker that parallelizes range search calculations.
+
+    Runs HEACalculator on a list of alloy formula strings using a
+    ProcessPoolExecutor, emitting results back to the main thread via signals
+    so that Qt widgets are only ever touched from the main thread.
+
+    Args:
+        alloys: List of alloy formula strings to calculate.
+    """
+
+    result_ready = QtCore.pyqtSignal(list)
+    finished_with_count = QtCore.pyqtSignal(int)
+
+    def __init__(self, alloys: list[str], parent: QtCore.QObject | None = None) -> None:
+        """Store the alloy list for use in ``run``."""
+        super().__init__(parent)
+        self._alloys = alloys
+
+    def run(self) -> None:
+        """Calculate all alloys in parallel and emit results to the main thread."""
+        from HEACalculator.utils import _range_worker
+
+        workers = min(os.cpu_count() or 1, len(self._alloys))
+        chunksize = max(1, len(self._alloys) // (workers * 4))
+        count = 0
+        with ProcessPoolExecutor(max_workers=workers) as executor:
+            for result, _err in executor.map(_range_worker, self._alloys, chunksize=chunksize):
+                if result is not None:
+                    self.result_ready.emit(result)
+                    count += 1
+        self.finished_with_count.emit(count)
+
+
 class BatchCalculationsPage(QtWidgets.QWidget):
     """Batch composition screener page.
 
@@ -216,6 +251,7 @@ class BatchCalculationsPage(QtWidgets.QWidget):
         self.ui = Ui_BatchCalculationsPage()
         self.ui.setupUi(self)
         self.selectedElements: list[str] = []
+        self._search_worker: RangeSearchWorker | None = None
         configure_results_tree_header(self.ui.resultsTreeWidget)
 
         self._element_buttons = [btn for btn in self.findChildren(QtWidgets.QPushButton) if btn.objectName().startswith("ebtn")]
@@ -246,7 +282,7 @@ class BatchCalculationsPage(QtWidgets.QWidget):
             self.selectedElements.remove(symbol)
 
     def _handle_search(self) -> None:
-        """Validate inputs, enumerate compositions, calculate HEA parameters, and populate results."""
+        """Validate inputs, enumerate compositions, and launch a parallel background search."""
         if len(self.selectedElements) < 2:
             self.notificationRequested.emit("Select at least two elements using the periodic table.", "warning")
             return
@@ -271,22 +307,31 @@ class BatchCalculationsPage(QtWidgets.QWidget):
             self.notificationRequested.emit("No valid compositions found for the given range.", "warning")
             return
 
-        self.ui.resultsTreeWidget.clear()
-        count = 0
-        for composition in composition_set:
-            new_alloy = "".join(
-                f"{k}{v}" for k, v in {**formula, **dict(zip(formula.keys(), composition, strict=False))}.items() if v != 0
-            )
-            try:
-                QtWidgets.QTreeWidgetItem(self.ui.resultsTreeWidget, HEACalculator(new_alloy).get_list())
-                count += 1
-            except (ElementNotFoundError, MissingMixingEnthalpyError, MissingFormationEnthalpyError):
-                pass
+        alloys = [
+            "".join(f"{k}{v}" for k, v in {**formula, **dict(zip(formula.keys(), composition, strict=False))}.items() if v != 0)
+            for composition in composition_set
+        ]
 
+        self.ui.resultsTreeWidget.clear()
+        self.ui.btnSearch.setEnabled(False)
+        self.notificationRequested.emit(f"Searching {len(alloys)} compositions...", "info")
+
+        self._search_worker = RangeSearchWorker(alloys, parent=self)
+        self._search_worker.result_ready.connect(self._on_result_ready)
+        self._search_worker.finished_with_count.connect(self._on_search_finished)
+        self._search_worker.finished.connect(self._search_worker.deleteLater)
+        self._search_worker.start()
+
+    def _on_result_ready(self, result: list) -> None:
+        """Add a single calculation result as a row in the results tree."""
+        QtWidgets.QTreeWidgetItem(self.ui.resultsTreeWidget, result)
+
+    def _on_search_finished(self, count: int) -> None:
+        """Re-enable the Search button and report the final result count."""
+        self.ui.btnSearch.setEnabled(True)
         if count == 0:
             self.notificationRequested.emit("No compositions could be calculated (missing database entries).", "warning")
             return
-
         self.ui.btnSave.setEnabled(True)
         self.notificationRequested.emit(f"Search completed. {count} compositions calculated.", "info")
 
