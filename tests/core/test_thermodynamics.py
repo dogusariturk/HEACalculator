@@ -143,10 +143,10 @@ class TestNewProperties:
         from HEACalculator.data.miedema_enthalpy import MiedemaIntEnthalpy
 
         pair_enthalpies = [MiedemaIntEnthalpy(pair) for pair in thermodynamics._c.pair_list]
-        expected_max_abs = max(pair_enthalpies, key=abs)
-        assert thermodynamics.delta_g_max == pytest.approx(
-            (len(thermodynamics._c.alloy) // 2) * float(expected_max_abs), abs=1e-10
-        )
+        pos_max = max(pair_enthalpies)
+        neg_min = min(pair_enthalpies)
+        expected_max_abs = pos_max if pos_max >= -neg_min else neg_min
+        assert thermodynamics.delta_g_max == pytest.approx((len(thermodynamics._c.alloy) // 2) * expected_max_abs, abs=1e-10)
 
 
 class TestAllenElectronegativityDifference:
