@@ -199,8 +199,8 @@ class HEAThermodynamics:
         return math.sqrt(_delta) * 100
 
     @cached_property
-    def electronegativity_difference(self) -> float:
-        r"""Allen electronegativity difference ($\Delta\chi_{\text{Allen}}$) of the alloy in %.
+    def allen_electronegativity_difference(self) -> float:
+        r"""Allen electronegativity difference (delta_chi_Allen) of the alloy in %.
 
         Returns:
             Allen electronegativity mismatch in percent.
@@ -215,6 +215,28 @@ class HEAThermodynamics:
             for pct, x in zip(
                 self._c.atomic_percentage.values(),
                 self._c.allen_electronegativity_list,
+                strict=True,
+            )
+        )
+        return math.sqrt(_delta_chi) * 100
+
+    @cached_property
+    def pauling_electronegativity_difference(self) -> float:
+        r"""Pauling electronegativity difference (delta_chi_Pauling) of the alloy in %.
+
+        Returns:
+            Pauling electronegativity mismatch in percent.
+
+        References:
+            - Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.;
+              CRC Press: London, 2014. ISBN 9781482208689.
+        """
+        chi_avg = self._c.average_pauling_electronegativity
+        _delta_chi = sum(
+            pct * (1 - (x / chi_avg)) ** 2
+            for pct, x in zip(
+                self._c.atomic_percentage.values(),
+                self._c.pauling_electronegativity_list,
                 strict=True,
             )
         )
@@ -497,7 +519,7 @@ class HEAThermodynamics:
             return float("nan")
         if not pair_enthalpies:
             return 0.0
-        return (len(self._c.alloy) // 2) * max(pair_enthalpies, key=abs)
+        return (len(self._c.alloy) // 2) * float(max(pair_enthalpies, key=abs))
 
     @cached_property
     def f_parameter(self) -> float:

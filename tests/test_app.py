@@ -308,6 +308,7 @@ class TestResultsTreeConfiguration:
         "δ",
         "δ (CN12)",
         "Δχ (Allen)",
+        "Δχ (Pauling)",
         "Omega",
         "Gamma",
         "Lambda",

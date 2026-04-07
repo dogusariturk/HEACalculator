@@ -133,3 +133,21 @@ class AlloyComposition:
             Composition-weighted average Allen electronegativity in Pauling units.
         """
         return sum(pct * x for pct, x in zip(self.atomic_percentage.values(), self.allen_electronegativity_list, strict=True))
+
+    @cached_property
+    def pauling_electronegativity_list(self) -> list[float]:
+        """Pauling electronegativity for each element in the same order as ``alloy``.
+
+        Returns:
+            Pauling electronegativities aligned with the alloy element order.
+        """
+        return [self.elements[elm].pauling_electronegativity for elm in self.alloy]
+
+    @cached_property
+    def average_pauling_electronegativity(self) -> float:
+        """Composition-weighted average Pauling electronegativity.
+
+        Returns:
+            Composition-weighted average Pauling electronegativity.
+        """
+        return sum(pct * x for pct, x in zip(self.atomic_percentage.values(), self.pauling_electronegativity_list, strict=True))

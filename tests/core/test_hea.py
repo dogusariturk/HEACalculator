@@ -64,15 +64,28 @@ class TestHEACalculator:
     def test_str_delta_chi_allen_present(self, calculator):
         """Delta Chi (Allen) line appears in __str__ with % unit."""
         lines = str(calculator).splitlines()
-        chi_line = next(line for line in lines if "Delta Chi" in line)
+        chi_line = next(line for line in lines if "Delta Chi (Allen)" in line)
         assert "%" in chi_line
 
-    def test_electronegativity_difference_in_get_list(self, calculator):
-        """get_list() includes electronegativity_difference as a formatted float string."""
+    def test_str_delta_chi_pauling_present(self, calculator):
+        """Delta Chi (Pauling) line appears in __str__ with % unit."""
+        lines = str(calculator).splitlines()
+        chi_line = next(line for line in lines if "Delta Chi (Pauling)" in line)
+        assert "%" in chi_line
+
+    def test_allen_electronegativity_difference_in_get_list(self, calculator):
+        """get_list() includes allen_electronegativity_difference as a formatted float string."""
         lst = calculator.get_list()
-        # index 4: formula(0), density(1), delta(2), delta_cn12(3), delta_chi(4)
+        # index 4: formula(0), density(1), delta(2), delta_cn12(3), delta_chi_allen(4)
         assert "." in lst[4]
         assert float(lst[4]) == pytest.approx(4.85, abs=0.01)
+
+    def test_pauling_electronegativity_difference_in_get_list(self, calculator):
+        """get_list() includes pauling_electronegativity_difference as a formatted float string."""
+        lst = calculator.get_list()
+        # index 5: formula(0), density(1), delta(2), delta_cn12(3), delta_chi_allen(4), delta_chi_pauling(5)
+        assert "." in lst[5]
+        assert float(lst[5]) == pytest.approx(5.31, abs=0.01)
 
     def test_str_entropy_unit(self, calculator):
         """Mixing entropy unit in __str__ uses J/K.mol."""
@@ -89,8 +102,8 @@ class TestHEACalculator:
     def test_get_list_melting_temp_no_decimal(self, calculator):
         """Melting temperature in get_list() has no decimal point."""
         lst = calculator.get_list()
-        # Layout: formula(0), 12 floats(1-12), melting(13), microstructure(14), 8 models(15-22)
-        assert "." not in lst[13]
+        # Layout: formula(0), 13 floats(1-13), melting(14), microstructure(15), 8 models(16-23)
+        assert "." not in lst[14]
 
     def test_get_list_model_5_is_string_not_na(self, calculator):
         """Model 5 in get_list() returns a valid phase prediction string."""
@@ -106,11 +119,11 @@ class TestHEACalculator:
         """A single-element calculation should still produce a result row."""
         lst = HEACalculator("Fe").get_list()
         assert lst[0] == "Fe"
-        assert len(lst) == 23
+        assert len(lst) == 24
 
-    def test_get_list_length_is_23(self, calculator):
-        """get_list() always returns exactly 23 entries regardless of missing data."""
-        assert len(HEACalculator("Fe50Ga50").get_list()) == 23
+    def test_get_list_length_is_24(self, calculator):
+        """get_list() always returns exactly 24 entries regardless of missing data."""
+        assert len(HEACalculator("Fe50Ga50").get_list()) == 24
 
     def test_headers_align_with_get_list(self, calculator):
         """Shared result headers stay in lockstep with the tabular payload."""
@@ -120,6 +133,7 @@ class TestHEACalculator:
             "Delta (%)",
             "Delta (CN12) (%)",
             "Delta Chi (Allen) (%)",
+            "Delta Chi (Pauling) (%)",
             "Omega",
             "Gamma",
             "Lambda",
@@ -180,32 +194,32 @@ class TestNaNIntegration:
     def test_fega_formation_enthalpy_na_in_get_list(self):
         """FeGa has no Troparevsky formation enthalpy data; get_list shows 'N/A'."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[11] == "N/A"
+        assert lst[12] == "N/A"
 
     def test_fega_min_formation_enthalpy_na_in_get_list(self):
         """FeGa min formation enthalpy column is 'N/A'."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[12] == "N/A"
+        assert lst[13] == "N/A"
 
     def test_fega_model_6_na_in_get_list(self):
         """Model 6 for FeGa is 'N/A' because it depends on formation enthalpy."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[20] == "N/A"
+        assert lst[21] == "N/A"
 
     def test_fega_model_7_na_in_get_list(self):
         """Model 7 for FeGa is 'N/A' because it depends on formation enthalpy."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[21] == "N/A"
+        assert lst[22] == "N/A"
 
     def test_fega_other_properties_are_not_na(self):
         """Properties that do not require formation enthalpy data remain finite for FeGa."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        for idx in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+        for idx in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]:
             assert lst[idx] != "N/A", f"index {idx} unexpectedly shows N/A"
 
     def test_femnga_ternary_get_list_length(self):
-        """FeMnGa ternary with missing formation enthalpy still yields a 23-element list."""
-        assert len(HEACalculator("Fe33.3Mn33.3Ga33.4").get_list()) == 23
+        """FeMnGa ternary with missing formation enthalpy still yields a 24-element list."""
+        assert len(HEACalculator("Fe33.3Mn33.3Ga33.4").get_list()) == 24
 
     def test_fega_str_shows_na_for_formation_enthalpy(self):
         """__str__ for FeGa shows 'N/A' in the Formation Enthalpy line."""
@@ -232,7 +246,7 @@ class TestNaNIntegration:
             side_effect=MissingMixingEnthalpyError("no data"),
         ):
             lst = HEACalculator("FeCoCrNi").get_list()
-        assert lst[15] == "N/A"
+        assert lst[16] == "N/A"
 
     def test_missing_mixing_enthalpy_propagates_na_to_model_2(self):
         """When mixing_enthalpy is NaN (mocked), Model 2 shows 'N/A'."""
@@ -245,4 +259,4 @@ class TestNaNIntegration:
             side_effect=MissingMixingEnthalpyError("no data"),
         ):
             lst = HEACalculator("FeCoCrNi").get_list()
-        assert lst[16] == "N/A"
+        assert lst[17] == "N/A"

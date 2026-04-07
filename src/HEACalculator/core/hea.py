@@ -19,6 +19,7 @@ RESULT_HEADERS = (
     "Delta (%)",
     "Delta (CN12) (%)",
     "Delta Chi (Allen) (%)",
+    "Delta Chi (Pauling) (%)",
     "Omega",
     "Gamma",
     "Lambda",
@@ -111,7 +112,8 @@ class HEACalculator:
             t.density,
             t.atomic_size_difference,
             t.atomic_size_difference_cn12,
-            t.electronegativity_difference,
+            t.allen_electronegativity_difference,
+            t.pauling_electronegativity_difference,
             t.omega,
             t.gamma,
             t.lambda_,
@@ -150,7 +152,8 @@ class HEACalculator:
             f"{'Density':25}: {self._fmt(t.density)} g/cm^3\n"
             f"{'Delta':25}: {self._fmt(t.atomic_size_difference)} %\n"
             f"{'Delta (CN12)':25}: {self._fmt(t.atomic_size_difference_cn12)} %\n"
-            f"{'Delta Chi (Allen)':25}: {self._fmt(t.electronegativity_difference)} %\n"
+            f"{'Delta Chi (Allen)':25}: {self._fmt(t.allen_electronegativity_difference)} %\n"
+            f"{'Delta Chi (Pauling)':25}: {self._fmt(t.pauling_electronegativity_difference)} %\n"
             f"{'Omega':25}: {self._fmt(t.omega)}\n"
             f"{'Gamma':25}: {self._fmt(t.gamma)}\n"
             f"{'Lambda':25}: {self._fmt(t.lambda_)}\n"

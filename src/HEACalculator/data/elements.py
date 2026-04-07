@@ -28,6 +28,7 @@ class _Element:
         atomic_radius_cn12: Goldschmidt CN12-corrected metallic radius in pm (NaN if unavailable).
         nvalence: Number of valence electrons.
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
+        pauling_electronegativity: Pauling electronegativity (NaN if unavailable).
 
     References:
         1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm](https://www.ciaaw.org/atomic-weights.htm).
@@ -35,6 +36,7 @@ class _Element:
         3. Smithells Metals Reference Book, 8th ed., Table 4.1 (Goldschmidt CN12 corrected).
         4. Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
         5. Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
+        6. Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
     """
 
     symbol: str
@@ -46,6 +48,7 @@ class _Element:
     atomic_radius_cn12: float
     nvalence: float
     allen_electronegativity: float
+    pauling_electronegativity: float
 
     def __str__(self) -> str:
         """Return a human-readable summary of the element's properties.
@@ -62,6 +65,7 @@ class _Element:
             f"\tAtomic radius: {self.atomic_radius} pm\n"
             f"\tValence electrons: {self.nvalence}\n"
             f"\tAllen electronegativity: {self.allen_electronegativity}\n"
+            f"\tPauling electronegativity: {self.pauling_electronegativity}\n"
         )
 
 
@@ -76,6 +80,7 @@ _elements: dict[str, _Element] = {
         atomic_radius_cn12=float(props["atomic_radius_cn12"]),
         nvalence=props["nvalence"],
         allen_electronegativity=float(props["allen_electronegativity"]),
+        pauling_electronegativity=float(props["pauling_electronegativity"]),
     )
     for name, props in _element_data.items()
 }
