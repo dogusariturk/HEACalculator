@@ -128,7 +128,7 @@ AlCoCrFeNi,quinary
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
 
-**Output columns:** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Omega, Gamma, Lambda, VEC, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
+**Output columns:** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Delta Chi (Pauling) (%), Omega, Gamma, Lambda, VEC, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
 
 **Example**
 
@@ -189,8 +189,9 @@ print(hea.thermo.density)                       # g/cm³
 print(hea.thermo.melting_temperature)           # K
 print(hea.thermo.valence_electron_concentration)
 print(hea.thermo.atomic_size_difference)        # %
-print(hea.thermo.atomic_size_difference_cn12)   # % (CN12-corrected radii)
-print(hea.thermo.electronegativity_difference)  # % (Allen CE scale)
+print(hea.thermo.atomic_size_difference_cn12)          # % (CN12-corrected radii)
+print(hea.thermo.allen_electronegativity_difference)   # % (Allen CE scale)
+print(hea.thermo.pauling_electronegativity_difference) # % (Pauling scale)
 print(hea.thermo.omega)
 print(hea.thermo.gamma)
 print(hea.thermo.lambda_)

@@ -60,13 +60,21 @@ $$
 
 where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i x_i r_i$ is the average radius.[^4]
 
-### Electronegativity Difference ($\Delta\chi_{\text{Allen}}$) { data-toc-label="Electronegativity Difference" }
+### Allen Electronegativity Difference ($\Delta\chi_{\text{Allen}}$) { data-toc-label="Allen Electronegativity Difference" }
 
 $$
 \Delta\chi_{\text{Allen}} = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
 $$
 
 where $\chi_i$ is the Allen configuration energy (CE) of element $i$ in Pauling units and $\bar{\chi} = \sum_i x_i \chi_i$ is the composition-weighted average.[^12][^13]
+
+### Pauling Electronegativity Difference ($\Delta\chi_{\text{Pauling}}$) { data-toc-label="Pauling Electronegativity Difference" }
+
+$$
+\Delta\chi_{\text{Pauling}} = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
+$$
+
+where $\chi_i$ is the Pauling electronegativity of element $i$ and $\bar{\chi} = \sum_i x_i \chi_i$ is the composition-weighted average.[^16]
 
 ### Omega (Ω) { data-toc-label="Omega" }
 
@@ -157,3 +165,4 @@ A microstructure prediction based on VEC is also provided:
 [^13]: Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 5132–5137.
 [^14]: de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. *Cohesion in Metals: Transition Metal Alloys.* North-Holland, Amsterdam, 1988.
 [^15]: Niessen, A.K.; Miedema, A.R. *Ber. Bunsenges. Phys. Chem.* **1983**, *87*, 717–723.
+[^16]: Haynes, W.M. *CRC Handbook of Chemistry and Physics*, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
