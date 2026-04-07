@@ -7,7 +7,8 @@
         "atomic_volume": 22.54,
         "atomic_weight": 227.0,
         "melting_point": 1323.15,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.1"
     },
     "Ag": {
         "allen_electronegativity": 1.87,
@@ -17,7 +18,8 @@
         "atomic_volume": 10.3,
         "atomic_weight": 107.8682,
         "melting_point": 1234.93,
-        "nvalence": 11.0
+        "nvalence": 11.0,
+        "pauling_electronegativity": "1.93"
     },
     "Al": {
         "allen_electronegativity": 1.613,
@@ -27,7 +29,8 @@
         "atomic_volume": 10.0,
         "atomic_weight": 26.9815385,
         "melting_point": 933.47,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.61"
     },
     "Am": {
         "allen_electronegativity": "NaN",
@@ -37,7 +40,8 @@
         "atomic_volume": 20.8,
         "atomic_weight": 243.0,
         "melting_point": 1449.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Nd": {
         "allen_electronegativity": "NaN",
@@ -47,7 +51,8 @@
         "atomic_volume": 20.6,
         "atomic_weight": 144.242,
         "melting_point": 1294.0,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.14"
     },
     "Ar": {
         "allen_electronegativity": 3.242,
@@ -57,7 +62,8 @@
         "atomic_volume": 24.2,
         "atomic_weight": 39.948,
         "melting_point": 83.81,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "NaN"
     },
     "As": {
         "allen_electronegativity": 2.211,
@@ -67,7 +73,8 @@
         "atomic_volume": 13.1,
         "atomic_weight": 74.921595,
         "melting_point": 1090.15,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "2.18"
     },
     "At": {
         "allen_electronegativity": 2.39,
@@ -77,7 +84,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 210.0,
         "melting_point": 575.15,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "2.2"
     },
     "Au": {
         "allen_electronegativity": 1.92,
@@ -87,7 +95,8 @@
         "atomic_volume": 10.2,
         "atomic_weight": 196.966569,
         "melting_point": 1337.33,
-        "nvalence": 11.0
+        "nvalence": 11.0,
+        "pauling_electronegativity": "2.4"
     },
     "B": {
         "allen_electronegativity": 2.051,
@@ -97,7 +106,8 @@
         "atomic_volume": 4.6,
         "atomic_weight": 10.81,
         "melting_point": 2350.15,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "2.04"
     },
     "Ba": {
         "allen_electronegativity": 0.881,
@@ -107,7 +117,8 @@
         "atomic_volume": 39.0,
         "atomic_weight": 137.327,
         "melting_point": 1000.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "0.89"
     },
     "Be": {
         "allen_electronegativity": 1.576,
@@ -117,7 +128,8 @@
         "atomic_volume": 5.0,
         "atomic_weight": 9.0121831,
         "melting_point": 1560.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.57"
     },
     "Bh": {
         "allen_electronegativity": "NaN",
@@ -127,7 +139,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 274.0,
         "melting_point": "NaN",
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "NaN"
     },
     "Bi": {
         "allen_electronegativity": 2.01,
@@ -137,7 +150,8 @@
         "atomic_volume": 21.3,
         "atomic_weight": 208.9804,
         "melting_point": 544.55,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "1.9"
     },
     "Bk": {
         "allen_electronegativity": "NaN",
@@ -147,7 +161,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 247.0,
         "melting_point": 1259.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Br": {
         "allen_electronegativity": 2.685,
@@ -157,7 +172,8 @@
         "atomic_volume": 23.5,
         "atomic_weight": 79.904,
         "melting_point": 265.95,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "2.96"
     },
     "C": {
         "allen_electronegativity": 2.544,
@@ -167,7 +183,8 @@
         "atomic_volume": 5.3,
         "atomic_weight": 12.011,
         "melting_point": 3820.0,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "2.55"
     },
     "Ca": {
         "allen_electronegativity": 1.034,
@@ -177,7 +194,8 @@
         "atomic_volume": 29.9,
         "atomic_weight": 40.078,
         "melting_point": 1115.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.0"
     },
     "Cd": {
         "allen_electronegativity": 1.521,
@@ -187,7 +205,8 @@
         "atomic_volume": 13.1,
         "atomic_weight": 112.414,
         "melting_point": 594.22,
-        "nvalence": 12.0
+        "nvalence": 12.0,
+        "pauling_electronegativity": "1.69"
     },
     "Ce": {
         "allen_electronegativity": "NaN",
@@ -197,7 +216,8 @@
         "atomic_volume": 21.0,
         "atomic_weight": 140.116,
         "melting_point": 1072.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.12"
     },
     "Cf": {
         "allen_electronegativity": "NaN",
@@ -207,7 +227,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 251.0,
         "melting_point": 1173.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Cl": {
         "allen_electronegativity": 2.869,
@@ -217,7 +238,8 @@
         "atomic_volume": 18.7,
         "atomic_weight": 35.45,
         "melting_point": 171.65,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "3.16"
     },
     "Cm": {
         "allen_electronegativity": "NaN",
@@ -227,7 +249,8 @@
         "atomic_volume": 18.28,
         "atomic_weight": 247.0,
         "melting_point": 1618.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Cn": {
         "allen_electronegativity": "NaN",
@@ -237,7 +260,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 285.0,
         "melting_point": "NaN",
-        "nvalence": 12.0
+        "nvalence": 12.0,
+        "pauling_electronegativity": "NaN"
     },
     "Co": {
         "allen_electronegativity": 1.84,
@@ -247,7 +271,8 @@
         "atomic_volume": 6.7,
         "atomic_weight": 58.933194,
         "melting_point": 1768.15,
-        "nvalence": 9.0
+        "nvalence": 9.0,
+        "pauling_electronegativity": "1.88"
     },
     "Cr": {
         "allen_electronegativity": 1.65,
@@ -257,7 +282,8 @@
         "atomic_volume": 7.23,
         "atomic_weight": 51.9961,
         "melting_point": 2180.15,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "1.66"
     },
     "Cs": {
         "allen_electronegativity": 0.659,
@@ -267,7 +293,8 @@
         "atomic_volume": 70.0,
         "atomic_weight": 132.90545196,
         "melting_point": 301.65,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "0.79"
     },
     "Cu": {
         "allen_electronegativity": 1.85,
@@ -277,7 +304,8 @@
         "atomic_volume": 7.1,
         "atomic_weight": 63.546,
         "melting_point": 1357.77,
-        "nvalence": 11.0
+        "nvalence": 11.0,
+        "pauling_electronegativity": "1.9"
     },
     "Db": {
         "allen_electronegativity": "NaN",
@@ -287,7 +315,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 268.0,
         "melting_point": "NaN",
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "NaN"
     },
     "Ds": {
         "allen_electronegativity": "NaN",
@@ -297,7 +326,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 281.0,
         "melting_point": "NaN",
-        "nvalence": 10.0
+        "nvalence": 10.0,
+        "pauling_electronegativity": "NaN"
     },
     "Dy": {
         "allen_electronegativity": "NaN",
@@ -307,7 +337,8 @@
         "atomic_volume": 19.0,
         "atomic_weight": 162.5,
         "melting_point": 1685.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.22"
     },
     "Er": {
         "allen_electronegativity": "NaN",
@@ -317,7 +348,8 @@
         "atomic_volume": 18.4,
         "atomic_weight": 167.259,
         "melting_point": 1802.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.24"
     },
     "Es": {
         "allen_electronegativity": "NaN",
@@ -327,7 +359,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 252.0,
         "melting_point": 1133.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Eu": {
         "allen_electronegativity": "NaN",
@@ -337,7 +370,8 @@
         "atomic_volume": 28.9,
         "atomic_weight": 151.964,
         "melting_point": 1095.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "F": {
         "allen_electronegativity": 4.193,
@@ -347,7 +381,8 @@
         "atomic_volume": 17.1,
         "atomic_weight": 18.998403163,
         "melting_point": 53.48,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "3.98"
     },
     "Fe": {
         "allen_electronegativity": 1.8,
@@ -357,7 +392,8 @@
         "atomic_volume": 7.1,
         "atomic_weight": 55.845,
         "melting_point": 1811.15,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "1.83"
     },
     "Fl": {
         "allen_electronegativity": "NaN",
@@ -367,7 +403,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 289.0,
         "melting_point": "NaN",
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "NaN"
     },
     "Fm": {
         "allen_electronegativity": "NaN",
@@ -377,7 +414,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 257.0,
         "melting_point": 1800.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Fr": {
         "allen_electronegativity": "NaN",
@@ -387,7 +425,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 223.0,
         "melting_point": 294.15,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "0.7"
     },
     "Ga": {
         "allen_electronegativity": 1.756,
@@ -397,7 +436,8 @@
         "atomic_volume": 11.8,
         "atomic_weight": 69.723,
         "melting_point": 302.91,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.81"
     },
     "Gd": {
         "allen_electronegativity": "NaN",
@@ -407,7 +447,8 @@
         "atomic_volume": 19.9,
         "atomic_weight": 157.25,
         "melting_point": 1586.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.2"
     },
     "Ge": {
         "allen_electronegativity": 1.994,
@@ -417,7 +458,8 @@
         "atomic_volume": 13.6,
         "atomic_weight": 72.63,
         "melting_point": 1211.4,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "2.01"
     },
     "H": {
         "allen_electronegativity": 2.3,
@@ -427,7 +469,8 @@
         "atomic_volume": 14.1,
         "atomic_weight": 1.008,
         "melting_point": 13.99,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "2.2"
     },
     "He": {
         "allen_electronegativity": 4.16,
@@ -437,7 +480,8 @@
         "atomic_volume": 31.8,
         "atomic_weight": 4.002602,
         "melting_point": 0.95,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Hf": {
         "allen_electronegativity": 1.16,
@@ -447,7 +491,8 @@
         "atomic_volume": 13.6,
         "atomic_weight": 178.49,
         "melting_point": 2506.15,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "1.3"
     },
     "Hg": {
         "allen_electronegativity": 1.765,
@@ -457,7 +502,8 @@
         "atomic_volume": 14.8,
         "atomic_weight": 200.592,
         "melting_point": 234.32,
-        "nvalence": 12.0
+        "nvalence": 12.0,
+        "pauling_electronegativity": "1.9"
     },
     "Ho": {
         "allen_electronegativity": "NaN",
@@ -467,7 +513,8 @@
         "atomic_volume": 18.7,
         "atomic_weight": 164.93033,
         "melting_point": 1745.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.23"
     },
     "Hs": {
         "allen_electronegativity": "NaN",
@@ -477,7 +524,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 269.0,
         "melting_point": "NaN",
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "NaN"
     },
     "I": {
         "allen_electronegativity": 2.359,
@@ -487,7 +535,8 @@
         "atomic_volume": 25.7,
         "atomic_weight": 126.90447,
         "melting_point": 386.85,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "2.66"
     },
     "In": {
         "allen_electronegativity": 1.656,
@@ -497,7 +546,8 @@
         "atomic_volume": 15.7,
         "atomic_weight": 114.818,
         "melting_point": 429.75,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.78"
     },
     "Ir": {
         "allen_electronegativity": 1.68,
@@ -507,7 +557,8 @@
         "atomic_volume": 8.54,
         "atomic_weight": 192.217,
         "melting_point": 2719.15,
-        "nvalence": 9.0
+        "nvalence": 9.0,
+        "pauling_electronegativity": "2.2"
     },
     "K": {
         "allen_electronegativity": 0.734,
@@ -517,7 +568,8 @@
         "atomic_volume": 45.3,
         "atomic_weight": 39.0983,
         "melting_point": 336.65,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "0.82"
     },
     "Kr": {
         "allen_electronegativity": 2.966,
@@ -527,7 +579,8 @@
         "atomic_volume": 32.2,
         "atomic_weight": 83.798,
         "melting_point": 115.78,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "NaN"
     },
     "La": {
         "allen_electronegativity": "NaN",
@@ -537,7 +590,8 @@
         "atomic_volume": 22.5,
         "atomic_weight": 138.90547,
         "melting_point": 1193.15,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.1"
     },
     "Li": {
         "allen_electronegativity": 0.912,
@@ -547,7 +601,8 @@
         "atomic_volume": 13.1,
         "atomic_weight": 6.94,
         "melting_point": 453.65,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "0.98"
     },
     "Lr": {
         "allen_electronegativity": "NaN",
@@ -557,7 +612,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 262.0,
         "melting_point": 1900.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Lu": {
         "allen_electronegativity": 1.09,
@@ -567,7 +623,8 @@
         "atomic_volume": 17.8,
         "atomic_weight": 174.9668,
         "melting_point": 1936.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.0"
     },
     "Lv": {
         "allen_electronegativity": "NaN",
@@ -577,7 +634,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 293.0,
         "melting_point": "NaN",
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "NaN"
     },
     "Mc": {
         "allen_electronegativity": "NaN",
@@ -587,7 +645,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 288.0,
         "melting_point": "NaN",
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "NaN"
     },
     "Md": {
         "allen_electronegativity": "NaN",
@@ -597,7 +656,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 258.0,
         "melting_point": 1100.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Mg": {
         "allen_electronegativity": 1.293,
@@ -607,7 +667,8 @@
         "atomic_volume": 14.0,
         "atomic_weight": 24.305,
         "melting_point": 923.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.31"
     },
     "Mn": {
         "allen_electronegativity": 1.75,
@@ -617,7 +678,8 @@
         "atomic_volume": 7.39,
         "atomic_weight": 54.938044,
         "melting_point": 1519.15,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "1.55"
     },
     "Mo": {
         "allen_electronegativity": 1.47,
@@ -627,7 +689,8 @@
         "atomic_volume": 9.4,
         "atomic_weight": 95.95,
         "melting_point": 2895.15,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "2.16"
     },
     "Mt": {
         "allen_electronegativity": "NaN",
@@ -637,7 +700,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 276.0,
         "melting_point": "NaN",
-        "nvalence": 9.0
+        "nvalence": 9.0,
+        "pauling_electronegativity": "NaN"
     },
     "N": {
         "allen_electronegativity": 3.066,
@@ -647,7 +711,8 @@
         "atomic_volume": 17.3,
         "atomic_weight": 14.007,
         "melting_point": 63.15,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "3.04"
     },
     "Na": {
         "allen_electronegativity": 0.869,
@@ -657,7 +722,8 @@
         "atomic_volume": 23.7,
         "atomic_weight": 22.98976928,
         "melting_point": 370.94,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "0.93"
     },
     "Nb": {
         "allen_electronegativity": 1.41,
@@ -667,7 +733,8 @@
         "atomic_volume": 10.8,
         "atomic_weight": 92.90637,
         "melting_point": 2750.15,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "1.6"
     },
     "Ne": {
         "allen_electronegativity": 4.787,
@@ -677,7 +744,8 @@
         "atomic_volume": 16.8,
         "atomic_weight": 20.1797,
         "melting_point": 24.56,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "NaN"
     },
     "Nh": {
         "allen_electronegativity": "NaN",
@@ -687,7 +755,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 286.0,
         "melting_point": "NaN",
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "NaN"
     },
     "Ni": {
         "allen_electronegativity": 1.88,
@@ -697,7 +766,8 @@
         "atomic_volume": 6.6,
         "atomic_weight": 58.6934,
         "melting_point": 1728.15,
-        "nvalence": 10.0
+        "nvalence": 10.0,
+        "pauling_electronegativity": "1.91"
     },
     "No": {
         "allen_electronegativity": "NaN",
@@ -707,7 +777,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 259.0,
         "melting_point": 1100.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Np": {
         "allen_electronegativity": "NaN",
@@ -717,7 +788,8 @@
         "atomic_volume": 21.1,
         "atomic_weight": 237.0,
         "melting_point": 917.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.3"
     },
     "O": {
         "allen_electronegativity": 3.61,
@@ -727,7 +799,8 @@
         "atomic_volume": 14.0,
         "atomic_weight": 15.999,
         "melting_point": 54.36,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "3.44"
     },
     "Og": {
         "allen_electronegativity": "NaN",
@@ -737,7 +810,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 294.0,
         "melting_point": "NaN",
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "NaN"
     },
     "Os": {
         "allen_electronegativity": 1.65,
@@ -747,7 +821,8 @@
         "atomic_volume": 8.43,
         "atomic_weight": 190.23,
         "melting_point": 3306.15,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "2.2"
     },
     "P": {
         "allen_electronegativity": 2.253,
@@ -757,7 +832,8 @@
         "atomic_volume": 17.0,
         "atomic_weight": 30.973761998,
         "melting_point": 317.3,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "2.19"
     },
     "Pa": {
         "allen_electronegativity": "NaN",
@@ -767,7 +843,8 @@
         "atomic_volume": 15.0,
         "atomic_weight": 231.03588,
         "melting_point": 1845.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.5"
     },
     "Pb": {
         "allen_electronegativity": 1.854,
@@ -777,7 +854,8 @@
         "atomic_volume": 18.3,
         "atomic_weight": 207.2,
         "melting_point": 600.61,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "1.8"
     },
     "Pd": {
         "allen_electronegativity": 1.58,
@@ -787,7 +865,8 @@
         "atomic_volume": 8.9,
         "atomic_weight": 106.42,
         "melting_point": 1827.95,
-        "nvalence": 10.0
+        "nvalence": 10.0,
+        "pauling_electronegativity": "2.2"
     },
     "Pm": {
         "allen_electronegativity": "NaN",
@@ -797,7 +876,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 144.91276,
         "melting_point": 1315.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Po": {
         "allen_electronegativity": 2.19,
@@ -807,7 +887,8 @@
         "atomic_volume": 22.7,
         "atomic_weight": 209.0,
         "melting_point": 527.15,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "2.0"
     },
     "Pr": {
         "allen_electronegativity": "NaN",
@@ -817,7 +898,8 @@
         "atomic_volume": 20.8,
         "atomic_weight": 140.90766,
         "melting_point": 1204.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.13"
     },
     "Pt": {
         "allen_electronegativity": 1.72,
@@ -827,7 +909,8 @@
         "atomic_volume": 9.1,
         "atomic_weight": 195.084,
         "melting_point": 2041.35,
-        "nvalence": 10.0
+        "nvalence": 10.0,
+        "pauling_electronegativity": "2.2"
     },
     "Pu": {
         "allen_electronegativity": "NaN",
@@ -837,7 +920,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 244.0,
         "melting_point": 913.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.3"
     },
     "Ra": {
         "allen_electronegativity": "NaN",
@@ -847,7 +931,8 @@
         "atomic_volume": 45.0,
         "atomic_weight": 226.0,
         "melting_point": 969.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "0.9"
     },
     "Rb": {
         "allen_electronegativity": 0.706,
@@ -857,7 +942,8 @@
         "atomic_volume": 55.9,
         "atomic_weight": 85.4678,
         "melting_point": 312.45,
-        "nvalence": 1.0
+        "nvalence": 1.0,
+        "pauling_electronegativity": "0.82"
     },
     "Re": {
         "allen_electronegativity": 1.6,
@@ -867,7 +953,8 @@
         "atomic_volume": 8.85,
         "atomic_weight": 186.207,
         "melting_point": 3458.15,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "1.9"
     },
     "Rf": {
         "allen_electronegativity": "NaN",
@@ -877,7 +964,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 267.0,
         "melting_point": "NaN",
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "NaN"
     },
     "Rg": {
         "allen_electronegativity": "NaN",
@@ -887,7 +975,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 281.0,
         "melting_point": "NaN",
-        "nvalence": 11.0
+        "nvalence": 11.0,
+        "pauling_electronegativity": "NaN"
     },
     "Rh": {
         "allen_electronegativity": 1.56,
@@ -897,7 +986,8 @@
         "atomic_volume": 8.3,
         "atomic_weight": 102.9055,
         "melting_point": 2236.15,
-        "nvalence": 9.0
+        "nvalence": 9.0,
+        "pauling_electronegativity": "2.28"
     },
     "Rn": {
         "allen_electronegativity": 2.6,
@@ -907,7 +997,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 222.0,
         "melting_point": 202.15,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "NaN"
     },
     "Ru": {
         "allen_electronegativity": 1.54,
@@ -917,7 +1008,8 @@
         "atomic_volume": 8.3,
         "atomic_weight": 101.07,
         "melting_point": 2606.15,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "2.2"
     },
     "S": {
         "allen_electronegativity": 2.589,
@@ -927,7 +1019,8 @@
         "atomic_volume": 15.5,
         "atomic_weight": 32.06,
         "melting_point": 386.0,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "2.58"
     },
     "Sb": {
         "allen_electronegativity": 1.984,
@@ -937,7 +1030,8 @@
         "atomic_volume": 18.4,
         "atomic_weight": 121.76,
         "melting_point": 903.78,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "2.05"
     },
     "Sc": {
         "allen_electronegativity": 1.19,
@@ -947,7 +1041,8 @@
         "atomic_volume": 15.0,
         "atomic_weight": 44.955908,
         "melting_point": 1814.15,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.36"
     },
     "Se": {
         "allen_electronegativity": 2.424,
@@ -957,7 +1052,8 @@
         "atomic_volume": 16.5,
         "atomic_weight": 78.971,
         "melting_point": 490.0,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "2.55"
     },
     "Sg": {
         "allen_electronegativity": "NaN",
@@ -967,7 +1063,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 271.0,
         "melting_point": "NaN",
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "NaN"
     },
     "Si": {
         "allen_electronegativity": 1.916,
@@ -977,7 +1074,8 @@
         "atomic_volume": 12.1,
         "atomic_weight": 28.085,
         "melting_point": 1687.15,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "1.9"
     },
     "Sm": {
         "allen_electronegativity": "NaN",
@@ -987,7 +1085,8 @@
         "atomic_volume": 19.9,
         "atomic_weight": 150.36,
         "melting_point": 1345.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.17"
     },
     "Sn": {
         "allen_electronegativity": 1.824,
@@ -997,7 +1096,8 @@
         "atomic_volume": 16.3,
         "atomic_weight": 118.71,
         "melting_point": 505.1,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "1.96"
     },
     "Sr": {
         "allen_electronegativity": 0.963,
@@ -1007,7 +1107,8 @@
         "atomic_volume": 33.7,
         "atomic_weight": 87.62,
         "melting_point": 1050.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "0.95"
     },
     "Ta": {
         "allen_electronegativity": 1.34,
@@ -1017,7 +1118,8 @@
         "atomic_volume": 10.9,
         "atomic_weight": 180.94788,
         "melting_point": 3290.15,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "1.5"
     },
     "Tb": {
         "allen_electronegativity": "NaN",
@@ -1027,7 +1129,8 @@
         "atomic_volume": 19.2,
         "atomic_weight": 158.92535,
         "melting_point": 1632.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Tc": {
         "allen_electronegativity": 1.51,
@@ -1037,7 +1140,8 @@
         "atomic_volume": 8.5,
         "atomic_weight": 97.90721,
         "melting_point": 2430.15,
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "2.1"
     },
     "Te": {
         "allen_electronegativity": 2.158,
@@ -1047,7 +1151,8 @@
         "atomic_volume": 20.5,
         "atomic_weight": 127.6,
         "melting_point": 722.66,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "2.1"
     },
     "Th": {
         "allen_electronegativity": "NaN",
@@ -1057,7 +1162,8 @@
         "atomic_volume": 19.8,
         "atomic_weight": 232.0377,
         "melting_point": 2023.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.3"
     },
     "Ti": {
         "allen_electronegativity": 1.38,
@@ -1067,7 +1173,8 @@
         "atomic_volume": 10.6,
         "atomic_weight": 47.867,
         "melting_point": 1943.15,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "1.54"
     },
     "Tl": {
         "allen_electronegativity": 1.789,
@@ -1077,7 +1184,8 @@
         "atomic_volume": 17.2,
         "atomic_weight": 204.38,
         "melting_point": 577.15,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.8"
     },
     "Tm": {
         "allen_electronegativity": "NaN",
@@ -1087,7 +1195,8 @@
         "atomic_volume": 18.1,
         "atomic_weight": 168.93422,
         "melting_point": 1818.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.25"
     },
     "Ts": {
         "allen_electronegativity": "NaN",
@@ -1097,7 +1206,8 @@
         "atomic_volume": "NaN",
         "atomic_weight": 294.0,
         "melting_point": "NaN",
-        "nvalence": 7.0
+        "nvalence": 7.0,
+        "pauling_electronegativity": "NaN"
     },
     "U": {
         "allen_electronegativity": "NaN",
@@ -1107,7 +1217,8 @@
         "atomic_volume": 12.5,
         "atomic_weight": 238.02891,
         "melting_point": 1408.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "1.7"
     },
     "V": {
         "allen_electronegativity": 1.53,
@@ -1117,7 +1228,8 @@
         "atomic_volume": 8.35,
         "atomic_weight": 50.9415,
         "melting_point": 2183.15,
-        "nvalence": 5.0
+        "nvalence": 5.0,
+        "pauling_electronegativity": "1.63"
     },
     "W": {
         "allen_electronegativity": 1.47,
@@ -1127,7 +1239,8 @@
         "atomic_volume": 9.53,
         "atomic_weight": 183.84,
         "melting_point": 3687.15,
-        "nvalence": 6.0
+        "nvalence": 6.0,
+        "pauling_electronegativity": "1.7"
     },
     "Xe": {
         "allen_electronegativity": 2.582,
@@ -1137,7 +1250,8 @@
         "atomic_volume": 42.9,
         "atomic_weight": 131.293,
         "melting_point": 161.4,
-        "nvalence": 8.0
+        "nvalence": 8.0,
+        "pauling_electronegativity": "2.6"
     },
     "Y": {
         "allen_electronegativity": 1.12,
@@ -1147,7 +1261,8 @@
         "atomic_volume": 19.8,
         "atomic_weight": 88.90584,
         "melting_point": 1795.15,
-        "nvalence": 3.0
+        "nvalence": 3.0,
+        "pauling_electronegativity": "1.22"
     },
     "Yb": {
         "allen_electronegativity": "NaN",
@@ -1157,7 +1272,8 @@
         "atomic_volume": 24.8,
         "atomic_weight": 173.045,
         "melting_point": 1097.15,
-        "nvalence": 2.0
+        "nvalence": 2.0,
+        "pauling_electronegativity": "NaN"
     },
     "Zn": {
         "allen_electronegativity": 1.588,
@@ -1167,7 +1283,8 @@
         "atomic_volume": 9.2,
         "atomic_weight": 65.38,
         "melting_point": 692.68,
-        "nvalence": 12.0
+        "nvalence": 12.0,
+        "pauling_electronegativity": "1.65"
     },
     "Zr": {
         "allen_electronegativity": 1.32,
@@ -1177,6 +1294,7 @@
         "atomic_volume": 14.1,
         "atomic_weight": 91.224,
         "melting_point": 2127.15,
-        "nvalence": 4.0
+        "nvalence": 4.0,
+        "pauling_electronegativity": "1.33"
     }
 }
