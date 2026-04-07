@@ -519,7 +519,10 @@ class HEAThermodynamics:
             return float("nan")
         if not pair_enthalpies:
             return 0.0
-        return (len(self._c.alloy) // 2) * float(max(pair_enthalpies, key=abs))
+        pos_max = max(pair_enthalpies)
+        neg_min = min(pair_enthalpies)
+        largest = pos_max if pos_max >= -neg_min else neg_min
+        return (len(self._c.alloy) // 2) * largest
 
     @cached_property
     def f_parameter(self) -> float:
