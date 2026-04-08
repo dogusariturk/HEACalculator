@@ -185,7 +185,7 @@ Equivalent to `search range`.
 
 ## License
 
-This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the GNU GPLv3 License. See the [LICENSE](https://github.com/dogusariturk/HEACalculator/blob/master/LICENSE) file for details.
 
 ---
 
