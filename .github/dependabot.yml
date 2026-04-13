@@ -4,11 +4,17 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    assignees:
+      - "dogusariturk"
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
+    assignees:
+      - "dogusariturk"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    assignees:
+      - "dogusariturk"
