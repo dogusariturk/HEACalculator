@@ -227,6 +227,7 @@ print(fe.atomic_weight)             # 55.845
 print(fe.melting_point)             # 1811 K
 print(fe.atomic_radius)             # 126 pm
 print(fe.allen_electronegativity)   # 1.80 (Pauling units)
+print(fe.pauling_electronegativity) # 1.83 (Pauling scale)
 
 dH = MixingEnthalpy(("Fe", "Co"))       # kJ/mol
 dHf = FormationEnthalpy(("Fe", "Co"))   # meV/atom
