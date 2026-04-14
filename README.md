@@ -156,6 +156,7 @@ Equivalent to `search range`.
   - Delta Parameter (Atomic Size Difference) [^4]
   - Delta Parameter (CN12-corrected Atomic Size Difference) [^4]
   - Electronegativity Difference (Allen CE scale)
+  - Electronegativity Difference (Pauling scale) [^16]
   - Omega Parameter [^5]
   - Gamma Parameter [^6]
   - Lambda Parameter [^7]
@@ -180,6 +181,7 @@ Equivalent to `search range`.
 [^9]: Y.F. Ye, Q. Wang, J. Lu, C.T. Liu, Y. Yang, Scr. Mater. 104 (2015) 53–55.
 [^10]: O.N. Senkov, D.B. Miracle, J. Alloys Compd. 658 (2016) 603–607.
 [^11]: D.J.M. King, S.C. Middleburgh, A.G. McGregor, M.B. Cortie, Acta Mater. 104 (2016) 172–179.
+[^16]: Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
 
 ---
 
