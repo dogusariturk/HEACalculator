@@ -18,3 +18,9 @@ updates:
       interval: "weekly"
     assignees:
       - "dogusariturk"
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "dogusariturk"
