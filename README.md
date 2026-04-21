@@ -1,17 +1,17 @@
 <div align="center">
-  <a href="https://github.com/dogusariturk/HEACalculator">
-    <img src="https://user-images.githubusercontent.com/46679086/200971710-3ad2327e-6183-4ef9-b3b7-06a57f004e1a.png" alt="Logo" width="120" height="120">
-  </a>
+
+<img src="https://user-images.githubusercontent.com/46679086/200971710-3ad2327e-6183-4ef9-b3b7-06a57f004e1a.png" alt="Logo" width="200" height="200">
 
 # HEACalculator
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3590318.svg)](https://doi.org/10.5281/zenodo.3590318)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/license/gpl-3-0)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Platforms](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey)
 
 [![Tests](https://github.com/dogusariturk/HEACalculator/actions/workflows/tests.yml/badge.svg)](https://github.com/dogusariturk/HEACalculator/actions/workflows/tests.yml)
 [![Lint](https://github.com/dogusariturk/HEACalculator/actions/workflows/lint.yml/badge.svg)](https://github.com/dogusariturk/HEACalculator/actions/workflows/lint.yml)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3590318.svg)](https://doi.org/10.5281/zenodo.3590318)
 
 `HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics to predict the formation of solid solutions in High Entropy Alloys (HEAs). It provides both a CLI (Typer) and GUI (PyQt6) interface.
 
