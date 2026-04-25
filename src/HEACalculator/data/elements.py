@@ -29,6 +29,7 @@ class _Element:
         nvalence: Number of valence electrons.
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
         pauling_electronegativity: Pauling electronegativity (NaN if unavailable).
+        ea: Hume-Rothery electron-to-atom ratio (outer s+p electrons per atom; d and f excluded; NaN for noble gases).
 
     References:
         1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm](https://www.ciaaw.org/atomic-weights.htm).
@@ -49,6 +50,7 @@ class _Element:
     nvalence: float
     allen_electronegativity: float
     pauling_electronegativity: float
+    ea: float
 
     def __str__(self) -> str:
         """Return a human-readable summary of the element's properties.
@@ -81,6 +83,7 @@ _elements: dict[str, _Element] = {
         nvalence=props["nvalence"],
         allen_electronegativity=float(props["allen_electronegativity"]),
         pauling_electronegativity=float(props["pauling_electronegativity"]),
+        ea=float(props["ea"]),
     )
     for name, props in _element_data.items()
 }
