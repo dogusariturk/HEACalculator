@@ -3342,6 +3342,7 @@ class Ui_ParametersPage(object):
         self.resultsTreeWidget.headerItem().setTextAlignment(21, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsTreeWidget.headerItem().setTextAlignment(22, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsTreeWidget.headerItem().setTextAlignment(23, QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.resultsTreeWidget.headerItem().setTextAlignment(24, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsTreeWidget.header().setVisible(True)
         self.resultsTreeWidget.header().setCascadingSectionResizes(False)
         self.resultsTreeWidget.header().setDefaultSectionSize(96)
@@ -3554,44 +3555,45 @@ class Ui_ParametersPage(object):
             _translate("ParametersPage", "<html><head/><body><p>λ</p></body></html>"),
         )
         self.resultsTreeWidget.headerItem().setText(9, _translate("ParametersPage", "VEC"))
+        self.resultsTreeWidget.headerItem().setText(10, _translate("ParametersPage", "e/a"))
 
-        self.resultsTreeWidget.headerItem().setText(10, _translate("ParametersPage", "Mixing Enthalpy"))
-        self.resultsTreeWidget.headerItem().setToolTip(
-            10,
-            _translate("ParametersPage", "<html><head/><body><p>kJ/mol</p></body></html>"),
-        )
-        self.resultsTreeWidget.headerItem().setText(11, _translate("ParametersPage", "Mixing Entropy"))
+        self.resultsTreeWidget.headerItem().setText(11, _translate("ParametersPage", "Mixing Enthalpy"))
         self.resultsTreeWidget.headerItem().setToolTip(
             11,
+            _translate("ParametersPage", "<html><head/><body><p>kJ/mol</p></body></html>"),
+        )
+        self.resultsTreeWidget.headerItem().setText(12, _translate("ParametersPage", "Mixing Entropy"))
+        self.resultsTreeWidget.headerItem().setToolTip(
+            12,
             _translate("ParametersPage", "<html><head/><body><p>J/K.mol</p></body></html>"),
         )
 
-        self.resultsTreeWidget.headerItem().setText(12, _translate("ParametersPage", "Formation Enthalpy"))
-        self.resultsTreeWidget.headerItem().setToolTip(
-            12,
-            _translate("ParametersPage", "<html><head/><body><p>meV/atom</p></body></html>"),
-        )
-
-        self.resultsTreeWidget.headerItem().setText(13, _translate("ParametersPage", "Min. Formation Enthalpy"))
+        self.resultsTreeWidget.headerItem().setText(13, _translate("ParametersPage", "Formation Enthalpy"))
         self.resultsTreeWidget.headerItem().setToolTip(
             13,
             _translate("ParametersPage", "<html><head/><body><p>meV/atom</p></body></html>"),
         )
 
-        self.resultsTreeWidget.headerItem().setText(14, _translate("ParametersPage", "Melting Temperature"))
+        self.resultsTreeWidget.headerItem().setText(14, _translate("ParametersPage", "Min. Formation Enthalpy"))
         self.resultsTreeWidget.headerItem().setToolTip(
-            14, _translate("ParametersPage", "<html><head/><body><p>K</p></body></html>")
+            14,
+            _translate("ParametersPage", "<html><head/><body><p>meV/atom</p></body></html>"),
         )
 
-        self.resultsTreeWidget.headerItem().setText(15, _translate("ParametersPage", "Crystal Structure"))
-        self.resultsTreeWidget.headerItem().setText(16, _translate("ParametersPage", "Model 1"))
-        self.resultsTreeWidget.headerItem().setText(17, _translate("ParametersPage", "Model 2"))
-        self.resultsTreeWidget.headerItem().setText(18, _translate("ParametersPage", "Model 3"))
-        self.resultsTreeWidget.headerItem().setText(19, _translate("ParametersPage", "Model 4"))
-        self.resultsTreeWidget.headerItem().setText(20, _translate("ParametersPage", "Model 5"))
-        self.resultsTreeWidget.headerItem().setText(21, _translate("ParametersPage", "Model 6"))
-        self.resultsTreeWidget.headerItem().setText(22, _translate("ParametersPage", "Model 7"))
-        self.resultsTreeWidget.headerItem().setText(23, _translate("ParametersPage", "Model 8"))
+        self.resultsTreeWidget.headerItem().setText(15, _translate("ParametersPage", "Melting Temperature"))
+        self.resultsTreeWidget.headerItem().setToolTip(
+            15, _translate("ParametersPage", "<html><head/><body><p>K</p></body></html>")
+        )
+
+        self.resultsTreeWidget.headerItem().setText(16, _translate("ParametersPage", "Crystal Structure"))
+        self.resultsTreeWidget.headerItem().setText(17, _translate("ParametersPage", "Model 1"))
+        self.resultsTreeWidget.headerItem().setText(18, _translate("ParametersPage", "Model 2"))
+        self.resultsTreeWidget.headerItem().setText(19, _translate("ParametersPage", "Model 3"))
+        self.resultsTreeWidget.headerItem().setText(20, _translate("ParametersPage", "Model 4"))
+        self.resultsTreeWidget.headerItem().setText(21, _translate("ParametersPage", "Model 5"))
+        self.resultsTreeWidget.headerItem().setText(22, _translate("ParametersPage", "Model 6"))
+        self.resultsTreeWidget.headerItem().setText(23, _translate("ParametersPage", "Model 7"))
+        self.resultsTreeWidget.headerItem().setText(24, _translate("ParametersPage", "Model 8"))
         self.ClearAllPushButton.setText(_translate("ParametersPage", "Clear All"))
         self.SavePushButton.setText(_translate("ParametersPage", "Save"))
         self.CalculatePushButton.setText(_translate("ParametersPage", "Calculate"))
