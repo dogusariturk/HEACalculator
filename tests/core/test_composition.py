@@ -209,3 +209,81 @@ class TestAlloyCompositionRepeatedElement:
         assert comp.alloy["Fe"] == 3
         assert comp.alloy["Co"] == 1
         assert sum(comp.atomic_percentage.values()) == pytest.approx(1.0, abs=1e-10)
+
+
+class TestAlloyCompositionCN12:
+    """Tests for CN12-corrected atomic radius properties."""
+
+    def test_atomic_radius_cn12_list_length(self, composition):
+        """CN12 radius list has one entry per element."""
+        assert len(composition.atomic_radius_cn12_list) == 4
+
+    def test_average_atomic_radius_cn12_is_float(self, composition):
+        """Weighted average CN12 radius is a float."""
+        assert isinstance(composition.average_atomic_radius_cn12, float)
+
+    def test_average_atomic_radius_cn12_positive(self, composition):
+        """Weighted average CN12 radius is strictly positive for FeCoCrNi."""
+        assert composition.average_atomic_radius_cn12 > 0
+
+    def test_average_atomic_radius_cn12_fecocrni(self, composition):
+        """Average CN12 radius for equimolar FeCoCrNi equals (124.1+125.1+124.9+124.6)/4."""
+        assert composition.average_atomic_radius_cn12 == pytest.approx(124.675, abs=1e-2)
+
+
+class TestAlloyCompositionPaulingEN:
+    """Tests for Pauling electronegativity properties."""
+
+    def test_pauling_electronegativity_list_length(self, composition):
+        """Pauling EN list has one entry per element."""
+        assert len(composition.pauling_electronegativity_list) == 4
+
+    def test_pauling_electronegativity_list_all_positive(self, composition):
+        """All Pauling EN values for FeCoCrNi are finite and positive."""
+        import math
+
+        for x in composition.pauling_electronegativity_list:
+            assert math.isfinite(x) and x > 0
+
+    def test_average_pauling_electronegativity_fecocrni(self, composition):
+        """Average Pauling EN for equimolar FeCoCrNi equals (1.83+1.88+1.66+1.91)/4 = 1.82."""
+        assert composition.average_pauling_electronegativity == pytest.approx(1.82, abs=1e-2)
+
+    def test_pauling_electronegativity_nan_for_noble_gas(self):
+        """An alloy containing a noble gas (Ar) has at least one NaN Pauling EN value."""
+        import math
+
+        comp = AlloyComposition("FeAr")
+        assert any(math.isnan(x) for x in comp.pauling_electronegativity_list)
+
+    def test_average_pauling_electronegativity_nan_when_element_missing(self):
+        """The weighted average Pauling EN is NaN when any element lacks data."""
+        import math
+
+        comp = AlloyComposition("FeAr")
+        assert math.isnan(comp.average_pauling_electronegativity)
+
+
+class TestAlloyCompositionEA:
+    """Tests for Hume-Rothery e/a properties."""
+
+    def test_ea_list_length(self, composition):
+        """e/a list has one entry per element."""
+        assert len(composition.ea_list) == 4
+
+    def test_average_ea_fecocrni(self, composition):
+        """Average e/a for equimolar FeCoCrNi equals (2+2+1+2)/4 = 1.75."""
+        assert composition.average_ea == pytest.approx(1.75)
+
+
+class TestAlloyCompositionElements:
+    """Tests for the elements cached property."""
+
+    def test_elements_keys_match_alloy(self, composition):
+        """The elements dict has the same keys as alloy."""
+        assert set(composition.elements.keys()) == set(composition.alloy.keys())
+
+    def test_elements_values_have_positive_atomic_weight(self, composition):
+        """Every element record has a positive atomic weight."""
+        for element in composition.elements.values():
+            assert element.atomic_weight > 0

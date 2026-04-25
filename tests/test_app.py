@@ -20,6 +20,7 @@ from PyQt6.QtWidgets import QMessageBox
 
 from HEACalculator.app import (
     AlignDelegate,
+    BatchAmountDelegate,
     BatchCalculationsPage,
     HEACalculatorMainWindow,
     ItemDelegate,
@@ -313,6 +314,7 @@ class TestResultsTreeConfiguration:
         "Gamma",
         "Lambda",
         "VEC",
+        "e/a",
         "Mixing Enthalpy",
         "Mixing Entropy",
         "Formation Enthalpy",
@@ -1009,3 +1011,293 @@ class TestAlignDelegate:
         index = QtCore.QModelIndex()
         delegate.initStyleOption(option, index)
         assert option.displayAlignment == QtCore.Qt.AlignmentFlag.AlignCenter
+
+
+class TestBatchAmountDelegate:
+    """Tests for BatchAmountDelegate cell editor."""
+
+    def test_create_editor_returns_line_edit(self, qapp):
+        """CreateEditor returns a QLineEdit widget."""
+        delegate = BatchAmountDelegate()
+        parent = QtWidgets.QWidget()
+        editor = delegate.createEditor(parent, None, None)
+        assert isinstance(editor, QtWidgets.QLineEdit)
+
+    def test_create_editor_has_double_validator(self, qapp):
+        """The returned QLineEdit has a QDoubleValidator attached."""
+        from PyQt6 import QtGui
+
+        delegate = BatchAmountDelegate()
+        parent = QtWidgets.QWidget()
+        editor = delegate.createEditor(parent, None, None)
+        assert isinstance(editor.validator(), QtGui.QDoubleValidator)
+
+
+class TestBtnBatchAmountClicked(TestCase):
+    """Tests for HEACalculatorMainWindow.btn_batch_amount_clicked."""
+
+    def _make_window(self):
+        return SimpleNamespace(
+            BTN_BACKGROUND_COLOR_HIGHLIGHTED=HEACalculatorMainWindow.BTN_BACKGROUND_COLOR_HIGHLIGHTED,
+            BTN_BACKGROUND_COLOR_DEFAULT=HEACalculatorMainWindow.BTN_BACKGROUND_COLOR_DEFAULT,
+            ui=SimpleNamespace(
+                stackedWidget=MagicMock(),
+                btnParameters=MagicMock(),
+                btnBatchAmount=MagicMock(),
+                btnMDL=MagicMock(),
+            ),
+            batchCalculationsPage=MagicMock(),
+        )
+
+    def test_switches_stacked_widget_to_batch_page(self):
+        """Clicking Batch navigates the stacked widget to the batch page."""
+        w = self._make_window()
+        HEACalculatorMainWindow.btn_batch_amount_clicked(w)
+        w.ui.stackedWidget.setCurrentWidget.assert_called_once_with(w.batchCalculationsPage)
+
+    def test_sets_batch_button_to_highlighted_style(self):
+        """The Batch button receives the highlighted stylesheet."""
+        w = self._make_window()
+        HEACalculatorMainWindow.btn_batch_amount_clicked(w)
+        w.ui.btnBatchAmount.setStyleSheet.assert_called_once_with(HEACalculatorMainWindow.BTN_BACKGROUND_COLOR_HIGHLIGHTED)
+
+    def test_sets_parameters_button_to_default_style(self):
+        """The Parameters button is reset to the default stylesheet."""
+        w = self._make_window()
+        HEACalculatorMainWindow.btn_batch_amount_clicked(w)
+        w.ui.btnParameters.setStyleSheet.assert_called_once_with(HEACalculatorMainWindow.BTN_BACKGROUND_COLOR_DEFAULT)
+
+
+class TestUpdateTotalLabel(TestCase):
+    """Tests for ParametersPage._update_total_label."""
+
+    def _make_page(self, selected_elements):
+        total_label = MagicMock()
+        p = SimpleNamespace(selectedElements=dict(selected_elements), totalLabel=total_label)
+        return p, total_label
+
+    def test_empty_selection_clears_label(self):
+        """An empty selection sets the label text to an empty string."""
+        p, label = self._make_page({})
+        ParametersPage._update_total_label(p)
+        label.setText.assert_called_once_with("")
+
+    def test_sum_at_100_uses_green_color(self):
+        """When the sum is exactly 100%, the label uses the green color."""
+        p, label = self._make_page({"Fe": 50.0, "Co": 50.0})
+        ParametersPage._update_total_label(p)
+        style = label.setStyleSheet.call_args.args[0]
+        assert "#7FB685" in style
+
+    def test_sum_not_at_100_uses_red_color(self):
+        """When the sum differs from 100%, the label uses the red color."""
+        p, label = self._make_page({"Fe": 50.0, "Co": 25.0})
+        ParametersPage._update_total_label(p)
+        style = label.setStyleSheet.call_args.args[0]
+        assert "#C94040" in style
+
+    def test_label_text_shows_formatted_total(self):
+        """Label text shows 'Total: XX.XX%' with the computed sum."""
+        p, label = self._make_page({"Fe": 60.0, "Co": 40.0})
+        ParametersPage._update_total_label(p)
+        label.setText.assert_called_once_with("Total: 100.00%")
+
+
+class TestHandleAmountChangedZeroValue(TestCase):
+    """Tests for the zero-percentage guard in ParametersPage.handleAmountChanged."""
+
+    def test_zero_percentage_resets_value_and_emits_warning(self):
+        """Entering 0 for an element restores the previous value and emits a warning."""
+        notifications = []
+
+        def table_item(row, col):
+            item = MagicMock()
+            item.text.return_value = "Fe" if col == 0 else "0"
+            return item
+
+        table = MagicMock()
+        table.item.side_effect = table_item
+        p = SimpleNamespace(
+            selectedElements={"Fe": 50.0},
+            _update_total_label=MagicMock(),
+            _show_notification=lambda msg, sev: notifications.append((msg, sev)),
+            parametersPage=SimpleNamespace(tableWidget=table),
+        )
+        ParametersPage.handleAmountChanged(p, 0, 1)
+        assert notifications == [("Atomic percentage cannot be 0%.", "warning")]
+
+
+class TestBatchHandleElementClicked(TestCase):
+    """Tests for BatchCalculationsPage._handle_element_clicked."""
+
+    def _make_page(self, selected=None):
+        return SimpleNamespace(selectedElements=list(selected or []))
+
+    def test_check_adds_element_to_list(self):
+        """Checking an element appends it to selectedElements."""
+        p = self._make_page()
+        BatchCalculationsPage._handle_element_clicked(p, "Fe", True)
+        assert "Fe" in p.selectedElements
+
+    def test_check_duplicate_does_not_add_again(self):
+        """Checking an already-selected element has no effect."""
+        p = self._make_page(["Fe"])
+        BatchCalculationsPage._handle_element_clicked(p, "Fe", True)
+        assert p.selectedElements.count("Fe") == 1
+
+    def test_uncheck_removes_element(self):
+        """Unchecking an element removes it from selectedElements."""
+        p = self._make_page(["Fe", "Co"])
+        BatchCalculationsPage._handle_element_clicked(p, "Fe", False)
+        assert "Fe" not in p.selectedElements
+
+    def test_uncheck_absent_element_does_nothing(self):
+        """Unchecking an element that was never selected has no effect."""
+        p = self._make_page(["Co"])
+        BatchCalculationsPage._handle_element_clicked(p, "Fe", False)
+        assert p.selectedElements == ["Co"]
+
+
+class TestBatchHandleSearch(TestCase):
+    """Tests for BatchCalculationsPage._handle_search input validation."""
+
+    def _make_page(self, selected_elements, start=5, end=95, step=5):
+        notifications = []
+        p = SimpleNamespace(
+            selectedElements=list(selected_elements),
+            ui=SimpleNamespace(
+                startSpinBox=MagicMock(),
+                endSpinBox=MagicMock(),
+                stepSpinBox=MagicMock(),
+                resultsTreeWidget=MagicMock(),
+                btnSearch=MagicMock(),
+                btnSave=MagicMock(),
+            ),
+            notificationRequested=MagicMock(),
+            _search_worker=None,
+        )
+        p.ui.startSpinBox.value.return_value = start
+        p.ui.endSpinBox.value.return_value = end
+        p.ui.stepSpinBox.value.return_value = step
+        p._notifications = notifications
+        p.notificationRequested.emit.side_effect = lambda msg, sev: notifications.append((msg, sev))
+        return p
+
+    def test_fewer_than_two_elements_emits_warning(self):
+        """Searching with only one element emits a warning notification."""
+        p = self._make_page(["Fe"])
+        BatchCalculationsPage._handle_search(p)
+        assert p._notifications[0][1] == "warning"
+
+    def test_no_elements_emits_warning(self):
+        """Searching with no elements emits a warning notification."""
+        p = self._make_page([])
+        BatchCalculationsPage._handle_search(p)
+        assert p._notifications[0][1] == "warning"
+
+    def test_start_greater_than_end_emits_error(self):
+        """When start exceeds end the handler emits an error notification."""
+        p = self._make_page(["Fe", "Co"], start=50, end=10)
+        BatchCalculationsPage._handle_search(p)
+        assert p._notifications[0][1] == "error"
+
+
+class TestBatchOnSearchFinished(TestCase):
+    """Tests for BatchCalculationsPage._on_search_finished."""
+
+    def _make_page(self):
+        notifications = []
+        p = SimpleNamespace(
+            ui=SimpleNamespace(
+                btnSearch=MagicMock(),
+                btnSave=MagicMock(),
+            ),
+            notificationRequested=MagicMock(),
+        )
+        p._notifications = notifications
+        p.notificationRequested.emit.side_effect = lambda msg, sev: notifications.append((msg, sev))
+        return p
+
+    def test_re_enables_search_button(self):
+        """_on_search_finished always re-enables the Search button."""
+        p = self._make_page()
+        BatchCalculationsPage._on_search_finished(p, 1)
+        p.ui.btnSearch.setEnabled.assert_called_once_with(True)
+
+    def test_count_zero_emits_warning_without_enabling_save(self):
+        """Zero results emits a warning and does not enable the Save button."""
+        p = self._make_page()
+        BatchCalculationsPage._on_search_finished(p, 0)
+        assert p._notifications[0][1] == "warning"
+        p.ui.btnSave.setEnabled.assert_not_called()
+
+    def test_count_nonzero_enables_save_and_emits_info(self):
+        """Non-zero results enables the Save button and emits an info notification."""
+        p = self._make_page()
+        BatchCalculationsPage._on_search_finished(p, 5)
+        p.ui.btnSave.setEnabled.assert_called_once_with(True)
+        assert p._notifications[0][1] == "info"
+
+    def test_info_message_includes_count(self):
+        """The info notification includes the number of calculated compositions."""
+        p = self._make_page()
+        BatchCalculationsPage._on_search_finished(p, 42)
+        assert "42" in p._notifications[0][0]
+
+
+class TestBatchHandleSave(TestCase):
+    """Tests for BatchCalculationsPage._handle_save."""
+
+    def _make_page(self, tree_count):
+        notifications = []
+        tree = MagicMock()
+        tree.topLevelItemCount.return_value = tree_count
+        tree.columnCount.return_value = 1
+        tree.headerItem.return_value.text.return_value = "Formula"
+        mock_item = MagicMock()
+        mock_item.text.return_value = "FeCoCrNi"
+        tree.topLevelItem.return_value = mock_item
+        p = SimpleNamespace(
+            ui=SimpleNamespace(resultsTreeWidget=tree),
+            notificationRequested=MagicMock(),
+        )
+        p._notifications = notifications
+        p.notificationRequested.emit.side_effect = lambda msg, sev: notifications.append((msg, sev))
+        return p
+
+    def test_empty_tree_emits_warning(self):
+        """Clicking Save with no results emits a warning instead of opening a dialog."""
+        p = self._make_page(0)
+        BatchCalculationsPage._handle_save(p)
+        assert p._notifications == [("No results to save.", "warning")]
+
+    def test_dialog_cancelled_writes_nothing(self):
+        """Cancelling the save dialog writes nothing and emits no notification."""
+        p = self._make_page(1)
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("", False)),
+            patch("builtins.open", mock_open()) as m,
+        ):
+            BatchCalculationsPage._handle_save(p)
+            m.assert_not_called()
+        assert not p._notifications
+
+    def test_successful_save_emits_info_with_filename(self):
+        """A successful save emits an info notification that includes the file name."""
+        p = self._make_page(1)
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("/tmp/batch.csv", True)),
+            patch("builtins.open", mock_open()),
+        ):
+            BatchCalculationsPage._handle_save(p)
+        assert any(sev == "info" and "batch.csv" in msg for msg, sev in p._notifications)
+
+    def test_os_error_emits_error_notification(self):
+        """An OSError while writing emits an error notification with the OS message."""
+        p = self._make_page(1)
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("/tmp/batch.csv", True)),
+            patch("builtins.open", side_effect=OSError("No space left")),
+        ):
+            BatchCalculationsPage._handle_save(p)
+        assert any(sev == "error" and "No space left" in msg for msg, sev in p._notifications)
