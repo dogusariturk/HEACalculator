@@ -151,3 +151,21 @@ class AlloyComposition:
             Composition-weighted average Pauling electronegativity.
         """
         return sum(pct * x for pct, x in zip(self.atomic_percentage.values(), self.pauling_electronegativity_list, strict=True))
+
+    @cached_property
+    def ea_list(self) -> list[float]:
+        """Hume-Rothery e/a for each element in the same order as ``alloy``.
+
+        Returns:
+            Outer s+p electron counts aligned with the alloy element order.
+        """
+        return [self.elements[elm].ea for elm in self.alloy]
+
+    @cached_property
+    def average_ea(self) -> float:
+        """Composition-weighted average Hume-Rothery e/a.
+
+        Returns:
+            Composition-weighted average outer s+p electrons per atom.
+        """
+        return sum(pct * v for pct, v in zip(self.atomic_percentage.values(), self.ea_list, strict=True))

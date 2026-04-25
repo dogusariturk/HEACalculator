@@ -24,6 +24,7 @@ RESULT_HEADERS = (
     "Gamma",
     "Lambda",
     "VEC",
+    "e/a",
     "Mixing Enthalpy (kJ/mol)",
     "Mixing Entropy (J/K.mol)",
     "Formation Enthalpy (meV/atom)",
@@ -118,6 +119,7 @@ class HEACalculator:
             t.gamma,
             t.lambda_,
             t.valence_electron_concentration,
+            t.ea_ratio,
             t.mixing_enthalpy,
             t.mixing_entropy,
             t.formation_enthalpy,
@@ -158,6 +160,7 @@ class HEACalculator:
             f"{'Gamma':25}: {self._fmt(t.gamma)}\n"
             f"{'Lambda':25}: {self._fmt(t.lambda_)}\n"
             f"{'VEC':25}: {self._fmt(t.valence_electron_concentration)}\n"
+            f"{'e/a':25}: {self._fmt(t.ea_ratio)}\n"
             f"{'Mixing Enthalpy':25}: {self._fmt(t.mixing_enthalpy)} kJ/mol\n"
             f"{'Mixing Entropy':25}: {self._fmt(t.mixing_entropy)} J/K.mol\n"
             f"{'Formation Enthalpy':25}: {self._fmt(t.formation_enthalpy)} meV/atom\n"
