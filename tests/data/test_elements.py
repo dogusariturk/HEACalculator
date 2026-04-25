@@ -81,3 +81,65 @@ class TestElementLoader:
     def test_element_str_contains_symbol(self):
         """The __str__ representation of an element includes its chemical symbol."""
         assert "Fe" in str(Element("Fe"))
+
+    def test_element_str_contains_melting_point(self):
+        """The __str__ representation includes the melting point label."""
+        assert "Melting point" in str(Element("Fe"))
+
+    def test_element_str_contains_allen_electronegativity(self):
+        """The __str__ representation includes the Allen electronegativity label."""
+        assert "Allen electronegativity" in str(Element("Fe"))
+
+
+class TestElementFieldValues:
+    """Tests for specific numeric field values and NaN handling."""
+
+    def test_iron_pauling_electronegativity(self, fe_element):
+        """Iron's Pauling electronegativity is 1.83 (CRC Handbook 95th ed.)."""
+        assert fe_element.pauling_electronegativity == pytest.approx(1.83, abs=1e-2)
+
+    def test_iron_atomic_number(self, fe_element):
+        """Iron has atomic number 26."""
+        assert fe_element.atomic_number == 26
+
+    def test_iron_ea(self, fe_element):
+        """Iron has 2 outer s+p electrons (4s^2, no outer p)."""
+        assert fe_element.ea == pytest.approx(2.0)
+
+    def test_iron_atomic_volume_positive(self, fe_element):
+        """Iron's atomic volume is strictly positive."""
+        assert fe_element.atomic_volume > 0
+
+    def test_iron_atomic_radius_cn12_positive(self, fe_element):
+        """Iron's CN12 radius is a finite positive value."""
+        import math
+
+        assert math.isfinite(fe_element.atomic_radius_cn12)
+        assert fe_element.atomic_radius_cn12 > 0
+
+    def test_iron_nvalence(self, fe_element):
+        """Iron has 8 valence electrons (3d^6 + 4s^2)."""
+        assert fe_element.nvalence == 8.0
+
+    def test_noble_gas_ea_is_nan(self):
+        """Noble gas (Ar) has no Hume-Rothery e/a — value is NaN."""
+        import math
+
+        assert math.isnan(Element("Ar").ea)
+
+    def test_noble_gas_pauling_electronegativity_is_nan(self):
+        """Noble gas (He) has no Pauling electronegativity — value is NaN."""
+        import math
+
+        assert math.isnan(Element("He").pauling_electronegativity)
+
+    def test_noble_gas_cn12_radius_is_nan(self):
+        """Noble gas (He) has no metallic CN12 radius — value is NaN."""
+        import math
+
+        assert math.isnan(Element("He").atomic_radius_cn12)
+
+    def test_element_is_immutable(self, fe_element):
+        """Frozen dataclass raises an error when an attribute assignment is attempted."""
+        with pytest.raises((AttributeError, TypeError)):
+            fe_element.symbol = "X"  # type: ignore[misc]
