@@ -108,6 +108,14 @@ $$
 
 Used to predict the stable crystal structure (FCC, BCC, or HCP).[^3]
 
+### Hume-Rothery Electron-to-Atom Ratio (e/a)
+
+$$
+e/a = \sum_{i=1}^{n} x_i\,(e/a)_i
+$$
+
+where $(e/a)_i$ is the number of outer s+p electrons of element $i$; d and f electrons are not counted. This follows the Hume-Rothery convention and is distinct from VEC.[^17]
+
 ### Density
 
 $$
@@ -166,3 +174,4 @@ A microstructure prediction based on VEC is also provided:
 [^14]: de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. *Cohesion in Metals: Transition Metal Alloys.* North-Holland, Amsterdam, 1988.
 [^15]: Niessen, A.K.; Miedema, A.R. *Ber. Bunsenges. Phys. Chem.* **1983**, *87*, 717–723.
 [^16]: Haynes, W.M. *CRC Handbook of Chemistry and Physics*, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
+[^17]: Hume-Rothery, W.; Smallman, R.E.; Haworth, C.W. *The Structure of Metals and Alloys*, 5th ed.; Institute of Metals: London, 1969.
