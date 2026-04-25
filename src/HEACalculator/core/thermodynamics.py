@@ -146,6 +146,18 @@ class HEAThermodynamics:
         return sum(pct * v for pct, v in zip(self._c.atomic_percentage.values(), nvalence_list, strict=True))
 
     @cached_property
+    def ea_ratio(self) -> float:
+        """Hume-Rothery electron-to-atom (e/a) ratio of the alloy.
+
+        Counts only outer s+p electrons per atom; d and f electrons are excluded.
+        Noble gases and elements with undefined configurations contribute NaN.
+
+        Returns:
+            Dimensionless composition-weighted Hume-Rothery e/a ratio.
+        """
+        return sum(pct * v for pct, v in zip(self._c.atomic_percentage.values(), self._c.ea_list, strict=True))
+
+    @cached_property
     def melting_temperature(self) -> int | float:
         """Approximate melting temperature of the alloy in Kelvin.
 
