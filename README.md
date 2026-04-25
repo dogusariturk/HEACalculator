@@ -150,6 +150,7 @@ Equivalent to `search range`.
   - Mixing Entropy
   - Formation Enthalpy [^2]
   - Valence Electron Concentration (VEC)
+  - Hume-Rothery Electron-to-Atom Ratio (e/a) [^17]
 
 - Parameters and predictions
   - Expected Microstructure [^3]
@@ -182,6 +183,7 @@ Equivalent to `search range`.
 [^10]: O.N. Senkov, D.B. Miracle, J. Alloys Compd. 658 (2016) 603–607.
 [^11]: D.J.M. King, S.C. Middleburgh, A.G. McGregor, M.B. Cortie, Acta Mater. 104 (2016) 172–179.
 [^16]: Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
+[^17]: Hume-Rothery, W.; Smallman, R.E.; Haworth, C.W. The Structure of Metals and Alloys, 5th ed.; Institute of Metals: London, 1969.
 
 ---
 
