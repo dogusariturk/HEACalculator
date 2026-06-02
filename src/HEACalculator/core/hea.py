@@ -100,6 +100,48 @@ class HEACalculator:
         """Return the tabular result headers in the same order as ``get_list()``."""
         return list(RESULT_HEADERS)
 
+    def get_dict(self) -> dict:
+        """Return all calculated properties as a dict with raw numeric values.
+
+        NaN values are returned as None for JSON compatibility.
+
+        Returns:
+            Mapping of property names to raw numeric or string values.
+        """
+
+        def _n(v: float) -> float | None:
+            return None if isinstance(v, float) and math.isnan(v) else v
+
+        t = self.thermo
+        p = self.predictor
+        return {
+            "formula": self.formula,
+            "density": _n(t.density),
+            "delta": _n(t.atomic_size_difference),
+            "delta_cn12": _n(t.atomic_size_difference_cn12),
+            "delta_chi_allen": _n(t.allen_electronegativity_difference),
+            "delta_chi_pauling": _n(t.pauling_electronegativity_difference),
+            "omega": _n(t.omega),
+            "gamma": _n(t.gamma),
+            "lambda": _n(t.lambda_),
+            "vec": _n(t.valence_electron_concentration),
+            "ea_ratio": _n(t.ea_ratio),
+            "mixing_enthalpy": _n(t.mixing_enthalpy),
+            "mixing_entropy": _n(t.mixing_entropy),
+            "formation_enthalpy": _n(t.formation_enthalpy),
+            "min_formation_enthalpy": _n(t.min_formation_enthalpy),
+            "melting_temperature": _n(t.melting_temperature),
+            "microstructure": p.microstructure,
+            "model_1": p.model_1,
+            "model_2": p.model_2,
+            "model_3": p.model_3,
+            "model_4": p.model_4,
+            "model_5": p.model_5,
+            "model_6": p.model_6,
+            "model_7": p.model_7(),
+            "model_8": p.model_8,
+        }
+
     def get_list(self) -> list:
         """Return all calculated properties as a formatted list.
 

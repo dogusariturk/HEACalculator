@@ -1,5 +1,6 @@
 """CLI search subcommands for HEACalculator."""
 
+import json
 import os
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -35,6 +36,23 @@ def _worker_str(formula: str) -> tuple[str | None, str | None]:
         return None, f"# Skipping '{formula}': {e}"
 
 
+def _worker_json(formula: str) -> tuple[str | None, str | None]:
+    """Compute a JSON result object for a single alloy formula.
+
+    Intended as a ProcessPoolExecutor worker.
+
+    Args:
+        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
+
+    Returns:
+        (output, None) on success, or (None, error_message) on failure.
+    """
+    try:
+        return json.dumps(HEACalculator(formula).get_dict()), None
+    except Exception as e:
+        return None, f"# Skipping '{formula}': {e}"
+
+
 def _worker_csv(formula: str) -> tuple[str | None, str | None]:
     """Compute a comma-separated result row for a single alloy formula.
 
@@ -53,13 +71,17 @@ def _worker_csv(formula: str) -> tuple[str | None, str | None]:
 
 
 @app.command(name="csv")
-def csv_search(csv_file: str = typer.Argument(...)) -> None:
+def csv_search(
+    csv_file: str = typer.Argument(...),
+    json_output: bool = typer.Option(False, "--json", help="Output results as newline-delimited JSON"),
+) -> None:
     """Calculates HEA parameters from the composition column of the given CSV file."""
     csv_path = Path(csv_file)
     if not csv_path.exists():
         raise typer.BadParameter(f"File not found: {csv_file}")
 
-    print(", ".join(HEACalculator.get_headers()))
+    if not json_output:
+        print(", ".join(HEACalculator.get_headers()))
 
     df = pd.read_csv(csv_path)
     col_map = {c.lower(): c for c in df.columns}
@@ -70,16 +92,27 @@ def csv_search(csv_file: str = typer.Argument(...)) -> None:
             typer.echo("# Skipping empty row", err=True)
             continue
         try:
-            print(", ".join(HEACalculator(alloy).get_list()))
+            calc = HEACalculator(alloy)
+            if json_output:
+                print(json.dumps(calc.get_dict()))
+            else:
+                print(", ".join(calc.get_list()))
         except Exception as e:
             typer.echo(f"# Skipping '{alloy}': {e}", err=True)
 
 
 @app.command(no_args_is_help=True, name="single")
-def single_search(alloy: str = typer.Argument(...)) -> None:
+def single_search(
+    alloy: str = typer.Argument(...),
+    json_output: bool = typer.Option(False, "--json", help="Output results as JSON"),
+) -> None:
     """Calculates HEA parameters of the given alloy."""
     try:
-        print(HEACalculator(alloy))
+        calc = HEACalculator(alloy)
+        if json_output:
+            print(json.dumps(calc.get_dict()))
+        else:
+            print(calc)
     except ElementNotFoundError as e:
         raise typer.BadParameter(f"Unknown element in '{alloy}'. Check the symbol spelling. ({e})") from e
     except (MissingMixingEnthalpyError, MissingFormationEnthalpyError) as e:
@@ -98,8 +131,12 @@ def range_search(
     end: float = typer.Option(100, min=0, max=100, help="Highest composition for each element"),
     step: float = typer.Option(5, min=0, help="Composition screening step for each element"),
     csv: bool = typer.Option(False, "--csv", help="Export results to stdout as a CSV file"),
+    json_output: bool = typer.Option(False, "--json", help="Output results as newline-delimited JSON"),
 ) -> None:
     """Screens given composition range of the given elements."""
+    if csv and json_output:
+        raise typer.BadParameter("--csv and --json are mutually exclusive")
+
     if start > end:
         raise typer.BadParameter("The End option should be higher than the Start option")
 
@@ -120,7 +157,12 @@ def range_search(
 
     workers = min(os.cpu_count() or 1, len(alloys))
     chunksize = max(1, len(alloys) // (workers * 4))
-    worker_fn = _worker_csv if csv else _worker_str
+    if csv:
+        worker_fn = _worker_csv
+    elif json_output:
+        worker_fn = _worker_json
+    else:
+        worker_fn = _worker_str
 
     with ProcessPoolExecutor(max_workers=workers) as executor:
         for output, err in executor.map(worker_fn, alloys, chunksize=chunksize):
