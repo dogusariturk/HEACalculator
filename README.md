@@ -88,13 +88,30 @@ Run `HEACalculator` without arguments to display the help text.
 
 ![HEACalculator](https://user-images.githubusercontent.com/46679086/205514909-ab4930cd-2f5b-4d9c-9598-750c661d44db.png)
 
+---
+
+#### Single Alloy Calculations
+
+![HEACalculator_SearchSingle](https://user-images.githubusercontent.com/46679086/205514947-ca25fb25-c726-4de9-a79b-1cccf354b4e3.png)
+
 `HEACalculator search single <ALLOY>` calculates all parameters and predictions for the given alloy and prints results to stdout.
 
 ```sh
 HEACalculator search single FeCoCrNi
 ```
 
-![HEACalculator_SearchSingle](https://user-images.githubusercontent.com/46679086/205514947-ca25fb25-c726-4de9-a79b-1cccf354b4e3.png)
+Append `--json` to get a machine-readable JSON output with raw numeric values instead of formatted text:
+
+```sh
+HEACalculator search single FeCoCrNi --json
+```
+
+---
+
+#### Range Screening
+
+![HEACalculator_SearchRange](https://user-images.githubusercontent.com/46679086/205514952-95dcb909-2147-4fcf-91df-4e0d1a1321dc.png)
+
 
 `HEACalculator search range` calculates all parameters and predictions for a composition range over a set of elements. Compositions are evaluated in parallel across all available CPU cores, so large screens complete significantly faster.
 
@@ -102,12 +119,30 @@ HEACalculator search single FeCoCrNi
 HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5
 ```
 
-![HEACalculator_SearchRange](https://user-images.githubusercontent.com/46679086/205514952-95dcb909-2147-4fcf-91df-4e0d1a1321dc.png)
-
-Use `HEACalculator search csv <FILE>` to run batch calculations from a CSV file, or append `--csv` to the `range` command to redirect output to a file:
+Append `--csv` / `--json` to redirect output to a file:
 
 ```sh
 HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5 --csv > results.csv
+HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5 --json > results.ndjson
+```
+
+---
+
+#### CSV Batch Calculations
+
+`HEACalculator search csv <FILE>` calculates all parameters and predictions for every alloy listed in a CSV file.
+
+> [!IMPORTANT]
+> The input CSV file must contain a column named **`composition`**. Each row in that column should be a valid alloy formula (e.g. `FeCoCrNi`). Any other columns in the file are ignored.
+
+```sh
+HEACalculator search csv alloys.csv
+```
+
+Append `--json` to get machine-readable JSON output instead of formatted text:
+
+```sh
+HEACalculator search csv alloys.csv --json
 ```
 
 ### Graphical User Interface
@@ -118,7 +153,9 @@ HEACalculator gui
 
 The GUI has two pages, switched via the navigation buttons on the left:
 
-**Parameters page (single alloy)**
+---
+
+#### Parameters page (single alloy)
 
 <img width="2342" height="1292" alt="HEACalculator_GUI-Parameters" src="https://github.com/user-attachments/assets/d13744ee-b60f-4922-a758-53b89876a7f5" />
 
@@ -127,7 +164,9 @@ The GUI has two pages, switched via the navigation buttons on the left:
 3. Click **Calculate**
 4. Click **Save** to export results as CSV
 
-**Batch Calculations page (range screening)**
+---
+
+#### Batch Calculations page (range screening)
 
 <img width="2342" height="1292" alt="HEACalculator_GUI-RangeSearch" src="https://github.com/user-attachments/assets/f829e67b-c069-4857-9b13-56068f63f816" />
 
