@@ -5,6 +5,7 @@ Uses ``typer.testing.CliRunner`` to invoke the ``single``, ``range``, and
 required.
 """
 
+import json
 import tempfile
 from pathlib import Path
 from unittest import TestCase
@@ -50,6 +51,45 @@ class TestSingleSearch(TestCase):
         result = runner.invoke(app, ["single", "FeNi"])
         assert result.exit_code == 0
         assert "FeNi" in result.output
+
+
+class TestSingleSearchJson(TestCase):
+    """Tests for the ``single`` subcommand ``--json`` flag."""
+
+    def test_json_flag_exits_zero(self):
+        """--json flag returns exit code 0 for a valid alloy."""
+        result = runner.invoke(app, ["single", "FeCoCrNi", "--json"])
+        assert result.exit_code == 0
+
+    def test_json_output_is_valid_json(self):
+        """--json output is a valid JSON object."""
+        result = runner.invoke(app, ["single", "FeCoCrNi", "--json"])
+        data = json.loads(result.output)
+        assert isinstance(data, dict)
+
+    def test_json_output_formula_key(self):
+        """JSON output contains 'formula' key with the input alloy."""
+        result = runner.invoke(app, ["single", "FeCoCrNi", "--json"])
+        data = json.loads(result.output)
+        assert data["formula"] == "FeCoCrNi"
+
+    def test_json_output_density_is_float(self):
+        """JSON output 'density' is a raw float, not a formatted string."""
+        result = runner.invoke(app, ["single", "FeCoCrNi", "--json"])
+        data = json.loads(result.output)
+        assert isinstance(data["density"], float)
+
+    def test_json_output_no_human_readable_labels(self):
+        """--json output does not include human-readable property labels."""
+        result = runner.invoke(app, ["single", "FeCoCrNi", "--json"])
+        assert "Density" not in result.output
+        assert "Mixing Enthalpy" not in result.output
+
+    def test_json_output_nan_becomes_null(self):
+        """NaN values (missing pair data) appear as JSON null in --json output."""
+        result = runner.invoke(app, ["single", "Fe50Ga50", "--json"])
+        data = json.loads(result.output)
+        assert data["formation_enthalpy"] is None
 
 
 class TestRangeSearch(TestCase):
@@ -170,6 +210,53 @@ class TestRangeSearch(TestCase):
         assert "Fe100.0" not in result.output
         assert "Ni100.0" not in result.output
         assert "Fe50.0Ni50.0" in result.output
+
+
+class TestRangeSearchJson(TestCase):
+    """Tests for the ``range`` subcommand ``--json`` flag."""
+
+    def test_json_flag_exits_zero(self):
+        """--json flag returns exit code 0 for a valid range."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "0", "--end", "100", "--step", "50", "--json"],
+        )
+        assert result.exit_code == 0
+
+    def test_json_each_line_is_valid_json(self):
+        """Each output line from --json is a valid JSON object."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "50", "--end", "50", "--step", "50", "--json"],
+        )
+        for line in result.output.strip().splitlines():
+            obj = json.loads(line)
+            assert "formula" in obj
+
+    def test_json_output_has_no_csv_header(self):
+        """--json output does not include the CSV header row."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "50", "--end", "50", "--step", "50", "--json"],
+        )
+        assert "Formula" not in result.output
+
+    def test_json_and_csv_flags_are_mutually_exclusive(self):
+        """Passing both --json and --csv causes a non-zero exit code."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "0", "--end", "100", "--step", "50", "--json", "--csv"],
+        )
+        assert result.exit_code != 0
+
+    def test_json_output_density_is_float(self):
+        """JSON objects from --json have a raw float 'density' field."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "50", "--end", "50", "--step", "50", "--json"],
+        )
+        obj = json.loads(result.output.strip())
+        assert isinstance(obj["density"], float)
 
 
 class TestCsvSearch(TestCase):
@@ -294,6 +381,69 @@ class TestCsvSearch(TestCase):
         try:
             result = runner.invoke(app, ["csv", tmp_path])
             assert "Formula" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+
+class TestCsvSearchJson(TestCase):
+    """Tests for the ``csv`` subcommand ``--json`` flag."""
+
+    def test_json_flag_exits_zero(self):
+        """--json flag returns exit code 0 for a valid CSV file."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--json"])
+            assert result.exit_code == 0
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_json_each_line_is_valid_json(self):
+        """Each output line from --json is a valid JSON object."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\nFeNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--json"])
+            for line in result.output.strip().splitlines():
+                obj = json.loads(line)
+                assert "formula" in obj
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_json_output_has_no_csv_header(self):
+        """--json output does not include the CSV header row."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--json"])
+            assert "Formula" not in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_json_output_density_is_float(self):
+        """JSON objects from --json have a raw float 'density' field."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--json"])
+            obj = json.loads(result.output.strip())
+            assert isinstance(obj["density"], float)
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_json_output_formula_matches_input(self):
+        """Each JSON object's 'formula' matches the input composition."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--json"])
+            obj = json.loads(result.output.strip())
+            assert obj["formula"] == "FeCoCrNi"
         finally:
             Path(tmp_path).unlink()
 

@@ -393,6 +393,124 @@ class TestGetListAdditionalValues:
             assert lst[idx] == "N/A" or float(lst[idx]) is not None
 
 
+class TestGetDict:
+    """Tests for get_dict() - raw-value dict output for programmatic/agent use."""
+
+    def test_returns_dict(self, calculator):
+        """get_dict() returns a dict."""
+        assert isinstance(calculator.get_dict(), dict)
+
+    def test_keys(self, calculator):
+        """get_dict() has exactly the expected set of keys."""
+        assert calculator.get_dict().keys() == {
+            "formula",
+            "density",
+            "delta",
+            "delta_cn12",
+            "delta_chi_allen",
+            "delta_chi_pauling",
+            "omega",
+            "gamma",
+            "lambda",
+            "vec",
+            "ea_ratio",
+            "mixing_enthalpy",
+            "mixing_entropy",
+            "formation_enthalpy",
+            "min_formation_enthalpy",
+            "melting_temperature",
+            "microstructure",
+            "model_1",
+            "model_2",
+            "model_3",
+            "model_4",
+            "model_5",
+            "model_6",
+            "model_7",
+            "model_8",
+        }
+
+    def test_formula_value(self, calculator):
+        """'formula' holds the original input string unchanged."""
+        assert calculator.get_dict()["formula"] == "FeCoCrNi"
+
+    def test_density_is_float(self, calculator):
+        """'density' is a raw float, not a formatted string."""
+        d = calculator.get_dict()
+        assert isinstance(d["density"], float)
+        assert d["density"] == pytest.approx(8.16, abs=1e-2)
+
+    def test_mixing_enthalpy_is_float(self, calculator):
+        """'mixing_enthalpy' is a raw float matching the thermodynamics property."""
+        d = calculator.get_dict()
+        assert isinstance(d["mixing_enthalpy"], float)
+        assert d["mixing_enthalpy"] == pytest.approx(-3.75)
+
+    def test_vec_is_float(self, calculator):
+        """'vec' is a raw float equal to 8.25 for equimolar FeCoCrNi."""
+        d = calculator.get_dict()
+        assert isinstance(d["vec"], float)
+        assert d["vec"] == pytest.approx(8.25)
+
+    def test_ea_ratio_is_float(self, calculator):
+        """'ea_ratio' is a raw float equal to 1.75 for FeCoCrNi."""
+        d = calculator.get_dict()
+        assert isinstance(d["ea_ratio"], float)
+        assert d["ea_ratio"] == pytest.approx(1.75)
+
+    def test_melting_temperature_value(self, calculator):
+        """'melting_temperature' matches the thermodynamics property value."""
+        d = calculator.get_dict()
+        assert d["melting_temperature"] == 1872
+
+    def test_microstructure_is_string(self, calculator):
+        """'microstructure' is a string prediction, not a numeric value."""
+        d = calculator.get_dict()
+        assert isinstance(d["microstructure"], str)
+        assert d["microstructure"] == "FCC"
+
+    def test_model_predictions_are_valid_strings(self, calculator):
+        """All model_N keys hold recognized prediction strings."""
+        d = calculator.get_dict()
+        valid = {"Solid Solution", "Multiple Phases", "N/A"}
+        for key in ["model_1", "model_2", "model_3", "model_4", "model_5", "model_6", "model_7", "model_8"]:
+            assert d[key] in valid, f"{key}={d[key]!r} is not a recognized prediction"
+
+    def test_nan_formation_enthalpy_becomes_none(self):
+        """NaN formation enthalpy (missing pair data) is represented as None."""
+        d = HEACalculator("Fe50Ga50").get_dict()
+        assert d["formation_enthalpy"] is None
+
+    def test_nan_min_formation_enthalpy_becomes_none(self):
+        """NaN min formation enthalpy (missing pair data) is represented as None."""
+        d = HEACalculator("Fe50Ga50").get_dict()
+        assert d["min_formation_enthalpy"] is None
+
+    def test_none_values_are_json_serializable(self):
+        """get_dict() for an alloy with missing data round-trips through json."""
+        import json
+
+        d = HEACalculator("Fe50Ga50").get_dict()
+        round_tripped = json.loads(json.dumps(d))
+        assert round_tripped["formula"] == "Fe50Ga50"
+        assert round_tripped["formation_enthalpy"] is None
+
+    def test_full_result_is_json_serializable(self, calculator):
+        """get_dict() for FeCoCrNi round-trips through json with correct values."""
+        import json
+
+        d = calculator.get_dict()
+        round_tripped = json.loads(json.dumps(d))
+        assert round_tripped["formula"] == "FeCoCrNi"
+        assert round_tripped["density"] == pytest.approx(8.16, abs=1e-2)
+
+    def test_no_formatted_strings_for_numeric_fields(self, calculator):
+        """Numeric fields are raw numbers, not '8.16'-style formatted strings."""
+        d = calculator.get_dict()
+        for key in ["density", "delta", "omega", "gamma", "vec", "mixing_enthalpy"]:
+            assert not isinstance(d[key], str), f"{key} should be numeric, got string"
+
+
 class TestResultHeadersConstant:
     """Tests for the RESULT_HEADERS module-level constant."""
 
