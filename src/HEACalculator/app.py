@@ -363,11 +363,10 @@ class BatchCalculationsPage(QtWidgets.QWidget):
         path, ok = QtWidgets.QFileDialog.getSaveFileName(self, "Save CSV", os.getenv("HOME"), "CSV(*.csv)")
         if ok and path:
             columns = range(self.ui.resultsTreeWidget.columnCount())
-            header = [self.ui.resultsTreeWidget.headerItem().text(c) for c in columns]
             try:
                 with open(path, "w", newline="") as csvfile:
                     writer = csv.writer(csvfile)
-                    writer.writerow(header)
+                    writer.writerow(HEACalculator.get_headers())
                     for row in range(self.ui.resultsTreeWidget.topLevelItemCount()):
                         writer.writerow(self.ui.resultsTreeWidget.topLevelItem(row).text(c) for c in columns)
             except OSError as error:
@@ -585,11 +584,10 @@ class ParametersPage(QtWidgets.QWidget):
         path, ok = QtWidgets.QFileDialog.getSaveFileName(self, "Save CSV", os.getenv("HOME"), "CSV(*.csv)")
         if ok and path:
             columns = range(self.parametersPage.resultsTreeWidget.columnCount())
-            header = [self.parametersPage.resultsTreeWidget.headerItem().text(column) for column in columns]
             try:
                 with open(path, "w", newline="") as csvfile:
                     writer = csv.writer(csvfile)
-                    writer.writerow(header)
+                    writer.writerow(HEACalculator.get_headers())
                     for row in range(self.parametersPage.resultsTreeWidget.topLevelItemCount()):
                         writer.writerow(
                             self.parametersPage.resultsTreeWidget.topLevelItem(row).text(column) for column in columns
