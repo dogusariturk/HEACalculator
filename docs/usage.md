@@ -29,7 +29,7 @@ uv tool install "HEACalculator[gui]"
 HEACalculator gui
 ```
 
-Or run the GUI without installing permanently:
+Or run the GUI without installing it permanently:
 
 ```bash
 uvx --from "HEACalculator[gui]" HEACalculator gui
@@ -41,23 +41,31 @@ Use `uv add` instead when `HEACalculator` should live inside a project's environ
 
 ## Command-Line Interface
 
+![HEACalculator CLI help](https://user-images.githubusercontent.com/46679086/205514909-ab4930cd-2f5b-4d9c-9598-750c661d44db.png)
+
 Running `HEACalculator` without arguments displays the help screen:
 
 ```bash
 HEACalculator --help
 ```
 
-![HEACalculator CLI help](https://user-images.githubusercontent.com/46679086/205514909-ab4930cd-2f5b-4d9c-9598-750c661d44db.png)
-
 ---
 
 ### `search single` - Single Alloy
 
+![search single output](https://user-images.githubusercontent.com/46679086/205514947-ca25fb25-c726-4de9-a79b-1cccf354b4e3.png)
+
 Calculate all thermodynamic parameters and solid-solution predictions for a single alloy formula:
 
 ```bash
-HEACalculator search single <ALLOY>
+HEACalculator search single <ALLOY> [OPTIONS]
 ```
+
+**Options**
+
+| Option   | Default | Description                                                    |
+|----------|---------|----------------------------------------------------------------|
+| `--json` | `False` | Output results as a JSON output instead of human-readable text |
 
 **Examples**
 
@@ -69,11 +77,23 @@ HEACalculator search single "(FeCo)2CrNi"
 
 The formula parser handles equimolar notation (`FeCoCrNi`), explicit atom counts (`Fe25Co25Cr25Ni25`), and nested bracket notation (`(FeCo)2CrNi`).
 
-![search single output](https://user-images.githubusercontent.com/46679086/205514947-ca25fb25-c726-4de9-a79b-1cccf354b4e3.png)
+Use `--json` to get machine-readable output with raw numeric values (useful for scripting or agent pipelines):
+
+```bash
+HEACalculator search single FeCoCrNi --json
+```
+
+```json
+{"formula": "FeCoCrNi", "density": 8.160249511400652, "delta": 1.1761590026042914, "omega": 5.753925287423301, "vec": 8.25, "mixing_enthalpy": -3.75, ...}
+```
+
+NaN values (from missing database entries) appear as JSON `null`.
 
 ---
 
 ### `search range` - Composition Range Screening
+
+![search range output](https://user-images.githubusercontent.com/46679086/205514952-95dcb909-2147-4fcf-91df-4e0d1a1321dc.png)
 
 Screen all composition combinations within a given range for a set of elements. Each composition is independent, so calculations are parallelized across all available CPU cores automatically.
 
@@ -83,13 +103,16 @@ HEACalculator search range --elements "El1 El2 ..." [OPTIONS]
 
 **Options**
 
-| Option       | Default      | Description                             |
-|--------------|--------------|-----------------------------------------|
-| `--elements` | *(required)* | Space-separated list of element symbols |
-| `--start`    | `0`          | Lowest at% for each element             |
-| `--end`      | `100`        | Highest at% for each element            |
-| `--step`     | `5`          | Composition step size (at%)             |
-| `--csv`      | `False`      | Export results as CSV to stdout         |
+| Option       | Default      | Description                              |
+|--------------|--------------|------------------------------------------|
+| `--elements` | *(required)* | Space-separated list of element symbols  |
+| `--start`    | `0`          | Lowest at% for each element              |
+| `--end`      | `100`        | Highest at% for each element             |
+| `--step`     | `5`          | Composition step size (at%)              |
+| `--csv`      | `False`      | Export results as CSV to stdout          |
+| `--json`     | `False`      | Output results as newline-delimited JSON |
+
+`--csv` and `--json` are mutually exclusive.
 
 Pure single-element compositions (one element at 100 at%, the rest at 0 at%) are excluded from `search range` results, even when both `--start 0` and `--end 100` are used with a step that lands on those endpoints.
 
@@ -101,9 +124,10 @@ HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5
 
 # Export to CSV file
 HEACalculator search range --elements "Fe Co Cr Ni" --step 10 --csv > results.csv
-```
 
-![search range output](https://user-images.githubusercontent.com/46679086/205514952-95dcb909-2147-4fcf-91df-4e0d1a1321dc.png)
+# Export as newline-delimited JSON for agent/script consumption
+HEACalculator search range --elements "Fe Co Cr Ni" --step 10 --json > results.ndjson
+```
 
 ---
 
@@ -112,8 +136,14 @@ HEACalculator search range --elements "Fe Co Cr Ni" --step 10 --csv > results.cs
 Calculate HEA parameters for every composition listed in a CSV file:
 
 ```bash
-HEACalculator search csv <FILE>
+HEACalculator search csv <FILE> [OPTIONS]
 ```
+
+**Options**
+
+| Option   | Default | Description                                |
+|----------|---------|--------------------------------------------|
+| `--json` | `False` | Output results as JSON instead of CSV rows |
 
 **CSV format requirements**
 
@@ -128,12 +158,16 @@ AlCoCrFeNi,quinary
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
 
-**Output columns:** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Delta Chi (Pauling) (%), Omega, Gamma, Lambda, VEC, e/a, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
+**Output columns (default CSV):** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Delta Chi (Pauling) (%), Omega, Gamma, Lambda, VEC, e/a, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
 
-**Example**
+**Examples**
 
 ```bash
+# Default CSV output
 HEACalculator search csv alloys.csv
+
+# JSON output (one object per line)
+HEACalculator search csv alloys.csv --json
 ```
 
 ---
@@ -210,7 +244,23 @@ print(hea.predictor.model_8)
 
 # Human-readable summary
 print(hea)
+
+# Machine-readable dict (raw floats; NaN -> None)
+d = hea.get_dict()
+print(d["density"])           # 8.160249...
+print(d["mixing_enthalpy"])   # -3.75
+print(d["model_1"])           # "Solid Solution"
 ```
+
+`get_dict()` returns the same properties as `get_list()` but as a named dictionary with raw numeric values rather than formatted strings, making it suitable for JSON serialization or programmatic use:
+
+```python
+import json
+
+result_json = json.dumps(hea.get_dict())
+```
+
+NaN values (from missing pair database entries) are returned as `None` so the dict serializes to valid JSON without extra handling.
 
 ### Omega at a specific temperature
 
