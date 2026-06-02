@@ -25,7 +25,7 @@ dependencies = [
 gui = ["PyQt6>=6.0.0"]
 docs = [
     "mkdocs-material==9.7.4",
-    "mkdocstrings[python]==1.0.3",
+    "mkdocstrings[python]==1.0.4",
 ]
 
 [dependency-groups]
