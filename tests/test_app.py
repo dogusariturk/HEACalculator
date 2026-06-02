@@ -760,6 +760,29 @@ class TestHandleSaveButton(TestCase):
             ParametersPage.handleSaveButton(p)
         assert any(sev == "info" and "out.csv" in msg for msg, sev in p._notifications)
 
+    def test_csv_header_row_matches_get_headers(self):
+        """The first row written to the CSV file matches HEACalculator.get_headers()."""
+        import csv
+        import io
+        from contextlib import contextmanager
+
+        p = self._make_page(1)
+        buffer = io.StringIO()
+
+        @contextmanager
+        def fake_open(path, mode="r", **kwargs):
+            yield buffer
+
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("/tmp/out.csv", True)),
+            patch("builtins.open", side_effect=fake_open),
+        ):
+            ParametersPage.handleSaveButton(p)
+
+        buffer.seek(0)
+        rows = list(csv.reader(buffer))
+        assert rows[0] == HEACalculator.get_headers()
+
     def test_os_error_during_write_emits_error_notification(self):
         """An OSError while writing emits an error notification with the OS message."""
         p = self._make_page(1)
@@ -1291,6 +1314,29 @@ class TestBatchHandleSave(TestCase):
         ):
             BatchCalculationsPage._handle_save(p)
         assert any(sev == "info" and "batch.csv" in msg for msg, sev in p._notifications)
+
+    def test_csv_header_row_matches_get_headers(self):
+        """The first row written to the CSV file matches HEACalculator.get_headers()."""
+        import csv
+        import io
+        from contextlib import contextmanager
+
+        p = self._make_page(1)
+        buffer = io.StringIO()
+
+        @contextmanager
+        def fake_open(path, mode="r", **kwargs):
+            yield buffer
+
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("/tmp/batch.csv", True)),
+            patch("builtins.open", side_effect=fake_open),
+        ):
+            BatchCalculationsPage._handle_save(p)
+
+        buffer.seek(0)
+        rows = list(csv.reader(buffer))
+        assert rows[0] == HEACalculator.get_headers()
 
     def test_os_error_emits_error_notification(self):
         """An OSError while writing emits an error notification with the OS message."""
