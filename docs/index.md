@@ -35,12 +35,14 @@ It exposes both a **command-line interface** (CLI) powered by [Typer](https://ty
 - Formation Enthalpy, $\Delta H_f$ (meV/atom)
 - Minimum Formation Enthalpy, min. $\Delta H_f$ (meV/atom)
 - Valence Electron Concentration (VEC)
+- Hume-Rothery Electron-to-Atom Ratio (e/a)
 
 **Structural parameters**
 
 - Atomic Size Difference, $\delta$ (%)
 - Atomic Size Difference (CN12), $\delta_{\text{CN12}}$ (%)
 - Electronegativity Difference, $\Delta\chi_{\text{Allen}}$ (%)
+- Electronegativity Difference, $\Delta\chi_{\text{Pauling}}$ (%)
 - Omega, $\Omega$
 - Gamma, $\gamma$
 - Lambda, $\lambda$
