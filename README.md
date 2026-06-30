@@ -12,6 +12,7 @@
 [![Lint](https://github.com/dogusariturk/HEACalculator/actions/workflows/lint.yml/badge.svg)](https://github.com/dogusariturk/HEACalculator/actions/workflows/lint.yml)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3590318.svg)](https://doi.org/10.5281/zenodo.3590318)
+[![DOI](https://img.shields.io/badge/DOI-10.48550%2FarXiv.2606.19661-blue.svg)](https://doi.org/10.48550/arXiv.2606.19661)
 
 `HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics to predict the formation of solid solutions in High Entropy Alloys (HEAs). It provides both a CLI (Typer) and GUI (PyQt6) interface.
 
