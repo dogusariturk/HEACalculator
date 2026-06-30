@@ -155,23 +155,3 @@ uv run pre-commit install
 ```
 
 Hooks run `uv-lock` (lockfile sync), `ruff` (linting and formatting), `ty` (type checking), and several file-hygiene checks (trailing whitespace, end-of-file, YAML/TOML validation, etc.).
-
----
-
-## Citation
-
-If you use `HEACalculator` in your research, please cite:
-
-> Sarıtürk, D. (2019). HEACalculator. Zenodo. https://doi.org/10.5281/zenodo.3590318
-
-???+ quote "BibTeX"
-    ```bibtex
-    @software{sariturk_2019_3590318,
-      author    = {Sarıtürk, Doğuhan},
-      title     = {HEACalculator},
-      year      = 2019,
-      publisher = {Zenodo},
-      doi       = {10.5281/zenodo.3590318},
-      url       = {https://doi.org/10.5281/zenodo.3590318},
-    }
-    ```

@@ -234,13 +234,24 @@ This project is licensed under the GNU GPLv3 License. See the [LICENSE](https://
 
 ## Citation
 
-We are currently preparing a preprint for publication. If you use `HEACalculator` in your research, please cite the following:
+If you use `HEACalculator` in your research, please cite the following:
+
+> Sarıtürk, D., Kalay, Y. E., & Arróyave, R. (2026). HEACalculator: An Open-Source Python Tool for Thermodynamic Property Calculation and Solid Solution Prediction in High-Entropy Alloys. arXiv. https://doi.org/10.48550/arXiv.2606.19661
 
 > Sarıtürk, D. (2019). HEACalculator. Zenodo. https://doi.org/10.5281/zenodo.3590318
 
 BibTeX:
 
 ```bibtex
+@misc{sariturk_2026_arxiv,
+  author    = {Sarıtürk, Doğuhan and Kalay, Yunus Eren and Arróyave, Raymundo},
+  title     = {{HEACalculator}: An Open-Source {Python} Tool for Thermodynamic Property Calculation and Solid Solution Prediction in High-Entropy Alloys},
+  year      = 2026,
+  publisher = {arXiv},
+  doi       = {10.48550/arXiv.2606.19661},
+  url       = {https://doi.org/10.48550/arXiv.2606.19661},
+}
+
 @software{sariturk_2019_3590318,
   author    = {Sarıtürk, Doğuhan},
   title     = {HEACalculator},
