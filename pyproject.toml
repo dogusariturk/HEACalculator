@@ -1,6 +1,6 @@
 [project]
 name = "HEACalculator"
-version = "2.0.0"
+version = "2.0.1"
 description = "A Python tool for calculating phenomenological parameters to predict solid solution formation in High Entropy Alloys (HEAs)"
 readme = "README.md"
 license = { text = "GPL-3.0-or-later" }
