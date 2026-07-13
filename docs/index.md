@@ -18,8 +18,7 @@
 
 <p>
   <a href="https://github.com/dogusariturk/HEACalculator/issues/new?labels=bug">Report a Bug</a> |
-  <a href="https://github.com/dogusariturk/HEACalculator/issues/new?labels=enhancement">Request a Feature</a> |
-  <a href="https://dogusariturk.github.io/HEACalculator">Documentation</a>
+  <a href="https://github.com/dogusariturk/HEACalculator/issues/new?labels=enhancement">Request a Feature</a>
 </p>
 
 </div>
