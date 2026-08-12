@@ -106,6 +106,7 @@ ignore = [
     "PLC0415", # `import` should be at the top-level of a file
     "PLR0912", # too-many-branches in complex functions
     "PLR0913", # too-many-arguments in function definition
+    "PLR0917", # Too many positional arguments
     "PLR2004", # magic value used in comparison
 ]
 pydocstyle.convention = "google"
