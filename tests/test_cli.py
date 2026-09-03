@@ -413,6 +413,66 @@ class TestCsvSearch(TestCase):
         finally:
             Path(tmp_path).unlink()
 
+    def test_csv_column_override_selects_named_column(self):
+        """The --column option reads compositions from a non-default column name."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("alloy_name\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--column", "alloy_name"])
+            assert result.exit_code == 0
+            assert "FeCoCrNi" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_csv_column_override_is_case_insensitive(self):
+        """The --column option matches the target column name case-insensitively."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("Alloy Name\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--column", "alloy name"])
+            assert result.exit_code == 0
+            assert "FeCoCrNi" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_csv_column_override_short_flag(self):
+        """The -c short flag is accepted as an alias for --column."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("alloy_name\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "-c", "alloy_name"])
+            assert result.exit_code == 0
+            assert "FeCoCrNi" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_csv_column_override_missing_column_exits_nonzero(self):
+        """Passing --column with a name absent from the CSV causes a non-zero exit code."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--column", "alloy_name"])
+            assert result.exit_code != 0
+            assert "alloy_name" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
+    def test_csv_column_override_ignores_default_composition_column(self):
+        """When --column is given, a 'composition' column present in the file is not used."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("composition,alloy_name\nXxYyZz,FeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path, "--column", "alloy_name"])
+            assert result.exit_code == 0
+            assert "FeCoCrNi" in result.output
+        finally:
+            Path(tmp_path).unlink()
+
 
 class TestCsvSearchJson(TestCase):
     """Tests for the ``csv`` subcommand ``--json`` flag."""
