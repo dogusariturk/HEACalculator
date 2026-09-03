@@ -229,7 +229,7 @@ class TestRangeSearchJson(TestCase):
             app,
             ["range", "--elements", "FeNi", "--start", "50", "--end", "50", "--step", "50", "--json"],
         )
-        for line in result.output.strip().splitlines():
+        for line in result.stdout.strip().splitlines():
             obj = json.loads(line)
             assert "formula" in obj
 
@@ -255,8 +255,37 @@ class TestRangeSearchJson(TestCase):
             app,
             ["range", "--elements", "FeNi", "--start", "50", "--end", "50", "--step", "50", "--json"],
         )
-        obj = json.loads(result.output.strip())
+        obj = json.loads(result.stdout.strip())
         assert isinstance(obj["density"], float)
+
+
+class TestRangeSearchProgress(TestCase):
+    """Tests for the ``range`` subcommand's progress indicator."""
+
+    def test_progress_label_written_to_stderr(self):
+        """The progress indicator label is written to stderr, not stdout."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "0", "--end", "100", "--step", "50"],
+        )
+        assert "Screening compositions" in result.stderr
+
+    def test_progress_label_does_not_pollute_stdout(self):
+        """The progress indicator never appears in the plain stdout stream."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "0", "--end", "100", "--step", "50", "--csv"],
+        )
+        assert "Screening compositions" not in result.stdout
+        assert result.stdout.splitlines()[0] == ", ".join(HEACalculator.get_headers())
+
+    def test_no_progress_indicator_when_no_compositions_found(self):
+        """No progress indicator is shown when the range produces no compositions."""
+        result = runner.invoke(
+            app,
+            ["range", "--elements", "FeNi", "--start", "10", "--end", "20", "--step", "50"],
+        )
+        assert "Screening compositions" not in result.stderr
 
 
 class TestCsvSearch(TestCase):
