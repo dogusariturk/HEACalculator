@@ -74,6 +74,7 @@ def _worker_csv(formula: str) -> tuple[str | None, str | None]:
 @app.command(name="csv")
 def csv_search(
     csv_file: str = typer.Argument(...),
+    column: str = typer.Option("composition", "--column", "-c", help="Name of the column containing alloy compositions"),
     json_output: bool = typer.Option(False, "--json", help="Output results as newline-delimited JSON"),
 ) -> None:
     """Calculates HEA parameters from the composition column of the given CSV file."""
@@ -86,9 +87,9 @@ def csv_search(
 
     df = pd.read_csv(csv_path)
     col_map = {c.lower(): c for c in df.columns}
-    if "composition" not in col_map:
-        raise typer.BadParameter(f"No 'composition' column found in {csv_file}. Available columns: {', '.join(df.columns)}")
-    for alloy in df[col_map["composition"]]:
+    if column.lower() not in col_map:
+        raise typer.BadParameter(f"No '{column}' column found in {csv_file}. Available columns: {', '.join(df.columns)}")
+    for alloy in df[col_map[column.lower()]]:
         if pd.isna(alloy):
             typer.echo("# Skipping empty row", err=True)
             continue
