@@ -134,10 +134,16 @@ HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5 --j
 `HEACalculator search csv <FILE>` calculates all parameters and predictions for every alloy listed in a CSV file.
 
 > [!IMPORTANT]
-> The input CSV file must contain a column named **`composition`**. Each row in that column should be a valid alloy formula (e.g. `FeCoCrNi`). Any other columns in the file are ignored.
+> By default, the input CSV file must contain a column named **`composition`**. Each row in that column should be a valid alloy formula (e.g. `FeCoCrNi`). Any other columns in the file are ignored.
 
 ```sh
 HEACalculator search csv alloys.csv
+```
+
+If your CSV uses a different column name, override it with `--column`/`-c`:
+
+```sh
+HEACalculator search csv alloys.csv --column Alloy
 ```
 
 Append `--json` to get machine-readable JSON output instead of formatted text:
