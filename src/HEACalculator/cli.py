@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -165,8 +166,10 @@ def range_search(
         worker_fn = _worker_str
 
     with ProcessPoolExecutor(max_workers=workers) as executor:
-        for output, err in executor.map(worker_fn, alloys, chunksize=chunksize):
-            if err:
-                typer.echo(err, err=True)
-            else:
-                print(output)
+        results = executor.map(worker_fn, alloys, chunksize=chunksize)
+        with typer.progressbar(results, length=len(alloys), label="Screening compositions", file=sys.stderr) as progress:
+            for output, err in progress:
+                if err:
+                    typer.echo(err, err=True)
+                else:
+                    print(output)
