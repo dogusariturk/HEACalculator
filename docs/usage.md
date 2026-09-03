@@ -141,19 +141,31 @@ HEACalculator search csv <FILE> [OPTIONS]
 
 **Options**
 
-| Option   | Default | Description                                |
-|----------|---------|--------------------------------------------|
-| `--json` | `False` | Output results as JSON instead of CSV rows |
+| Option             | Default       | Description                                        |
+|--------------------|---------------|-----------------------------------------------------|
+| `--column`, `-c`   | `composition` | Name of the column containing alloy compositions   |
+| `--json`           | `False`       | Output results as JSON instead of CSV rows          |
 
 **CSV format requirements**
 
-The input file must contain a column named `composition` (case-insensitive):
+By default, the input file must contain a column named `composition` (case-insensitive):
 
 ```
 composition,note
 FeCoCrNi,equimolar quaternary
 Fe25Co25Cr25Ni25,same as above explicit
 AlCoCrFeNi,quinary
+```
+
+If your CSV uses a different column name for compositions, point to it with `--column`:
+
+```
+alloy,note
+FeCoCrNi,equimolar quaternary
+```
+
+```bash
+HEACalculator search csv alloys.csv --column alloy
 ```
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
