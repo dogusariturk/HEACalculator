@@ -105,15 +105,19 @@ The CSV file does not have a column named `composition` (case-insensitive match)
 
 **Fix**
 
-Rename the column in your CSV to `composition`:
+Either rename the column in your CSV to `composition`, or point to the existing column with `--column`:
 
 ```csv
-composition,description
+Alloy,description
 FeCoCrNi,quaternary equimolar
 AlCoCrFeNi,quinary
 ```
 
-Rows with empty or unparseable values in the `composition` column are skipped automatically.
+```sh
+HEACalculator search csv alloys.csv --column Alloy
+```
+
+Rows with empty or unparseable values in the composition column are skipped automatically.
 
 ---
 
