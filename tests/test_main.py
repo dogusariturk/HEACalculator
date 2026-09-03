@@ -31,6 +31,29 @@ class TestRootApp(TestCase):
         assert "FeCoCrNi" in result.output
 
 
+class TestVersionOption(TestCase):
+    """Tests for the ``--version``/``-V`` option."""
+
+    def test_version_flag_exits_zero(self):
+        """--version returns exit code 0."""
+        result = runner.invoke(main_module.app, ["--version"])
+        assert result.exit_code == 0
+
+    def test_version_flag_prints_installed_version(self):
+        """--version prints the installed package version from metadata."""
+        from importlib.metadata import version as get_version  # noqa: PLC0415
+
+        result = runner.invoke(main_module.app, ["--version"])
+        assert get_version("HEACalculator") in result.output
+
+    def test_short_version_flag_matches_long_flag(self):
+        """-V is a shorthand alias for --version."""
+        result = runner.invoke(main_module.app, ["-V"])
+        assert result.exit_code == 0
+        long_result = runner.invoke(main_module.app, ["--version"])
+        assert result.output == long_result.output
+
+
 class TestGuiCommand(TestCase):
     """Tests for the gui command."""
 
