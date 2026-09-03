@@ -146,6 +146,7 @@ def range_search(
 
     if csv:
         print(", ".join(HEACalculator.get_headers()))
+        sys.stdout.flush()
 
     formula, composition_set = find_all_comps(elements, start, end, step)
     alloys = [
