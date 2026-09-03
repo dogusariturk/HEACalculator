@@ -71,6 +71,7 @@ omit = [
 [tool.ruff]
 line-length = 130
 include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
+extend-exclude = ["*.md"]
 
 [tool.ruff.lint]
 select = [
