@@ -11,6 +11,7 @@ import re
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
+from pathlib import Path
 from typing import Any
 
 try:
@@ -360,7 +361,7 @@ class BatchCalculationsPage(QtWidgets.QWidget):
         if self.ui.resultsTreeWidget.topLevelItemCount() == 0:
             self.notificationRequested.emit("No results to save.", "warning")
             return
-        path, ok = QtWidgets.QFileDialog.getSaveFileName(self, "Save CSV", os.getenv("HOME"), "CSV(*.csv)")
+        path, ok = QtWidgets.QFileDialog.getSaveFileName(self, "Save CSV", str(Path.home()), "CSV(*.csv)")
         if ok and path:
             columns = range(self.ui.resultsTreeWidget.columnCount())
             try:
@@ -581,7 +582,7 @@ class ParametersPage(QtWidgets.QWidget):
             self._show_notification("There are no calculated results to save.", "warning")
             return
 
-        path, ok = QtWidgets.QFileDialog.getSaveFileName(self, "Save CSV", os.getenv("HOME"), "CSV(*.csv)")
+        path, ok = QtWidgets.QFileDialog.getSaveFileName(self, "Save CSV", str(Path.home()), "CSV(*.csv)")
         if ok and path:
             columns = range(self.parametersPage.resultsTreeWidget.columnCount())
             try:
