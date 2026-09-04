@@ -793,6 +793,16 @@ class TestHandleSaveButton(TestCase):
             ParametersPage.handleSaveButton(p)
         assert p._notifications == [("Could not save the results file. Disk full", "error")]
 
+    def test_dialog_defaults_to_home_directory(self):
+        """The save dialog is opened with the user's home directory as the default path."""
+        p = self._make_page(1)
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("", False)) as mock_dialog,
+            patch("builtins.open", mock_open()),
+        ):
+            ParametersPage.handleSaveButton(p)
+        assert mock_dialog.call_args.args[2] == str(Path.home())
+
 
 class TestCalculateAdditional(TestCase):
     """Additional tests for ParametersPage.calculate."""
@@ -1347,3 +1357,13 @@ class TestBatchHandleSave(TestCase):
         ):
             BatchCalculationsPage._handle_save(p)
         assert any(sev == "error" and "No space left" in msg for msg, sev in p._notifications)
+
+    def test_dialog_defaults_to_home_directory(self):
+        """The save dialog is opened with the user's home directory as the default path."""
+        p = self._make_page(1)
+        with (
+            patch("HEACalculator.app.QtWidgets.QFileDialog.getSaveFileName", return_value=("", False)) as mock_dialog,
+            patch("builtins.open", mock_open()),
+        ):
+            BatchCalculationsPage._handle_save(p)
+        assert mock_dialog.call_args.args[2] == str(Path.home())
