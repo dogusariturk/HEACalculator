@@ -6,7 +6,7 @@ import typer
 
 from HEACalculator.cli import app as cli_app
 
-app = typer.Typer(add_completion=False, no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True)
 app.add_typer(cli_app, name="search", help="Parameter search commands", no_args_is_help=True)
 
 
