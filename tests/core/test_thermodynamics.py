@@ -99,11 +99,10 @@ class TestNewProperties:
         """Phi is positive for FeCoCrNi (entropy dominates enthalpy)."""
         assert thermodynamics.phi > 0
 
-    def test_phi_infinite_when_packing_specific_phi_is_infinite(self):
-        """Phi = inf when either packing-specific phi becomes infinite."""
+    def test_phi_infinite_when_excess_entropy_is_zero(self):
+        """Phi = inf when the averaged excess entropy vanishes."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["phi_bcc"] = math.inf
-        t.__dict__["phi_fcc"] = math.inf
+        t.__dict__["excess_entropy"] = 0.0
         assert math.isinf(t.phi)
 
     def test_delta_g_ss_fecocrni(self, thermodynamics):
@@ -322,23 +321,20 @@ class TestMissingDataNaN:
         t = HEAThermodynamics(AlloyComposition("Fe50Ga50"))
         assert math.isnan(t.max_formation_enthalpy)
 
-    def test_phi_nan_when_phi_fcc_is_nan(self):
-        """phi returns NaN (not inf) when phi_fcc is NaN."""
+    def test_phi_nan_when_excess_entropy_is_nan(self):
+        """phi returns NaN (not inf) when the averaged excess entropy is unavailable."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["phi_fcc"] = float("nan")
-        t.__dict__["phi_bcc"] = 5.0
+        t.__dict__["excess_entropy"] = float("nan")
         assert math.isnan(t.phi)
 
-    def test_phi_nan_when_phi_bcc_is_nan(self):
-        """phi returns NaN (not inf) when phi_bcc is NaN."""
+    def test_phi_nan_when_mixing_enthalpy_is_nan(self):
+        """phi returns NaN (not inf) when the mixing enthalpy is unavailable."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["phi_fcc"] = 5.0
-        t.__dict__["phi_bcc"] = float("nan")
+        t.__dict__["mixing_enthalpy"] = float("nan")
         assert math.isnan(t.phi)
 
-    def test_phi_inf_when_components_are_inf(self):
-        """phi still returns inf (not NaN) when phi_fcc and phi_bcc are legitimately infinite."""
+    def test_phi_inf_when_melting_temperature_is_zero(self):
+        """phi returns inf (not NaN) when the melting temperature degenerates to zero."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["phi_fcc"] = math.inf
-        t.__dict__["phi_bcc"] = math.inf
+        t.__dict__["melting_temperature"] = 0
         assert math.isinf(t.phi)
