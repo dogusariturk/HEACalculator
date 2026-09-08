@@ -170,7 +170,7 @@ HEACalculator search csv alloys.csv --column alloy
 
 Rows with missing or unparseable compositions are skipped and an error is printed to stderr.
 
-**Output columns (default CSV):** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Delta Chi (Pauling) (%), Omega, Gamma, Lambda, VEC, e/a, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
+**Output columns (default CSV):** Formula, Density (g/cm^3), Delta (%), Delta (CN12) (%), Delta Chi (Allen) (%), Delta Chi (Pauling) (%), Omega, Gamma, Lambda, Phi, VEC, e/a, Mixing Enthalpy (kJ/mol), Mixing Entropy (J/K.mol), Formation Enthalpy (meV/atom), Min. Formation Enthalpy (meV/atom), Melting Temperature (K), Crystal Structure, Model 1–8.
 
 **Examples**
 

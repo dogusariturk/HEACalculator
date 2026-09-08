@@ -207,6 +207,7 @@ Equivalent to `search range`.
   - Omega Parameter [^5]
   - Gamma Parameter [^6]
   - Lambda Parameter [^7]
+  - Phi Parameter [^9]
   - Solid Solution Prediction Models
       - Model 1 [^5]
       - Model 2 [^8]
