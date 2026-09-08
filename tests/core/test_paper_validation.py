@@ -261,7 +261,7 @@ class TestModel5Ye2015:
         """The calculated entropy and phi values stay close to the paper data."""
         thermodynamics, _ = _thermo_and_predictor(formula)
         assert thermodynamics.mixing_entropy / GAS_CONSTANT == pytest.approx(sc_over_kb_paper, abs=6e-5)
-        assert thermodynamics.phi == pytest.approx(phi_paper, rel=0.12)
+        assert thermodynamics.phi == pytest.approx(phi_paper, rel=0.06)
 
 
 MODEL_6_CASES = [
