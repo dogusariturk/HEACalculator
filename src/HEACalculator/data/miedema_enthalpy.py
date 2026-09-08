@@ -376,13 +376,9 @@ def MiedemaEnthalpy(
         MissingMiedemaDataError: If Miedema parameters are unavailable for either element.
 
     References:
-        - de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K.
-            Cohesion in Metals: Transition Metal Alloys. North-Holland, Amsterdam, 1988.
-            Tables V-1.1 and V-3.
-        - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B.
-            Acta Mater. 2016, 104, 172-179. Supplementary Eqs. S4-S7.
-        - Niessen, A.K.; Miedema, A.R.
-            Ber. Bunsenges. Phys. Chem. 1983, 87, 717-723. Eq. 9 and Table I.
+        - de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. Cohesion in Metals: Transition Metal Alloys. North-Holland, Amsterdam, 1988. Tables V-1.1 and V-3.
+        - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179. Supplementary Eqs. S4-S7.
+        - Niessen, A.K.; Miedema, A.R. Ber. Bunsenges. Phys. Chem. 1983, 87, 717-725. Eq. 9 and Table I.
     """
     A, B = _validate_pair(pair)
     c_a, c_b = _normalize_fractions(c_a, c_b)

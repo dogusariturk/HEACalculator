@@ -172,6 +172,6 @@ A microstructure prediction based on VEC is also provided. The HCP window is tes
 [^12]: Mann, J.B.; Meek, T.L.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 2780–2783.
 [^13]: Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 5132–5137.
 [^14]: de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. *Cohesion in Metals: Transition Metal Alloys.* North-Holland, Amsterdam, 1988.
-[^15]: Niessen, A.K.; Miedema, A.R. *Ber. Bunsenges. Phys. Chem.* **1983**, *87*, 717–723.
+[^15]: Niessen, A.K.; Miedema, A.R. *Ber. Bunsenges. Phys. Chem.* **1983**, *87*, 717–725.
 [^16]: Haynes, W.M. *CRC Handbook of Chemistry and Physics*, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
 [^17]: Hume-Rothery, W.; Smallman, R.E.; Haworth, C.W. *The Structure of Metals and Alloys*, 5th ed.; Institute of Metals: London, 1969.
