@@ -357,7 +357,7 @@ class HEAThermodynamics:
     def _compute_se_at_packing(self, xi: float) -> float:
         """S_E / k_B at a given packing fraction xi (dimensionless).
 
-        Implements the Manssori-Carnahan-Starling-Leland (MCSL) hard-sphere mixture
+        Implements the Mansoori-Carnahan-Starling-Leland (MCSL) hard-sphere mixture
         equations from the Appendix of Ye *et al.* (eqs. 3A-4B). Returns a dimensionless
         value that is zero for identical atom sizes and negative otherwise.
 
@@ -369,7 +369,7 @@ class HEAThermodynamics:
 
         References:
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80.
-            - Manssori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
+            - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
         """
         fractions = list(self._c.atomic_percentage.values())
         diameters = [2.0 * r for r in self._model_atomic_radius_cn12_list()]
@@ -415,7 +415,7 @@ class HEAThermodynamics:
 
         References:
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80. (Appendix, eqs. 3A-4B)
-            - Manssori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
+            - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
         """
         return GAS_CONSTANT * (self._compute_se_at_packing(0.74) + self._compute_se_at_packing(0.68)) / 2
 
