@@ -134,7 +134,7 @@ $$
 
 ## Solid-Solution Prediction Models
 
-`HEACalculator` implements eight published criteria. Each model returns `"Solid Solution"`, `"Intermetallic"`, or `"Multiple Phases"`.
+`HEACalculator` implements eight published criteria. Each model returns `"Solid Solution"`, `"Intermetallic"`, or `"Multiple Phases"`, or `"N/A"` when the pair data that model requires are unavailable.
 
 | Model | Author(s)                   | Criteria                                                                                                                                 | Reference    |
 |-------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------------|
@@ -147,12 +147,12 @@ $$
 | 7     | Senkov & Miracle (2016)     | $\Omega(T_{\text{anneal}}) \geq k_2 \cdot \Delta S_{\text{mix}} / R$                                                                     | [10](#fn:10) |
 | 8     | King *et al.* (2016)        | $\phi = \Delta G_{\text{SS}} / (-\lvert \Delta G_{\max}\rvert) \geq 1$                                                                   | [11](#fn:11) |
 
-A microstructure prediction based on VEC is also provided:
+A microstructure prediction based on VEC is also provided. The HCP window is tested first, so a composition falling in it is reported as HCP even though it also satisfies the BCC bound:
 
+- 2.5 ≤ VEC ≤ 3.5: HCP
 - VEC ≥ 8: FCC
-- VEC < 6.87: BCC
-- 6.87 ≤ VEC < 8: BCC + FCC (mixed)
-- 2.5 ≤ VEC < 3.5: HCP
+- VEC ≤ 6.87: BCC
+- 6.87 < VEC < 8: BCC + FCC (mixed)
 
 ---
 
