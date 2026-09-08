@@ -107,7 +107,7 @@ class TestHEACalculator:
         """Melting temperature in get_list() has no decimal point."""
         lst = calculator.get_list()
         # Layout: formula(0), 14 floats(1-14), melting(15), microstructure(16), 8 models(17-24)
-        assert "." not in lst[15]
+        assert "." not in lst[16]
 
     def test_get_list_model_5_is_string_not_na(self, calculator):
         """Model 5 in get_list() returns a valid phase prediction string."""
@@ -123,11 +123,11 @@ class TestHEACalculator:
         """A single-element calculation should still produce a result row."""
         lst = HEACalculator("Fe").get_list()
         assert lst[0] == "Fe"
-        assert len(lst) == 25
+        assert len(lst) == 26
 
-    def test_get_list_length_is_25(self, calculator):
-        """get_list() always returns exactly 25 entries regardless of missing data."""
-        assert len(HEACalculator("Fe50Ga50").get_list()) == 25
+    def test_get_list_length_is_26(self, calculator):
+        """get_list() always returns exactly 26 entries regardless of missing data."""
+        assert len(HEACalculator("Fe50Ga50").get_list()) == 26
 
     def test_headers_align_with_get_list(self, calculator):
         """Shared result headers stay in lockstep with the tabular payload."""
@@ -141,6 +141,7 @@ class TestHEACalculator:
             "Omega",
             "Gamma",
             "Lambda",
+            "Phi",
             "VEC",
             "e/a",
             "Mixing Enthalpy (kJ/mol)",
@@ -199,32 +200,32 @@ class TestNaNIntegration:
     def test_fega_formation_enthalpy_na_in_get_list(self):
         """FeGa has no Troparevsky formation enthalpy data; get_list shows 'N/A'."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[13] == "N/A"
+        assert lst[14] == "N/A"
 
     def test_fega_min_formation_enthalpy_na_in_get_list(self):
         """FeGa min formation enthalpy column is 'N/A'."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[14] == "N/A"
+        assert lst[15] == "N/A"
 
     def test_fega_model_6_na_in_get_list(self):
         """Model 6 for FeGa is 'N/A' because it depends on formation enthalpy."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[22] == "N/A"
+        assert lst[23] == "N/A"
 
     def test_fega_model_7_na_in_get_list(self):
         """Model 7 for FeGa is 'N/A' because it depends on formation enthalpy."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        assert lst[23] == "N/A"
+        assert lst[24] == "N/A"
 
     def test_fega_other_properties_are_not_na(self):
         """Properties that do not require formation enthalpy data remain finite for FeGa."""
         lst = HEACalculator("Fe50Ga50").get_list()
-        for idx in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+        for idx in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]:
             assert lst[idx] != "N/A", f"index {idx} unexpectedly shows N/A"
 
     def test_femnga_ternary_get_list_length(self):
-        """FeMnGa ternary with missing formation enthalpy still yields a 25-element list."""
-        assert len(HEACalculator("Fe33.3Mn33.3Ga33.4").get_list()) == 25
+        """FeMnGa ternary with missing formation enthalpy still yields a 26-element list."""
+        assert len(HEACalculator("Fe33.3Mn33.3Ga33.4").get_list()) == 26
 
     def test_fega_str_shows_na_for_formation_enthalpy(self):
         """__str__ for FeGa shows 'N/A' in the Formation Enthalpy line."""
@@ -251,7 +252,7 @@ class TestNaNIntegration:
             side_effect=MissingMixingEnthalpyError("no data"),
         ):
             lst = HEACalculator("FeCoCrNi").get_list()
-        assert lst[17] == "N/A"
+        assert lst[18] == "N/A"
 
     def test_missing_mixing_enthalpy_propagates_na_to_model_2(self):
         """When mixing_enthalpy is NaN (mocked), Model 2 shows 'N/A'."""
@@ -264,7 +265,7 @@ class TestNaNIntegration:
             side_effect=MissingMixingEnthalpyError("no data"),
         ):
             lst = HEACalculator("FeCoCrNi").get_list()
-        assert lst[18] == "N/A"
+        assert lst[19] == "N/A"
 
 
 class TestHEACalculatorStrAdditional:
@@ -289,6 +290,11 @@ class TestHEACalculatorStrAdditional:
         """Critical Temperature appears in __str__."""
         lines = str(calculator).splitlines()
         assert any("Critical Temperature" in line for line in lines)
+
+    def test_str_phi_present(self, calculator):
+        """The headline Phi appears in __str__ as its own labeled line, not only inside Model 5."""
+        lines = str(calculator).splitlines()
+        assert any(line.split(":")[0].strip() == "Phi" for line in lines)
 
     def test_str_phi_bcc_present(self, calculator):
         """Phi (BCC) line appears in __str__."""
@@ -352,44 +358,44 @@ class TestGetListAdditionalValues:
         assert float(lst[6]) == pytest.approx(5.75, abs=1e-2)
 
     def test_get_list_vec_value(self, calculator):
-        """VEC at index 9 is 8.25 for equimolar FeCoCrNi."""
+        """VEC at index 10 is 8.25 for equimolar FeCoCrNi."""
         lst = calculator.get_list()
-        assert float(lst[9]) == pytest.approx(8.25, abs=1e-2)
+        assert float(lst[10]) == pytest.approx(8.25, abs=1e-2)
 
     def test_get_list_ea_value(self, calculator):
-        """e/a at index 10 is 1.75 for equimolar FeCoCrNi."""
+        """e/a at index 11 is 1.75 for equimolar FeCoCrNi."""
         lst = calculator.get_list()
-        assert float(lst[10]) == pytest.approx(1.75, abs=1e-2)
+        assert float(lst[11]) == pytest.approx(1.75, abs=1e-2)
 
     def test_get_list_mixing_enthalpy_value(self, calculator):
-        """Mixing enthalpy at index 11 is -3.75 kJ/mol for FeCoCrNi."""
+        """Mixing enthalpy at index 12 is -3.75 kJ/mol for FeCoCrNi."""
         lst = calculator.get_list()
-        assert float(lst[11]) == pytest.approx(-3.75, abs=1e-2)
+        assert float(lst[12]) == pytest.approx(-3.75, abs=1e-2)
 
     def test_get_list_mixing_entropy_value(self, calculator):
-        """Mixing entropy at index 12 is R*ln(4) for equimolar FeCoCrNi."""
+        """Mixing entropy at index 13 is R*ln(4) for equimolar FeCoCrNi."""
         lst = calculator.get_list()
-        assert float(lst[12]) == pytest.approx(11.53, abs=1e-2)
+        assert float(lst[13]) == pytest.approx(11.53, abs=1e-2)
 
     def test_get_list_microstructure_is_valid_crystal_structure(self, calculator):
-        """Crystal structure at index 16 is one of the recognized phase strings."""
+        """Crystal structure at index 17 is one of the recognized phase strings."""
         lst = calculator.get_list()
-        assert lst[16] in ("FCC", "BCC", "HCP", "BCC+FCC", "N/A")
+        assert lst[17] in ("FCC", "BCC", "HCP", "BCC+FCC", "N/A")
 
     def test_get_list_model_1_is_valid_prediction(self, calculator):
-        """Model 1 at index 17 is a recognized prediction string."""
+        """Model 1 at index 18 is a recognized prediction string."""
         lst = calculator.get_list()
-        assert lst[17] in ("Solid Solution", "Multiple Phases", "N/A")
+        assert lst[18] in ("Solid Solution", "Multiple Phases", "N/A")
 
     def test_get_list_model_3_is_valid_prediction(self, calculator):
-        """Model 3 at index 19 is a recognized prediction string."""
+        """Model 3 at index 20 is a recognized prediction string."""
         lst = calculator.get_list()
-        assert lst[19] in ("Solid Solution", "Multiple Phases", "N/A")
+        assert lst[20] in ("Solid Solution", "Multiple Phases", "N/A")
 
     def test_get_list_all_float_entries_parseable(self, calculator):
         """All numeric (non-formula, non-melting-temp, non-model) entries parse as float or 'N/A'."""
         lst = calculator.get_list()
-        for idx in range(1, 15):
+        for idx in range(1, 16):
             assert lst[idx] == "N/A" or float(lst[idx]) is not None
 
 
@@ -412,6 +418,7 @@ class TestGetDict:
             "omega",
             "gamma",
             "lambda",
+            "phi",
             "vec",
             "ea_ratio",
             "mixing_enthalpy",
@@ -445,6 +452,12 @@ class TestGetDict:
         d = calculator.get_dict()
         assert isinstance(d["mixing_enthalpy"], float)
         assert d["mixing_enthalpy"] == pytest.approx(-3.75)
+
+    def test_phi_matches_thermo_property(self, calculator):
+        """'phi' is a raw numeric equal to the underlying thermo phi."""
+        d = calculator.get_dict()
+        assert d["phi"] == pytest.approx(calculator.thermo.phi)
+        assert not isinstance(d["phi"], str)
 
     def test_vec_is_float(self, calculator):
         """'vec' is a raw float equal to 8.25 for equimolar FeCoCrNi."""
@@ -515,10 +528,16 @@ class TestResultHeadersConstant:
     """Tests for the RESULT_HEADERS module-level constant."""
 
     def test_result_headers_count(self):
-        """RESULT_HEADERS contains exactly 25 entries."""
+        """RESULT_HEADERS contains exactly 26 entries."""
         from HEACalculator.core.hea import RESULT_HEADERS
 
-        assert len(RESULT_HEADERS) == 25
+        assert len(RESULT_HEADERS) == 26
+
+    def test_result_headers_include_phi_after_lambda(self):
+        """Phi is reported alongside the other derived stability parameters."""
+        from HEACalculator.core.hea import RESULT_HEADERS
+
+        assert RESULT_HEADERS[RESULT_HEADERS.index("Lambda") + 1] == "Phi"
 
     def test_result_headers_first_is_formula(self):
         """First header is 'Formula'."""

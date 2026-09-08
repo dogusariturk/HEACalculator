@@ -313,6 +313,7 @@ class TestResultsTreeConfiguration:
         "Omega",
         "Gamma",
         "Lambda",
+        "Phi",
         "VEC",
         "e/a",
         "Mixing Enthalpy",
