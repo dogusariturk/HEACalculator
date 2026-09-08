@@ -458,23 +458,24 @@ class HEAThermodynamics:
         $S_H = |H_a| / T_m$ is the complementary entropy derived from the mixing enthalpy.
         H_a uses the Takeuchi & Inoue (2000) binary mixing enthalpy table (Miedema model,
         Bakker 1998 parameterization), as cited by Ye *et al.* (2015) refs [5,14].
-        $S_E$ uses the MCSL hard-sphere model with CN12 (Goldschmidt) radii.
+        $S_E$ uses the MCSL hard-sphere model with CN12 (Goldschmidt) radii. It is averaged
+        over the BCC and FCC packing fractions before entering the ratio.
 
         Returns:
-            Dimensionless average of the FCC and BCC phi values, or ``math.inf`` when either diverges.
+            Dimensionless phi parameter, or ``math.inf`` when $T_m$ or the averaged $S_E$ is zero.
 
         References:
             - Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80.
             - Takeuchi, A.; Inoue, A. Mater. Trans. JIM 2000, 41, 1372-1378.
         """
-        phi_fcc = self.phi_fcc
-        phi_bcc = self.phi_bcc
-        if math.isnan(phi_fcc) or math.isnan(phi_bcc):
-            return float("nan")
-        if not math.isfinite(phi_fcc) or not math.isfinite(phi_bcc):
+        if self.melting_temperature == 0:
             return math.inf
-        return (phi_fcc + phi_bcc) / 2
+        se = self.excess_entropy
+        if se == 0:
+            return math.inf
+        s_h = abs(self.mixing_enthalpy) * 1000 / self.melting_temperature
+        return (self.mixing_entropy - s_h) / abs(se)
 
     @cached_property
     def critical_temperature(self) -> float:
