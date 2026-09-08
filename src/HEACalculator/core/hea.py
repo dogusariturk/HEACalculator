@@ -23,6 +23,7 @@ RESULT_HEADERS = (
     "Omega",
     "Gamma",
     "Lambda",
+    "Phi",
     "VEC",
     "e/a",
     "Mixing Enthalpy (kJ/mol)",
@@ -124,6 +125,7 @@ class HEACalculator:
             "omega": _n(t.omega),
             "gamma": _n(t.gamma),
             "lambda": _n(t.lambda_),
+            "phi": _n(t.phi),
             "vec": _n(t.valence_electron_concentration),
             "ea_ratio": _n(t.ea_ratio),
             "mixing_enthalpy": _n(t.mixing_enthalpy),
@@ -160,6 +162,7 @@ class HEACalculator:
             t.omega,
             t.gamma,
             t.lambda_,
+            t.phi,
             t.valence_electron_concentration,
             t.ea_ratio,
             t.mixing_enthalpy,
@@ -201,6 +204,7 @@ class HEACalculator:
             f"{'Omega':25}: {self._fmt(t.omega)}\n"
             f"{'Gamma':25}: {self._fmt(t.gamma)}\n"
             f"{'Lambda':25}: {self._fmt(t.lambda_)}\n"
+            f"{'Phi':25}: {self._fmt(t.phi)}\n"
             f"{'VEC':25}: {self._fmt(t.valence_electron_concentration)}\n"
             f"{'e/a':25}: {self._fmt(t.ea_ratio)}\n"
             f"{'Mixing Enthalpy':25}: {self._fmt(t.mixing_enthalpy)} kJ/mol\n"
