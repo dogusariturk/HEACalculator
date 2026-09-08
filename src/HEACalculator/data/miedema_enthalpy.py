@@ -6,6 +6,7 @@ import importlib.resources
 import json
 from bisect import bisect_right
 from dataclasses import dataclass
+from functools import cache
 
 from HEACalculator.data.elements import Element
 from HEACalculator.exceptions import MissingMiedemaDataError
@@ -86,8 +87,13 @@ def _elastic_solution_enthalpy(
     return numerator / denominator
 
 
+@cache
 def _structural_solution_enthalpy(solute: str, matrix: str) -> float:
     """Return the Niessen structural enthalpy contribution for a solute-matrix direction.
+
+    Depends only on the element symbols, so it's cached: a range search
+    evaluates the same fixed set of elements across many compositions, and
+    this contribution never changes for a given solute-matrix pair.
 
     Returns:
         Structural enthalpy contribution in kJ/mol for the directional substitution.
@@ -113,6 +119,58 @@ def _structural_solution_enthalpy(solute: str, matrix: str) -> float:
     e_matrix, _ = _interpolate(z_matrix)
     e_solute, slope = _interpolate(z_solute)
     return e_matrix - e_solute + (z_solute - z_matrix) * slope
+
+
+@cache
+def _pair_constants(
+    symbol_a: str, symbol_b: str
+) -> tuple[float, float, float, float, dict[str, float | bool | int], dict[str, float | bool | int]]:
+    """Compute the composition-independent Miedema quantities for an element pair.
+
+    Depends only on the element symbols, so it's cached: a range search
+    evaluates the same fixed set of elements across many compositions, and
+    these quantities never change for a given pair.
+
+    Returns:
+        (h_ab, h_ba, V_A, V_B, pA, pB) for the ordered pair.
+
+    Raises:
+        MissingMiedemaDataError: If Miedema parameters are unavailable for either element.
+    """
+    for symbol in (symbol_a, symbol_b):
+        if symbol not in _params:
+            raise MissingMiedemaDataError(f"No Miedema parameters for element '{symbol}'")
+
+    pA, pB = _params[symbol_a], _params[symbol_b]
+    phi_A, nws_A, V_A, tm_A = pA["phi_star"], pA["n_ws"], pA["V_molar"], pA["is_transition_metal"]
+    phi_B, nws_B, V_B, tm_B = pB["phi_star"], pB["n_ws"], pB["V_molar"], pB["is_transition_metal"]
+
+    if tm_A and tm_B:
+        p_const = 1.15 * 12.35
+    elif tm_A == tm_B:
+        p_const = 12.35 / 1.15
+    else:
+        p_const = 12.35
+
+    if pA["is_transition_metal"] == pB["is_transition_metal"]:
+        r_over_p = 0.0
+    else:
+        factor_a = pA.get("r_over_p", 1.0 if tm_A else 0.0)
+        factor_b = pB.get("r_over_p", 1.0 if tm_B else 0.0)
+        r_over_p = factor_a * factor_b
+
+    nws_A13, nws_B13 = nws_A ** (1 / 3), nws_B ** (1 / 3)
+    n_denom = nws_A13 ** (-1) + nws_B13 ** (-1)
+    dphi = phi_A - phi_B
+    dn = nws_A13 - nws_B13
+    miedema_func = -(dphi**2) + 9.4 * (dn**2) - r_over_p
+
+    h_ab = 2 * _corrected_volume_term(symbol_a, V_A, dphi, 1.0) * p_const * miedema_func / n_denom
+    h_ba = 2 * _corrected_volume_term(symbol_b, V_B, -dphi, 1.0) * p_const * miedema_func / n_denom
+    h_ab = _interfacial_table.get(symbol_a, {}).get(symbol_b, h_ab)
+    h_ba = _interfacial_table.get(symbol_b, {}).get(symbol_a, h_ba)
+
+    return h_ab, h_ba, V_A, V_B, pA, pB
 
 
 @dataclass(frozen=True)
@@ -147,34 +205,7 @@ class _MiedemaPairData:
         Returns:
             Cached directional quantities for the binary pair.
         """
-        pA, pB = _params[symbol_a], _params[symbol_b]
-        phi_A, nws_A, V_A, tm_A = pA["phi_star"], pA["n_ws"], pA["V_molar"], pA["is_transition_metal"]
-        phi_B, nws_B, V_B, tm_B = pB["phi_star"], pB["n_ws"], pB["V_molar"], pB["is_transition_metal"]
-
-        if tm_A and tm_B:
-            p_const = 1.15 * 12.35
-        elif tm_A == tm_B:
-            p_const = 12.35 / 1.15
-        else:
-            p_const = 12.35
-
-        if pA["is_transition_metal"] == pB["is_transition_metal"]:
-            r_over_p = 0.0
-        else:
-            factor_a = pA.get("r_over_p", 1.0 if tm_A else 0.0)
-            factor_b = pB.get("r_over_p", 1.0 if tm_B else 0.0)
-            r_over_p = factor_a * factor_b
-
-        nws_A13, nws_B13 = nws_A ** (1 / 3), nws_B ** (1 / 3)
-        n_denom = nws_A13 ** (-1) + nws_B13 ** (-1)
-        dphi = phi_A - phi_B
-        dn = nws_A13 - nws_B13
-        miedema_func = -(dphi**2) + 9.4 * (dn**2) - r_over_p
-
-        h_ab = 2 * _corrected_volume_term(symbol_a, V_A, dphi, 1.0) * p_const * miedema_func / n_denom
-        h_ba = 2 * _corrected_volume_term(symbol_b, V_B, -dphi, 1.0) * p_const * miedema_func / n_denom
-        h_ab = _interfacial_table.get(symbol_a, {}).get(symbol_b, h_ab)
-        h_ba = _interfacial_table.get(symbol_b, {}).get(symbol_a, h_ba)
+        h_ab, h_ba, V_A, V_B, pA, pB = _pair_constants(symbol_a, symbol_b)
 
         v_a_23, v_b_23 = V_A ** (2 / 3), V_B ** (2 / 3)
         denom = c_a * v_a_23 + c_b * v_b_23
