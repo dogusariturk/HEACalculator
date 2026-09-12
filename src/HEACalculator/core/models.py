@@ -6,11 +6,6 @@ import math
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-_J_PER_MOL_TO_MEV_PER_ATOM = _KJ_PER_MOL_TO_EV_PER_ATOM = (
-    0.0103642688  # 1 J/mol = 0.010364 meV/atom | 1 kJ/mol = 0.010364 eV/atom
-)
-_MEV_PER_ATOM_TO_KJ_PER_MOL = 1e-3 / _KJ_PER_MOL_TO_EV_PER_ATOM
-
 if TYPE_CHECKING:
     from HEACalculator.core.composition import AlloyComposition
     from HEACalculator.core.thermodynamics import HEAThermodynamics
@@ -152,6 +147,7 @@ class SolidSolutionPredictor:
         """
         if math.isnan(self._t.min_formation_enthalpy) or math.isnan(self._t.max_formation_enthalpy):
             return "N/A"
+        _J_PER_MOL_TO_MEV_PER_ATOM = 0.0103642688  # 1 J/mol = 0.010364 meV/atom
         critical_temperature = self._t.critical_temperature
         lower_bound = -critical_temperature * self._t.mixing_entropy * _J_PER_MOL_TO_MEV_PER_ATOM
         return (
@@ -171,6 +167,7 @@ class SolidSolutionPredictor:
             return float("nan")
         if self._t.mixing_enthalpy == 0:
             return math.inf
+        _MEV_PER_ATOM_TO_KJ_PER_MOL = 1e-3 / 0.0103642688  # 1 kJ/mol = 0.010364 eV/atom
         return (self._t.formation_enthalpy * _MEV_PER_ATOM_TO_KJ_PER_MOL) / self._t.mixing_enthalpy
 
     def model_7_k1_critical(
