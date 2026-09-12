@@ -29,9 +29,7 @@ def MixingEnthalpy(pair: tuple[str, str] | list[str]) -> float:
         MissingMixingEnthalpyError: If the requested pair does not exist in the database.
 
     References:
-        - Takeuchi, A.; Inoue, A. Classification of Bulk Metallic Glasses by Atomic Size Difference,
-            Heat of Mixing and Period of Constituent Elements and Its Application to Characterization
-            of the Main Alloying Element. Mater. Trans. 2005, 46(12), 2817-2829. Table 1.
+        - Takeuchi, A.; Inoue, A. Mater. Trans. 2005, 46(12), 2817-2829. Table 1 and 2.
     """
     if not isinstance(pair, tuple | list):
         raise TypeError("Usage: MixingEnthalpy(('X', 'Y')) where X and Y are element names.")

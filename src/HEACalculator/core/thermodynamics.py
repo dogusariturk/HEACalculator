@@ -455,10 +455,9 @@ class HEAThermodynamics:
         r"""$\phi$ parameter: $(S_C - S_H) / |S_E|$.
 
         $S_H = |H_a| / T_m$ is the complementary entropy derived from the mixing enthalpy.
-        H_a uses the Takeuchi & Inoue (2000) binary mixing enthalpy table (Miedema model,
-        Bakker 1998 parameterization), as cited by Ye *et al.* (2015) refs [5,14].
-        $S_E$ uses the MCSL hard-sphere model with CN12 (Goldschmidt) radii. It is averaged
-        over the BCC and FCC packing fractions before entering the ratio.
+        H_a uses the Takeuchi & Inoue (2005) binary mixing enthalpy table, as cited by
+        Ye *et al.* (2015) refs [5,14]. $S_E$ uses the MCSL hard-sphere model with CN12
+        (Goldschmidt) radii. It is averaged over the BCC and FCC packing fractions before entering the ratio.
 
         Returns:
             Dimensionless phi parameter, or ``math.inf`` when $T_m$ or the averaged $S_E$ is zero.
@@ -467,6 +466,7 @@ class HEAThermodynamics:
             - Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53-55.
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80.
             - Takeuchi, A.; Inoue, A. Mater. Trans. JIM 2000, 41, 1372-1378.
+            - Takeuchi, A.; Inoue, A. Mater. Trans. 2005, 46(12), 2817-2829.
         """
         if self.melting_temperature == 0:
             return math.inf
