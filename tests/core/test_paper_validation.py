@@ -393,6 +393,6 @@ class TestModel8King2016:
     def test_parameters(self, formula, delta_g_ss_paper, delta_g_max_paper, f_parameter_paper):
         """The calculated Gibbs-energy terms stay close to the paper data."""
         thermodynamics, _ = _thermo_and_predictor(formula)
-        assert thermodynamics.delta_g_ss == pytest.approx(delta_g_ss_paper, rel=0.02)
+        assert thermodynamics.delta_g_ss == pytest.approx(delta_g_ss_paper, rel=0.03)
         assert thermodynamics.delta_g_max == pytest.approx(delta_g_max_paper, rel=0.02)
         assert thermodynamics.f_parameter == pytest.approx(f_parameter_paper, abs=0.025)

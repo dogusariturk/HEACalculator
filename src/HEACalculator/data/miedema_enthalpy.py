@@ -29,10 +29,6 @@ _z_points: list[float] = _niessen["z_points"]
 _niessen_energies: dict[str, list[float]] = _niessen["energies_kj_per_mol"]
 _reference_structures: dict[int, str] = {int(k): v for k, v in _niessen["reference_structures"].items()}
 
-_ALKALI_METALS = {"Li", "Na", "K", "Rb", "Cs"}
-_DIVALENT_METALS = {"Be", "Mg", "Zn", "Cd", "Hg"}
-_NOBLE_AND_TRIVALENT_METALS = {"Al", "Ga", "In", "Tl", "Cu", "Ag", "Au", "Sc", "Y", "La"}
-
 
 def model_niessen_structural() -> dict:
     """Return the structural-enthalpy data derived from Niessen *et al.* (1983).
@@ -44,6 +40,10 @@ def model_niessen_structural() -> dict:
 
 
 def _corrected_volume_term(symbol: str, volume: float, dphi: float, f_ba: float) -> float:
+    _ALKALI_METALS = {"Li", "Na", "K", "Rb", "Cs"}
+    _DIVALENT_METALS = {"Be", "Ca", "Mg", "Zn", "Cd", "Hg"}
+    _NOBLE_AND_TRIVALENT_METALS = {"Al", "Ga", "In", "Tl", "Cu", "Ag", "Au", "Sc", "Y", "La"}
+
     if symbol in _ALKALI_METALS:
         alpha = 0.14
     elif symbol in _DIVALENT_METALS:
