@@ -17,7 +17,6 @@ from HEACalculator.data.miedema_enthalpy import (
     _directional_ordered_enthalpies,
 )
 from HEACalculator.data.mixing_enthalpy import MixingEnthalpy
-from HEACalculator.data.model_radii import model_atomic_radius_cn12
 from HEACalculator.exceptions import MissingFormationEnthalpyError, MissingMiedemaDataError, MissingMixingEnthalpyError
 
 __author__ = "Doguhan Sariturk"
@@ -53,7 +52,7 @@ class HEAThermodynamics:
         Returns:
             CN12 radii in pm aligned with the alloy element order.
         """
-        return [model_atomic_radius_cn12(elm, self._c.elements[elm].atomic_radius_cn12) for elm in self._c.alloy]
+        return [self._c.elements[elm].atomic_radius_cn12 for elm in self._c.alloy]
 
     def _average_radius(self, radii: list[float]) -> float:
         """Return the composition-weighted average radius for the supplied radius list.
