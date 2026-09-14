@@ -70,6 +70,7 @@ omit = [
 
 [tool.ruff]
 line-length = 130
+force-exclude = true
 include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
 extend-exclude = ["*.md"]
 
@@ -119,6 +120,7 @@ pydocstyle.convention = "google"
 quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
+exclude = ["tests/models/published_data.py"]
 
 [tool.ty.src]
 include = [

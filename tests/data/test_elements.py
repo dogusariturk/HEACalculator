@@ -53,13 +53,13 @@ class TestElementLoader:
         assert Element("Ni").allen_electronegativity == pytest.approx(1.88, abs=1e-10)
 
     def test_lanthanide_allen_electronegativity_is_nan(self):
-        """La has no Allen CE data — value is NaN (lanthanides not covered by Allen papers)."""
+        """La has no Allen CE data, so the value is NaN (lanthanides not covered by Allen papers)."""
         import math
 
         assert math.isnan(Element("La").allen_electronegativity)
 
     def test_actinide_allen_electronegativity_is_nan(self):
-        """Ac has no Allen CE data — value is NaN (actinides not covered by Allen papers)."""
+        """Ac has no Allen CE data, so the value is NaN (actinides not covered by Allen papers)."""
         import math
 
         assert math.isnan(Element("Ac").allen_electronegativity)
@@ -122,19 +122,19 @@ class TestElementFieldValues:
         assert fe_element.nvalence == 8.0
 
     def test_noble_gas_ea_is_nan(self):
-        """Noble gas (Ar) has no Hume-Rothery e/a — value is NaN."""
+        """Noble gas (Ar) has no Hume-Rothery e/a, so the value is NaN."""
         import math
 
         assert math.isnan(Element("Ar").ea)
 
     def test_noble_gas_pauling_electronegativity_is_nan(self):
-        """Noble gas (He) has no Pauling electronegativity — value is NaN."""
+        """Noble gas (He) has no Pauling electronegativity, so the value is NaN."""
         import math
 
         assert math.isnan(Element("He").pauling_electronegativity)
 
     def test_noble_gas_radius_is_nan(self):
-        """Noble gas (He) has no metallic radius in a crystal structure — value is NaN."""
+        """Noble gas (He) has no metallic radius in a crystal structure, so the value is NaN."""
         import math
 
         assert math.isnan(Element("He").atomic_radius)
