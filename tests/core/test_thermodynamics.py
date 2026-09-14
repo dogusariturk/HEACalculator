@@ -47,9 +47,9 @@ class TestHEAThermodynamics:
         """Melting temperature is returned as an integer (rounded Kelvin value)."""
         assert isinstance(thermodynamics.melting_temperature, int)
 
-    def test_atomic_size_difference_positive(self, thermodynamics):
+    def test_atomic_size_difference_cn12_positive(self, thermodynamics):
         """Atomic size difference is a positive float for any multi-element alloy."""
-        result = thermodynamics.atomic_size_difference
+        result = thermodynamics.atomic_size_difference_cn12
         assert isinstance(result, float)
         assert result > 0
 
@@ -76,7 +76,7 @@ class TestHEAThermodynamics:
         assert thermodynamics.omega_at(2000) / thermodynamics.omega_at(1000) == pytest.approx(2.0, abs=1e-5)
 
     def test_lambda_parameter(self, thermodynamics):
-        """Lambda parameter is positive and matches the expected value for FeCoCrNi (CN12 radii)."""
+        """Lambda parameter is positive and matches the expected value for FeCoCrNi."""
         result = thermodynamics.lambda_
         assert result == pytest.approx(126.28, abs=1.0)
         assert result > 0
@@ -215,10 +215,10 @@ class TestEdgeCases:
         t.__dict__["mixing_enthalpy"] = 0.0
         assert math.isinf(t.omega)
 
-    def test_lambda_zero_atomic_size_difference_returns_inf(self):
-        """lambda_ returns math.inf when atomic_size_difference_cn12 == 0 (no size mismatch)."""
+    def test_lambda_zero_atomic_size_difference_cn12_returns_inf(self):
+        """lambda_ returns math.inf when atomic_size_difference == 0 (no size mismatch)."""
         t = HEAThermodynamics(AlloyComposition("FeCoCrNi"))
-        t.__dict__["atomic_size_difference_cn12"] = 0.0
+        t.__dict__["atomic_size_difference"] = 0.0
         assert math.isinf(t.lambda_)
 
     def test_omega_at_zero_temperature_returns_zero(self):
@@ -240,10 +240,10 @@ class TestSingleElementThermodynamics:
         t = HEAThermodynamics(AlloyComposition("Fe"))
         assert t.mixing_entropy == pytest.approx(0.0, abs=1e-10)
 
-    def test_atomic_size_difference_is_zero(self):
+    def test_atomic_size_difference_cn12_is_zero(self):
         """A single-element alloy has zero atomic size difference (no size mismatch)."""
         t = HEAThermodynamics(AlloyComposition("Fe"))
-        assert t.atomic_size_difference == pytest.approx(0.0, abs=1e-10)
+        assert t.atomic_size_difference_cn12 == pytest.approx(0.0, abs=1e-10)
 
     def test_allen_electronegativity_difference_is_zero(self):
         """A single-element alloy has zero Allen electronegativity difference."""
@@ -261,7 +261,7 @@ class TestSingleElementThermodynamics:
         assert math.isinf(t.omega)
 
     def test_lambda_is_inf_for_single_element(self):
-        """Lambda is infinite for a pure element because atomic_size_difference == 0."""
+        """Lambda is infinite for a pure element because atomic_size_difference_cn12 == 0."""
         t = HEAThermodynamics(AlloyComposition("Fe"))
         assert math.isinf(t.lambda_)
 

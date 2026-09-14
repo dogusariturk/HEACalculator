@@ -52,17 +52,17 @@ class TestAlloyCompositionEquimolar:
         """For equimolar FeCoCrNi each pair percentage is 0.25**2 and six pairs sum to 0.375."""
         assert sum(composition.pair_percentage) == pytest.approx(0.375, abs=1e-10)
 
-    def test_atomic_radius_list_length(self, composition):
-        """The atomic-radius list contains one value per element."""
-        assert len(composition.atomic_radius_list) == 4
+    def test_atomic_radius_cn12_list_length(self, composition):
+        """The CN12 radius list contains one value per element."""
+        assert len(composition.atomic_radius_cn12_list) == 4
 
-    def test_average_atomic_radius_is_float(self, composition):
-        """The weighted average atomic radius is stored as a float."""
-        assert isinstance(composition.average_atomic_radius, float)
+    def test_average_atomic_radius_cn12_is_float(self, composition):
+        """The weighted average CN12 radius is stored as a float."""
+        assert isinstance(composition.average_atomic_radius_cn12, float)
 
-    def test_average_atomic_radius_positive(self, composition):
-        """The weighted average atomic radius is a strictly positive value."""
-        assert composition.average_atomic_radius > 0
+    def test_average_atomic_radius_cn12_positive(self, composition):
+        """The weighted average CN12 radius is a strictly positive value."""
+        assert composition.average_atomic_radius_cn12 > 0
 
     def test_allen_electronegativity_list_length(self, composition):
         """The Allen electronegativity list contains one value per element."""
@@ -152,9 +152,9 @@ class TestAlloyCompositionSingleElement:
         """A single-element alloy has no pair percentages."""
         assert single_element_composition.pair_percentage == []
 
-    def test_atomic_radius_list_length(self, single_element_composition):
-        """Single-element alloy has exactly one atomic radius entry."""
-        assert len(single_element_composition.atomic_radius_list) == 1
+    def test_atomic_radius_cn12_list_length(self, single_element_composition):
+        """Single-element alloy has exactly one CN12 radius entry."""
+        assert len(single_element_composition.atomic_radius_cn12_list) == 1
 
     def test_allen_electronegativity_list_length(self, single_element_composition):
         """Single-element alloy has exactly one Allen CE entry."""
@@ -211,24 +211,28 @@ class TestAlloyCompositionRepeatedElement:
         assert sum(comp.atomic_percentage.values()) == pytest.approx(1.0, abs=1e-10)
 
 
-class TestAlloyCompositionCN12:
-    """Tests for CN12-corrected atomic radius properties."""
+class TestAlloyCompositionAtomicRadius:
+    """Tests for the ``atomic_radius`` properties."""
 
-    def test_atomic_radius_cn12_list_length(self, composition):
-        """CN12 radius list has one entry per element."""
-        assert len(composition.atomic_radius_cn12_list) == 4
+    def test_atomic_radius_list_length(self, composition):
+        """Own-structure radius list has one entry per element."""
+        assert len(composition.atomic_radius_list) == 4
 
-    def test_average_atomic_radius_cn12_is_float(self, composition):
-        """Weighted average CN12 radius is a float."""
-        assert isinstance(composition.average_atomic_radius_cn12, float)
+    def test_average_atomic_radius_is_float(self, composition):
+        """Weighted average atomic radius is a float."""
+        assert isinstance(composition.average_atomic_radius, float)
 
-    def test_average_atomic_radius_cn12_positive(self, composition):
-        """Weighted average CN12 radius is strictly positive for FeCoCrNi."""
-        assert composition.average_atomic_radius_cn12 > 0
+    def test_average_atomic_radius_positive(self, composition):
+        """Weighted average atomic radius is strictly positive for FeCoCrNi."""
+        assert composition.average_atomic_radius > 0
+
+    def test_average_atomic_radius_fecocrni(self, composition):
+        """Average atomic radius for equimolar FeCoCrNi equals (124.1+125.1+124.9+124.6)/4."""
+        assert composition.average_atomic_radius == pytest.approx(124.675, abs=1e-2)
 
     def test_average_atomic_radius_cn12_fecocrni(self, composition):
-        """Average CN12 radius for equimolar FeCoCrNi equals (124.1+125.1+124.9+124.6)/4."""
-        assert composition.average_atomic_radius_cn12 == pytest.approx(124.675, abs=1e-2)
+        """Average CN12 radius for equimolar FeCoCrNi equals (126+125+128+124)/4."""
+        assert composition.average_atomic_radius_cn12 == pytest.approx(125.75, abs=1e-2)
 
 
 class TestAlloyCompositionPaulingEN:

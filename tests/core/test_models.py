@@ -437,9 +437,9 @@ class TestNaNInputsReturnNA:
         assert p.model_1 == "N/A"
 
     def test_model_1_na_when_delta_is_nan(self, comp_thermo):
-        """model_1 returns 'N/A' when atomic_size_difference is NaN."""
+        """model_1 returns 'N/A' when atomic_size_difference_cn12 is NaN."""
         comp, t = comp_thermo
-        t.__dict__["atomic_size_difference"] = float("nan")
+        t.__dict__["atomic_size_difference_cn12"] = float("nan")
         p = SolidSolutionPredictor(comp, t)
         assert p.model_1 == "N/A"
 

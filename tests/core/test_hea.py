@@ -35,9 +35,9 @@ class TestHEACalculator:
         """Melting temperature is the weighted average of constituent melting points."""
         assert calculator.thermo.melting_temperature == 1872
 
-    def test_atomic_size_difference(self, calculator):
+    def test_atomic_size_difference_cn12(self, calculator):
         """Atomic size difference for FeCoCrNi using Slater radii (Fe=126, Co=125, Cr=128, Ni=124 pm)."""
-        assert calculator.thermo.atomic_size_difference == pytest.approx(1.18, abs=1e-2)
+        assert calculator.thermo.atomic_size_difference_cn12 == pytest.approx(1.18, abs=1e-2)
 
     def test_mixing_entropy(self, calculator):
         """Mixing entropy equals R*ln(4) for an equimolar 4-element alloy."""
