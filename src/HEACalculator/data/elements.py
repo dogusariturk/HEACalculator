@@ -24,17 +24,29 @@ class _Element:
         atomic_number: Atomic number.
         atomic_volume: Atomic volume in cm$^3$/mol.
         atomic_weight: Relative atomic weight.
-        atomic_radius: Slater atomic radius in pm.
-        atomic_radius_cn12: Goldschmidt CN12-corrected metallic radius in pm (NaN if unavailable).
+        atomic_radius_cn12: Goldschmidt CN12 metallic radius in pm.
+        atomic_radius: Atomic radius in pm (NaN if unavailable).
         nvalence: Number of valence electrons.
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
         pauling_electronegativity: Pauling electronegativity (NaN if unavailable).
         ea: Hume-Rothery electron-to-atom ratio (outer s+p electrons per atom; d and f excluded; NaN for noble gases).
 
+    Notes:
+        The two radius columns are different conventions, not alternative estimates of the same
+        quantity, and each model uses the one its source paper used. ``atomic_radius_cn12`` is
+        corrected to 12-fold coordination, so b.c.c. metals carry the ~3% CN8 to CN12 correction;
+        ``atomic_radius`` carries no such correction, so the same metals are ~3% smaller. They
+        agree for fcc and hcp metals, which are already 12-coordinated.
+
     References:
         1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm](https://www.ciaaw.org/atomic-weights.htm).
-        2. Slater, J.C. Atomic Radii in Crystals. J. Chem. Phys. 1964, 41(10), 3199.
-        3. Smithells Metals Reference Book, 8th ed., Table 4.1 (Goldschmidt CN12 corrected).
+        2. Greenwood, N.N.; Earnshaw, A. Chemistry of the Elements, 2nd ed.; Butterworth-Heinemann: Oxford, 1997
+           (metallic radii); cross-checked against Smithells Metals Reference Book, 8th ed., Table 4.25, column 6
+           (Goldschmidt radii). Non-metals fall back to covalent or van der Waals radii.
+        3. Teatum, E.T.; Gschneidner, K.A.; Waber, J.T. Compilation of Calculated Data Useful in Predicting
+           Metallurgical Behavior of the Elements in Binary Alloy Systems, LA-4003; Los Alamos Scientific
+           Laboratory, 1968, Table I; distances from Smithells Metals Reference Book, 8th ed., Table 4.25,
+           column 5.
         4. Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
         5. Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
         6. Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
@@ -45,8 +57,8 @@ class _Element:
     atomic_number: int
     atomic_volume: float
     atomic_weight: float
-    atomic_radius: float
     atomic_radius_cn12: float
+    atomic_radius: float
     nvalence: float
     allen_electronegativity: float
     pauling_electronegativity: float
@@ -65,6 +77,7 @@ class _Element:
             f"\tAtomic volume: {self.atomic_volume} cm^3/mol\n"
             f"\tAtomic weight: {self.atomic_weight}\n"
             f"\tAtomic radius: {self.atomic_radius} pm\n"
+            f"\tAtomic radius (CN12): {self.atomic_radius_cn12} pm\n"
             f"\tValence electrons: {self.nvalence}\n"
             f"\tAllen electronegativity: {self.allen_electronegativity}\n"
             f"\tPauling electronegativity: {self.pauling_electronegativity}\n"
@@ -78,8 +91,8 @@ _elements: dict[str, _Element] = {
         atomic_number=props["atomic_number"],
         atomic_volume=float(props["atomic_volume"]),
         atomic_weight=props["atomic_weight"],
-        atomic_radius=float(props["atomic_radius"]),
         atomic_radius_cn12=float(props["atomic_radius_cn12"]),
+        atomic_radius=float(props["atomic_radius"]),
         nvalence=props["nvalence"],
         allen_electronegativity=float(props["allen_electronegativity"]),
         pauling_electronegativity=float(props["pauling_electronegativity"]),

@@ -63,7 +63,7 @@ class SolidSolutionPredictor:
             - Yang, X.; Zhang, Y. Mater. Chem. Phys. 2012, 132, 233-238.
         """
         omega = self._t.omega
-        delta = self._t.atomic_size_difference
+        delta = self._t.atomic_size_difference_cn12
         if math.isnan(omega) or math.isnan(delta):
             return "N/A"
         return "Solid Solution" if omega >= 1.1 and delta <= 6.6 else "Intermetallic"

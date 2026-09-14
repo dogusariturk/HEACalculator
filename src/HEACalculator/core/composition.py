@@ -100,7 +100,7 @@ class AlloyComposition:
 
     @cached_property
     def atomic_radius_cn12_list(self) -> list[float]:
-        """Goldschmidt CN12 corrected atomic radius for each element in the same order as alloy.
+        """Goldschmidt CN12 atomic radius for each element in the same order as ``alloy``.
 
         Returns:
             CN12 radii in pm aligned with the alloy element order.
@@ -109,7 +109,7 @@ class AlloyComposition:
 
     @cached_property
     def average_atomic_radius_cn12(self) -> float:
-        """Composition-weighted average CN12 corrected atomic radius.
+        """Composition-weighted average Goldschmidt CN12 atomic radius.
 
         Returns:
             Composition-weighted average CN12 radius in pm.

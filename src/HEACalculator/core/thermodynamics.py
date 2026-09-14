@@ -38,21 +38,21 @@ class HEAThermodynamics:
         """Initialize with a parsed alloy composition."""
         self._c = composition
 
-    def _model_atomic_radius_list(self) -> list[float]:
-        """Return the per-element atomic radii used by the delta and gamma calculations.
-
-        Returns:
-            Atomic radii in pm aligned with the alloy element order.
-        """
-        return [self._c.elements[elm].atomic_radius for elm in self._c.alloy]
-
     def _model_atomic_radius_cn12_list(self) -> list[float]:
-        """Return the per-element CN12 radii used by the model-specific size calculations.
+        """Return the per-element Goldschmidt CN12 radii used by the delta and gamma calculations.
 
         Returns:
             CN12 radii in pm aligned with the alloy element order.
         """
         return [self._c.elements[elm].atomic_radius_cn12 for elm in self._c.alloy]
+
+    def _model_atomic_radius_list(self) -> list[float]:
+        """Return the per-element atomic radii used by the lambda and excess-entropy models.
+
+        Returns:
+            Atomic radii in pm aligned with the alloy element order.
+        """
+        return [self._c.elements[elm].atomic_radius for elm in self._c.alloy]
 
     def _average_radius(self, radii: list[float]) -> float:
         """Return the composition-weighted average radius for the supplied radius list.
@@ -175,25 +175,8 @@ class HEAThermodynamics:
         return math.ceil(result) if math.isfinite(result) else result
 
     @cached_property
-    def atomic_size_difference(self) -> float:
-        r"""Atomic size difference ($\delta$) of the alloy.
-
-        Returns:
-            Atomic size difference in percent using model radii.
-
-        References:
-            - Fang, S.S.; Xiao, X.S.; Xia, L.; Li, W.H.; Dong, Y.D. J. Non-Cryst. Solids 2003, 321, 120-125.
-        """
-        radii = self._model_atomic_radius_list()
-        average_radius = self._average_radius(radii)
-        _delta = sum(
-            pct * (1 - (r / average_radius)) ** 2 for pct, r in zip(self._c.atomic_percentage.values(), radii, strict=True)
-        )
-        return math.sqrt(_delta) * 100
-
-    @cached_property
     def atomic_size_difference_cn12(self) -> float:
-        """Atomic size difference computed with CN12 (Smithells/Goldschmidt) radii.
+        r"""Atomic size difference ($\delta$) of the alloy, computed with Goldschmidt CN12 radii.
 
         Returns:
             Atomic size difference in percent using CN12 radii.
@@ -203,6 +186,24 @@ class HEAThermodynamics:
             - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
         """
         radii = self._model_atomic_radius_cn12_list()
+        average_radius = self._average_radius(radii)
+        _delta = sum(
+            pct * (1 - (r / average_radius)) ** 2 for pct, r in zip(self._c.atomic_percentage.values(), radii, strict=True)
+        )
+        return math.sqrt(_delta) * 100
+
+    @cached_property
+    def atomic_size_difference(self) -> float:
+        """Atomic size difference computed with ``atomic_radius``.
+
+        Returns:
+            Atomic size difference in percent.
+
+        References:
+            - Fang, S.S.; Xiao, X.S.; Xia, L.; Li, W.H.; Dong, Y.D. J. Non-Cryst. Solids 2003, 321, 120-125.
+            - Senkov, O.N.; Miracle, D.B. Mater. Res. Bull. 2001, 36, 2183-2198.
+        """
+        radii = self._model_atomic_radius_list()
         average_radius = self._average_radius(radii)
         _delta = sum(
             pct * (1 - (r / average_radius)) ** 2 for pct, r in zip(self._c.atomic_percentage.values(), radii, strict=True)
@@ -301,7 +302,7 @@ class HEAThermodynamics:
         References:
             - Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T. Scr. Mater. 2015, 94, 28-31.
         """
-        radii = self._model_atomic_radius_list()
+        radii = self._model_atomic_radius_cn12_list()
         r_min, r_max = min(radii), max(radii)
         r_avg = self._average_radius(radii)
 
@@ -339,19 +340,19 @@ class HEAThermodynamics:
 
     @cached_property
     def lambda_(self) -> float:
-        """Lambda parameter (entropy / atomic-size-difference ratio).
+        r"""Lambda parameter (entropy / atomic-size-difference ratio).
 
-        Uses CN12 (Goldschmidt/Smithells) radii for delta.
+        Uses ``atomic_radius``, matching Singh *et al.*.
 
         Returns:
-            Dimensionless lambda parameter, or ``math.inf`` when the CN12 delta is zero.
+            Dimensionless lambda parameter, or ``math.inf`` when the delta is zero.
 
         References:
             - Singh, A.K.; Kumar, N.; Dwivedi, A.; Subramaniam, A. Intermetallics 2014, 53, 112-119.
         """
-        if self.atomic_size_difference_cn12 == 0:
+        if self.atomic_size_difference == 0:
             return math.inf
-        return self.mixing_entropy / (self.atomic_size_difference_cn12**2)
+        return self.mixing_entropy / (self.atomic_size_difference**2)
 
     def _compute_se_at_packing(self, xi: float) -> float:
         """S_E / k_B at a given packing fraction xi (dimensionless).
@@ -371,7 +372,7 @@ class HEAThermodynamics:
             - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
         """
         fractions = list(self._c.atomic_percentage.values())
-        diameters = [2.0 * r for r in self._model_atomic_radius_cn12_list()]
+        diameters = [2.0 * r for r in self._model_atomic_radius_list()]
         n = len(fractions)
 
         d3 = [d**3 for d in diameters]
@@ -456,8 +457,8 @@ class HEAThermodynamics:
 
         $S_H = |H_a| / T_m$ is the complementary entropy derived from the mixing enthalpy.
         H_a uses the Takeuchi & Inoue (2005) binary mixing enthalpy table, as cited by
-        Ye *et al.* (2015) refs [5,14]. $S_E$ uses the MCSL hard-sphere model with CN12
-        (Goldschmidt) radii. It is averaged over the BCC and FCC packing fractions before entering the ratio.
+        Ye *et al.* (2015) refs [5,14]. $S_E$ uses the MCSL hard-sphere model with ``atomic_radius``,
+        averaged over the BCC and FCC packing fractions before entering the ratio.
 
         Returns:
             Dimensionless phi parameter, or ``math.inf`` when $T_m$ or the averaged $S_E$ is zero.
