@@ -10,7 +10,7 @@ from HEACalculator.core.thermodynamics import HEAThermodynamics
 
 __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
-__version__ = "2.0.2"
+__version__ = "2.1.0"
 
 
 RESULT_HEADERS = (
