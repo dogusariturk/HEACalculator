@@ -171,7 +171,7 @@ class HEACalculator:
             t.min_formation_enthalpy,
         ]:
             result.append(self._fmt(item, ".2f"))
-        result.append(str(t.melting_temperature))
+        result.append(self._fmt(t.melting_temperature, "d"))
         result.append(p.microstructure)
         for item in [
             p.model_1,
@@ -222,7 +222,7 @@ class HEACalculator:
             f"\n{'Predictions':=^48}\n"
             f"{'Microstructure':25}:     {p.microstructure}\n"
             f"{'Model 1':25}:     {p.model_1} (Omega={self._fmt(t.omega, '.2f')}, Delta={self._fmt(t.atomic_size_difference_cn12, '.2f')})\n"
-            f"{'Model 2':25}:     {p.model_2} (DeltaHmix={self._fmt(t.mixing_enthalpy, '.2f')}, Delta={self._fmt(t.atomic_size_difference_cn12, '.2f')})\n"
+            f"{'Model 2':25}:     {p.model_2} (DeltaHmix={self._fmt(t.mixing_enthalpy, '.2f')}, Delta={self._fmt(t.atomic_size_difference, '.2f')})\n"
             f"{'Model 3':25}:     {p.model_3} (Gamma={self._fmt(t.gamma, '.2f')})\n"
             f"{'Model 4':25}:     {p.model_4} (Lambda={self._fmt(t.lambda_, '.2f')})\n"
             f"{'Model 5':25}:     {p.model_5} (Phi={self._fmt(t.phi, '.2f')})\n"
