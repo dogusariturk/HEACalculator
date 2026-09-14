@@ -288,7 +288,8 @@ from HEACalculator.data import Element, MixingEnthalpy, FormationEnthalpy
 fe = Element("Fe")
 print(fe.atomic_weight)             # 55.845
 print(fe.melting_point)             # 1811 K
-print(fe.atomic_radius)             # 126 pm
+print(fe.atomic_radius)             # 124.1 pm
+print(fe.atomic_radius_cn12)        # 126 pm (Goldschmidt CN12)
 print(fe.allen_electronegativity)   # 1.80 (Pauling units)
 print(fe.pauling_electronegativity) # 1.83 (Pauling scale)
 
