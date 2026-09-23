@@ -32,6 +32,8 @@ docs = [
 dev = [
     "prek>=0.3.4",
     "pytest>=9.0.2",
+    "pytest-qt>=4.5.0",
+    "PyQt6>=6.0.0",
     "ruff>=0.15.15",
     "ty>=0.0.42",
 ]
@@ -54,17 +56,19 @@ packages = ["src/HEACalculator"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+qt_api = "pyqt6"
+markers = [
+    "slow: spawns real subprocesses; deselect with -m 'not slow'",
+]
 
 [tool.coverage.run]
 source = ["src/HEACalculator"]
 omit = [
-    "src/HEACalculator/app.py",
     "src/HEACalculator/gui/*",
 ]
 
 [tool.coverage.report]
 omit = [
-    "src/HEACalculator/app.py",
     "src/HEACalculator/gui/*",
 ]
 
@@ -130,5 +134,4 @@ include = [
 exclude = [
     "src/HEACalculator/gui/*",
     "src/HEACalculator/app.py",
-    "tests/test_app.py"
 ]
