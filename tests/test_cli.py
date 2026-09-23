@@ -6,6 +6,7 @@ required.
 """
 
 import json
+import re
 import tempfile
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -23,7 +24,7 @@ runner = CliRunner()
 
 
 def _flat(text: str) -> str:
-    """Flatten a rich error box into one line so wrapped messages can be matched.
+    """Flatten rich-rendered output into one line so wrapped messages can be matched.
 
     Typer renders ``typer.BadParameter`` messages inside a bordered box and hard-wraps
     them at the terminal width, which splits a message across lines mid-sentence.
@@ -32,9 +33,11 @@ def _flat(text: str) -> str:
         text (str): Raw command output.
 
     Returns:
-        The output with box-drawing characters removed and all runs of whitespace
-            collapsed to a single space.
+        The output with colour codes and box-drawing characters removed and all runs
+            of whitespace collapsed to a single space.
     """
+    _ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
+    text = _ANSI_ESCAPE.sub("", text)
     for border in "\u2502\u256d\u2570\u256e\u256f\u2500":
         text = text.replace(border, " ")
     return " ".join(text.split())
@@ -998,7 +1001,7 @@ class TestHelpOutput(TestCase):
         result = runner.invoke(app, ["--help"])
         assert result.exit_code == 0
         for name in ("csv", "single", "range"):
-            assert name in result.stdout
+            assert name in _flat(result.stdout)
 
     def test_single_help_exits_zero(self):
         """The single subcommand's help renders successfully."""
@@ -1015,4 +1018,4 @@ class TestHelpOutput(TestCase):
     def test_single_without_arguments_shows_help(self):
         """The single subcommand shows its help when invoked with no arguments."""
         result = runner.invoke(app, ["single"])
-        assert "--json" in result.stdout
+        assert "--json" in _flat(result.stdout)
