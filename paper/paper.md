@@ -155,6 +155,6 @@ Claude Code (Anthropic, Claude Opus 5) and Codex (OpenAI, GPT-5) were used in th
 
 # Acknowledgements
 
-Portions of this research were conducted with the advanced computing resources provided by Texas A&M High Performance Research Computing. The calculations reported in this paper were partially performed at TUBITAK ULAKBIM, High Performance and Grid Computing Center (TRUBA resources).
+R.A. and D.S. acknowledge support from the U.S. Army Research Office (ARO) through Grant No. W911NF-22-2-0117 and the U.S. Army Contract No. W911NF-25-1-0112. Portions of this research were conducted with the advanced computing resources provided by Texas A&M High Performance Research Computing. The calculations reported in this paper were partially performed at TUBITAK ULAKBIM, High Performance and Grid Computing Center (TRUBA resources).
 
 # References
