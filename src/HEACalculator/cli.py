@@ -29,13 +29,14 @@ def csv_search(
     if not csv_path.exists():
         raise typer.BadParameter(f"File not found: {csv_file}")
 
-    if not json_output:
-        print(", ".join(HEACalculator.get_headers()))
-
     df = pd.read_csv(csv_path)
     col_map = {c.lower(): c for c in df.columns}
     if column.lower() not in col_map:
         raise typer.BadParameter(f"No '{column}' column found in {csv_file}. Available columns: {', '.join(df.columns)}")
+
+    if not json_output:
+        print(", ".join(HEACalculator.get_headers()))
+
     for alloy in df[col_map[column.lower()]]:
         if pd.isna(alloy):
             typer.echo("# Skipping empty row", err=True)

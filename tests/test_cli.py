@@ -397,6 +397,18 @@ class TestCsvSearch(TestCase):
         finally:
             Path(tmp_path).unlink()
 
+    def test_csv_missing_column_prints_no_header(self):
+        """A missing composition column writes nothing to stdout, not even the header."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write("alloy_name\nFeCoCrNi\n")
+            tmp_path = f.name
+        try:
+            result = runner.invoke(app, ["csv", tmp_path])
+            assert result.exit_code != 0
+            assert result.stdout == ""
+        finally:
+            Path(tmp_path).unlink()
+
     def test_csv_case_insensitive_composition_column(self):
         """A CSV with 'Composition' (capitalized) column is accepted."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
