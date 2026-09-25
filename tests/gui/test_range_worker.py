@@ -139,7 +139,6 @@ class TestConstruction:
         assert RangeSearchWorker([], parent=batch_page).parent() is batch_page
 
 
-@pytest.mark.slow
 class TestRealMultiprocessing:
     """End-to-end tests that spawn a real ProcessPoolExecutor."""
 
