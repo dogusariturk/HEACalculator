@@ -241,7 +241,7 @@ class HEAThermodynamics:
 
         References:
             - Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.;
-              CRC Press: London, 2014. ISBN 9781482208689.
+              CRC Press: Boca Raton, FL, 2014. ISBN 9781482208689.
         """
         chi_avg = self._c.average_pauling_electronegativity
         _delta_chi = sum(
@@ -369,7 +369,7 @@ class HEAThermodynamics:
 
         References:
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80.
-            - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
+            - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W., Jr. J. Chem. Phys. 1971, 54, 1523-1525.
         """
         fractions = list(self._c.atomic_percentage.values())
         diameters = [2.0 * r for r in self._model_atomic_radius_list()]
@@ -415,7 +415,7 @@ class HEAThermodynamics:
 
         References:
             - Ye, Y.F. et al. Intermetallics 2015, 59, 75-80. (Appendix, eqs. 3A-4B)
-            - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W.J. J. Chem. Phys. 1971, 54, 1523.
+            - Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W., Jr. J. Chem. Phys. 1971, 54, 1523-1525.
         """
         return GAS_CONSTANT * (self._compute_se_at_packing(0.74) + self._compute_se_at_packing(0.68)) / 2
 
