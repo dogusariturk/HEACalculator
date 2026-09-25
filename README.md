@@ -14,7 +14,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3590318.svg)](https://doi.org/10.5281/zenodo.3590318)
 [![DOI](https://img.shields.io/badge/DOI-10.48550%2FarXiv.2606.19661-blue.svg)](https://doi.org/10.48550/arXiv.2606.19661)
 
-`HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics to predict the formation of solid solutions in High Entropy Alloys (HEAs). It provides both a CLI (Typer) and GUI (PyQt6) interface.
+`HEACalculator` is a Python tool for calculating phenomenological parameters based on thermodynamics and physics to predict the formation of solid solutions in High Entropy Alloys (HEAs). It provides a CLI (Typer), a GUI (PyQt6), and a Python API.
 
 <p>
   <a href="https://github.com/dogusariturk/HEACalculator/issues/new?labels=bug">Report a Bug</a> |
@@ -120,7 +120,7 @@ HEACalculator search single FeCoCrNi --json
 HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5
 ```
 
-Append `--csv` / `--json` to redirect output to a file:
+Append `--csv` or `--json` to get CSV or newline-delimited JSON instead of formatted text, and redirect it to a file with `>`:
 
 ```sh
 HEACalculator search range --elements "Al Ti V" --start 0 --end 100 --step 5 --csv > results.csv
@@ -146,7 +146,7 @@ If your CSV uses a different column name, override it with `--column`/`-c`:
 HEACalculator search csv alloys.csv --column Alloy
 ```
 
-Append `--json` to get machine-readable JSON output instead of formatted text:
+Append `--json` to get newline-delimited JSON (one object per alloy) instead of CSV rows:
 
 ```sh
 HEACalculator search csv alloys.csv --json
@@ -184,6 +184,62 @@ Equivalent to `search range`.
 3. Click **Search**
 4. Click **Save** to export results as CSV
 
+### Python API
+
+`HEACalculator` can also be imported as a library. The CLI and GUI both use the same `HEACalculator` class.
+
+---
+
+#### Single Alloy Calculations
+
+`HEACalculator(<ALLOY>)` calculates all parameters and predictions for the given alloy. Printing it gives the same report as `search single`.
+
+```python
+from HEACalculator import HEACalculator
+
+hea = HEACalculator("FeCoCrNi")
+print(hea)
+```
+
+Individual properties are available through `hea.thermo`, and solid solution predictions through `hea.predictor`:
+
+```python
+hea.thermo.mixing_enthalpy                 # -3.75 kJ/mol
+hea.thermo.mixing_entropy                  # 11.53 J/K.mol
+hea.thermo.valence_electron_concentration  # 8.25
+hea.thermo.omega                           # 5.75
+hea.thermo.omega_at(800)                   # Omega at 800 K
+
+hea.predictor.microstructure               # "FCC"
+hea.predictor.model_1                      # "Solid Solution"
+hea.predictor.model_7()                    # method, accepts optional parameters
+```
+
+Use `get_dict()` to get raw numeric values, the same data as `--json`. NaN values are returned as `None`:
+
+```python
+import json
+
+json.dumps(hea.get_dict())
+```
+
+---
+
+#### Range Screening
+
+`HEACalculator.screen` calculates many alloys in parallel. It takes a list of formulas or the output of `find_all_comps`, which generates the same compositions as `search range`. By default it uses all CPU cores; set `n_workers` to limit this. It yields fully calculated `HEACalculator` objects in input order.
+
+```python
+import pandas as pd
+
+from HEACalculator import HEACalculator
+from HEACalculator.utils import find_all_comps
+
+if __name__ == "__main__":  # required by multiprocessing on macOS and Windows
+    compositions = find_all_comps("Al Ti V", start=0, end=100, step=5)
+    results = pd.DataFrame(calc.get_dict() for calc in HEACalculator.screen(compositions, n_workers=4))
+```
+
 ---
 
 ## Features
@@ -191,7 +247,7 @@ Equivalent to `search range`.
 - Property calculations
   - Density
   - Melting Temperature
-  - Mixing Enthalpy [^1]
+  - Mixing Enthalpy [^1] [^18]
   - Miedema Mixing Enthalpy [^11]
   - Mixing Entropy
   - Formation Enthalpy [^2]
@@ -200,14 +256,14 @@ Equivalent to `search range`.
 
 - Parameters and predictions
   - Expected Microstructure [^3]
-  - Delta Parameter (Atomic Size Difference) [^4]
+  - Delta Parameter (Atomic Size Difference) [^4] [^21]
   - Delta Parameter (CN12-corrected Atomic Size Difference) [^4]
-  - Electronegativity Difference (Allen CE scale)
+  - Electronegativity Difference (Allen CE scale) [^12] [^13]
   - Electronegativity Difference (Pauling scale) [^16]
   - Omega Parameter [^5]
   - Gamma Parameter [^6]
   - Lambda Parameter [^7]
-  - Phi Parameter [^9]
+  - Phi Parameter [^9] [^19] [^20]
   - Solid Solution Prediction Models
       - Model 1 [^5]
       - Model 2 [^8]
@@ -218,19 +274,25 @@ Equivalent to `search range`.
       - Model 7 [^10]
       - Model 8 [^11]
 
-[^1]: Zhang, Y.; Zuo, T.T.; Tang, Z.; Gao, M.C.; Dahmen, K.A.; Liaw, P.K.; Lu, Z.P. Prog. Mater. Sci. 2014, 61.
-[^2]: Troparevsky, M. C.; Morris, J. R.; Kent, P. R. C.; Lupini, A. R.; Stocks, G. M.; Phys. Rev. X, 5(1) (2015)
+[^1]: Zhang, Y.; Zuo, T.T.; Tang, Z.; Gao, M.C.; Dahmen, K.A.; Liaw, P.K.; Lu, Z.P. Prog. Mater. Sci. 2014, 61, 1–93.
+[^2]: Troparevsky, M.C.; Morris, J.R.; Kent, P.R.C.; Lupini, A.R.; Stocks, G.M. Phys. Rev. X 2015, 5(1), 011041.
 [^3]: Guo, S.; Ng, C.; Lu, J.; Liu, C.T. J. Appl. Phys. 2011, 109, 103505.
-[^4]: S.S.Fang, X. S. Xiao, L. Xia, W. H. Li, Y. D. Dong, J. Non-Cryst. Solids 2003, 321, 120.
+[^4]: Fang, S.S.; Xiao, X.S.; Xia, L.; Li, W.H.; Dong, Y.D. J. Non-Cryst. Solids 2003, 321, 120–125.
 [^5]: Yang, X.; Zhang, Y. Mater. Chem. Phys. 2012, 132, 233–238.
-[^6]: Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T.; Scr. Mater. 94 (2015) 28–31.
-[^7]: Singh, A.K.; Kumar N.; Dwivedi A.; Subramaniam A.; Intermetallics 53 (2014) 112–119.
-[^8]: S. Guo, Q. Hu, C. Ng, C.T. Liu, Intermetallics 41 (0) (2013) 96–103.
-[^9]: Y.F. Ye, Q. Wang, J. Lu, C.T. Liu, Y. Yang, Scr. Mater. 104 (2015) 53–55.
-[^10]: O.N. Senkov, D.B. Miracle, J. Alloys Compd. 658 (2016) 603–607.
-[^11]: D.J.M. King, S.C. Middleburgh, A.G. McGregor, M.B. Cortie, Acta Mater. 104 (2016) 172–179.
-[^16]: Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
+[^6]: Wang, Z.; Huang, Y.; Yang, Y.; Wang, J.; Liu, C.T. Scr. Mater. 2015, 94, 28–31.
+[^7]: Singh, A.K.; Kumar, N.; Dwivedi, A.; Subramaniam, A. Intermetallics 2014, 53, 112–119.
+[^8]: Guo, S.; Hu, Q.; Ng, C.; Liu, C.T. Intermetallics 2013, 41, 96–103.
+[^9]: Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Scr. Mater. 2015, 104, 53–55.
+[^10]: Senkov, O.N.; Miracle, D.B. J. Alloys Compd. 2016, 658, 603–607.
+[^11]: King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172–179.
+[^12]: Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780–2783.
+[^13]: Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132–5137.
+[^16]: Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: Boca Raton, FL, 2014. ISBN 9781482208689.
 [^17]: Hume-Rothery, W.; Smallman, R.E.; Haworth, C.W. The Structure of Metals and Alloys, 5th ed.; Institute of Metals: London, 1969.
+[^18]: Takeuchi, A.; Inoue, A. Mater. Trans. 2005, 46(12), 2817–2829.
+[^19]: Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Intermetallics 2015, 59, 75–80.
+[^20]: Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W., Jr. J. Chem. Phys. 1971, 54, 1523–1525.
+[^21]: Senkov, O.N.; Miracle, D.B. Mater. Res. Bull. 2001, 36, 2183–2198.
 
 ---
 
