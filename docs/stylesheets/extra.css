@@ -7,3 +7,7 @@
   height: 40px;
   width: auto;
 }
+
+.cli-output code {
+  font-family: Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+}
