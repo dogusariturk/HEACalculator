@@ -3,10 +3,17 @@
 from __future__ import annotations
 
 import math
+import os
+from concurrent.futures import ProcessPoolExecutor
+from contextlib import suppress
+from typing import TYPE_CHECKING
 
 from HEACalculator.core.composition import AlloyComposition
 from HEACalculator.core.models import SolidSolutionPredictor
 from HEACalculator.core.thermodynamics import HEAThermodynamics
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator, Sequence
 
 __author__ = "Doguhan Sariturk"
 __email__ = "dogu.sariturk@gmail.com"
@@ -100,6 +107,28 @@ class HEACalculator:
     def get_headers(cls) -> list[str]:
         """Return the tabular result headers in the same order as ``get_list()``."""
         return list(RESULT_HEADERS)
+
+    @staticmethod
+    def screen(
+        compositions: Sequence[str] | tuple[dict[str, int | float], set[tuple[float, ...]]],
+        n_workers: int | None = None,
+    ) -> Iterator[HEACalculator]:
+        """Calculate many alloys in parallel, yielding results in input order.
+
+        Args:
+            compositions: Alloy formulas, or the output of ``find_all_comps``.
+            n_workers (int | None): Number of worker processes. Defaults to the CPU count.
+
+        Returns:
+            A fully calculated ``HEACalculator`` per alloy. As with a single alloy, an alloy
+                that cannot be calculated raises when its properties are accessed.
+        """
+        if compositions and isinstance(compositions[0], dict):
+            formula, comps = compositions
+            compositions = ["".join(f"{el}{x}" for el, x in zip(formula, c, strict=True) if x) for c in sorted(comps)]
+        workers = max(1, min(n_workers or os.cpu_count() or 1, len(compositions)))
+        with ProcessPoolExecutor(max_workers=workers) as executor:
+            yield from executor.map(_calculate, compositions, chunksize=max(1, len(compositions) // (workers * 4)))
 
     def get_dict(self) -> dict:
         """Return all calculated properties as a dict with raw numeric values.
@@ -230,3 +259,11 @@ class HEACalculator:
             f"{'Model 7':25}:     {p.model_7()} (k1={self._fmt(p.model_7_k1(), '.2f')}, k1_cr={self._fmt(p.model_7_k1_critical(), '.2f')})\n"
             f"{'Model 8':25}:     {p.model_8} (F={self._fmt(t.f_parameter, '.2f')})\n"
         )
+
+
+def _calculate(formula: str) -> HEACalculator:
+    """Calculate every property of ``HEACalculator(formula)`` so the result pickles back with its cached values."""
+    calc = HEACalculator(formula)
+    with suppress(Exception):
+        str(calc)
+    return calc

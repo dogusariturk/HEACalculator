@@ -17,7 +17,7 @@ from unittest.mock import patch
 from typer.testing import CliRunner
 
 from HEACalculator import HEACalculator
-from HEACalculator.cli import _worker_csv, _worker_json, _worker_str, app
+from HEACalculator.cli import app
 from HEACalculator.exceptions import MissingFormationEnthalpyError, MissingMixingEnthalpyError
 
 runner = CliRunner()
@@ -595,64 +595,6 @@ class TestRangeSearchEdgeCases(TestCase):
             ["range", "--elements", "FeNi", "--start", "10", "--end", "20", "--step", "50"],
         )
         assert result.exit_code == 0
-
-
-class TestWorkerFunctions(TestCase):
-    """Tests for the ``range`` subcommand's ProcessPoolExecutor workers.
-
-    The workers run in child processes during a real ``range`` invocation, so they are
-    exercised directly here to pin their return contract and error formatting.
-    """
-
-    def test_worker_str_success_returns_report_and_no_error(self):
-        """_worker_str returns the human-readable report and no error for a valid formula."""
-        output, err = _worker_str("FeCoCrNi")
-        assert output is not None
-        assert err is None
-        assert "FeCoCrNi" in output
-        assert "Density" in output
-
-    def test_worker_str_failure_returns_error_and_no_output(self):
-        """_worker_str returns a skip message and no output for an unknown element."""
-        output, err = _worker_str("Xx")
-        assert output is None
-        assert err is not None
-        assert err.startswith("# Skipping 'Xx':")
-
-    def test_worker_json_success_returns_valid_json(self):
-        """_worker_json returns a JSON object carrying the input formula."""
-        output, err = _worker_json("FeCoCrNi")
-        assert output is not None
-        assert err is None
-        assert json.loads(output)["formula"] == "FeCoCrNi"
-
-    def test_worker_json_failure_returns_error_and_no_output(self):
-        """_worker_json returns a skip message and no output for an unknown element."""
-        output, err = _worker_json("Xx")
-        assert output is None
-        assert err is not None
-        assert err.startswith("# Skipping 'Xx':")
-
-    def test_worker_csv_success_returns_row_matching_header_width(self):
-        """_worker_csv returns a row with exactly as many fields as there are headers."""
-        output, err = _worker_csv("FeCoCrNi")
-        assert output is not None
-        assert err is None
-        assert len(output.split(", ")) == len(HEACalculator.get_headers())
-
-    def test_worker_csv_failure_returns_error_and_no_output(self):
-        """_worker_csv returns a skip message and no output for an unknown element."""
-        output, err = _worker_csv("Xx")
-        assert output is None
-        assert err is not None
-        assert err.startswith("# Skipping 'Xx':")
-
-    def test_worker_error_messages_are_comment_prefixed(self):
-        """Every worker prefixes its error with '#' so it is ignorable in piped output."""
-        for worker in (_worker_str, _worker_json, _worker_csv):
-            _, err = worker("Xx")
-            assert err is not None
-            assert err.startswith("#")
 
 
 class TestSingleSearchErrorMessages(TestCase):

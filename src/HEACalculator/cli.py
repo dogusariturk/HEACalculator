@@ -1,9 +1,7 @@
 """CLI search subcommands for HEACalculator."""
 
 import json
-import os
 import sys
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -18,57 +16,6 @@ from HEACalculator.exceptions import (
 from HEACalculator.utils import find_all_comps
 
 app = typer.Typer()
-
-
-def _worker_str(formula: str) -> tuple[str | None, str | None]:
-    """Compute the human-readable report for a single alloy formula.
-
-    Intended as a ProcessPoolExecutor worker.
-
-    Args:
-        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
-
-    Returns:
-        (output, None) on success, or (None, error_message) on failure.
-    """
-    try:
-        return str(HEACalculator(formula)), None
-    except Exception as e:
-        return None, f"# Skipping '{formula}': {e}"
-
-
-def _worker_json(formula: str) -> tuple[str | None, str | None]:
-    """Compute a JSON result object for a single alloy formula.
-
-    Intended as a ProcessPoolExecutor worker.
-
-    Args:
-        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
-
-    Returns:
-        (output, None) on success, or (None, error_message) on failure.
-    """
-    try:
-        return json.dumps(HEACalculator(formula).get_dict()), None
-    except Exception as e:
-        return None, f"# Skipping '{formula}': {e}"
-
-
-def _worker_csv(formula: str) -> tuple[str | None, str | None]:
-    """Compute a comma-separated result row for a single alloy formula.
-
-    Intended as a ProcessPoolExecutor worker.
-
-    Args:
-        formula (str): Alloy formula string (e.g. ``Fe25Co25Cr25Ni25``).
-
-    Returns:
-        (output, None) on success, or (None, error_message) on failure.
-    """
-    try:
-        return ", ".join(HEACalculator(formula).get_list()), None
-    except Exception as e:
-        return None, f"# Skipping '{formula}': {e}"
 
 
 @app.command(name="csv")
@@ -149,29 +96,14 @@ def range_search(
         print(", ".join(HEACalculator.get_headers()))
         sys.stdout.flush()
 
-    formula, composition_set = find_all_comps(elements, start, end, step)
-    alloys = [
-        "".join(f"{k}{v}" for k, v in {**formula, **dict(zip(formula.keys(), composition, strict=True))}.items() if v != 0)
-        for composition in composition_set
-    ]
-
-    if not alloys:
+    compositions = find_all_comps(elements, start, end, step)
+    if not compositions[1]:
         return
 
-    workers = min(os.cpu_count() or 1, len(alloys))
-    chunksize = max(1, len(alloys) // (workers * 4))
-    if csv:
-        worker_fn = _worker_csv
-    elif json_output:
-        worker_fn = _worker_json
-    else:
-        worker_fn = _worker_str
-
-    with ProcessPoolExecutor(max_workers=workers) as executor:
-        results = executor.map(worker_fn, alloys, chunksize=chunksize)
-        with typer.progressbar(results, length=len(alloys), label="Screening compositions", file=sys.stderr) as progress:
-            for output, err in progress:
-                if err:
-                    typer.echo(err, err=True)
-                else:
-                    print(output)
+    results = HEACalculator.screen(compositions)
+    with typer.progressbar(results, length=len(compositions[1]), label="Screening compositions", file=sys.stderr) as progress:
+        for calc in progress:
+            try:
+                print(", ".join(calc.get_list()) if csv else json.dumps(calc.get_dict()) if json_output else calc)
+            except Exception as e:
+                typer.echo(f"# Skipping '{calc.formula}': {e}", err=True)

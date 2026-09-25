@@ -10,6 +10,8 @@ import math
 import pytest
 
 from HEACalculator.core.hea import HEACalculator
+from HEACalculator.exceptions import ElementNotFoundError
+from HEACalculator.utils import find_all_comps
 
 
 class TestHEACalculator:
@@ -558,3 +560,21 @@ class TestResultHeadersConstant:
         result = HEACalculator.get_headers()
         assert isinstance(result, list)
         assert tuple(result) == RESULT_HEADERS
+
+
+class TestScreen:
+    """Tests for parallel calculation with ``HEACalculator.screen``."""
+
+    def test_keeps_order_and_defers_errors(self):
+        """Results follow input order; a failing alloy raises on access instead of stopping the screen."""
+        results = list(HEACalculator.screen(["FeCoCrNi", "FeXx", "FeNi"], n_workers=2))
+        assert [calc.formula for calc in results] == ["FeCoCrNi", "FeXx", "FeNi"]
+        assert str(results[0]) == str(HEACalculator("FeCoCrNi"))
+        with pytest.raises(ElementNotFoundError, match="Xx"):
+            results[1].get_dict()
+
+    def test_accepts_find_all_comps_output(self):
+        """find_all_comps output is expanded into sorted formulas without pure elements."""
+        results = list(HEACalculator.screen(find_all_comps("Al Ti V", 0, 100, 50)))
+        assert [calc.formula for calc in results] == ["Ti50.0V50.0", "Al50.0V50.0", "Al50.0Ti50.0"]
+        assert list(HEACalculator.screen([])) == []
