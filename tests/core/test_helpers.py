@@ -1,7 +1,7 @@
 """Tests for nested_formula_parser.
 
 Covers simple formulas, rational stoichiometry, nested parentheses,
-bracket/charge stripping, and input validation behavior.
+square brackets, zero counts, and input validation behavior.
 """
 
 from unittest import TestCase
@@ -84,23 +84,24 @@ class TestNestedParentheses(TestCase):
         assert result == {"Fe": 6, "Co": 3}
 
 
-class TestChargeAndBracketStripping(TestCase):
-    """Stripping of square brackets and ionic charge symbols before parsing."""
+class TestSquareBracketsAndZeroCounts(TestCase):
+    """Square brackets group like round brackets; zero-count elements are dropped."""
 
-    def test_square_brackets_stripped(self):
-        """Square brackets are removed before element counting."""
-        result = nested_formula_parser("[Fe]Co")
-        assert result == {"Fe": 1, "Co": 1}
+    def test_square_brackets_group(self):
+        """A multiplier after ']' scales the whole bracketed group."""
+        assert nested_formula_parser("[Fe]Co") == {"Fe": 1, "Co": 1}
+        assert nested_formula_parser("[FeCo]2Ni") == {"Fe": 2, "Co": 2, "Ni": 1}
 
-    def test_positive_charge_stripped(self):
-        """A trailing '+' charge symbol is stripped before parsing."""
-        result = nested_formula_parser("FeCo+")
-        assert result == {"Fe": 1, "Co": 1}
+    def test_zero_count_element_dropped(self):
+        """An element written with a zero count is left out."""
+        assert nested_formula_parser("Fe0Co50Ni50") == {"Co": 50, "Ni": 50}
 
-    def test_negative_charge_stripped(self):
-        """A trailing '-' charge symbol is stripped before parsing."""
-        result = nested_formula_parser("FeCo-")
-        assert result == {"Fe": 1, "Co": 1}
+
+@pytest.mark.parametrize("formula", ["Ni(FeCo", "Fe)Co", "2Fe", "Fe1e3", "Fe-Co", "Ti-6Al-4V", "FeCo+", "FeCo-", "Fe0Co0", ""])
+def test_malformed_formula_raises(formula):
+    """Malformed formulas raise ValueError instead of returning a wrong composition."""
+    with pytest.raises(ValueError, match="may not be a formula"):
+        nested_formula_parser(formula)
 
 
 class TestValidation(TestCase):
