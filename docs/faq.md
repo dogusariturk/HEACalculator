@@ -6,14 +6,15 @@
 
 `HEACalculator` uses a flexible chemical formula parser that handles several common styles:
 
-| Style                   | Example            | Notes                                   |
-|-------------------------|--------------------|-----------------------------------------|
-| Equimolar (symbol-only) | `FeCoCrNi`         | All elements treated as equal fractions |
-| Explicit atom counts    | `Fe25Co25Cr25Ni25` | Counts are normalised internally        |
-| Nested brackets         | `(FeCo)2CrNi`      | Parentheses with multipliers            |
-| Mixed counts            | `Fe10Co20Cr30Ni40` | Any non-negative integer counts         |
+| Style                   | Example                        | Notes                                       |
+|-------------------------|--------------------------------|---------------------------------------------|
+| Equimolar (symbol-only) | `FeCoCrNi`                     | All elements treated as equal fractions     |
+| Explicit atom counts    | `Fe25Co25Cr25Ni25`             | Counts are normalized internally            |
+| Fractional counts       | `Al0.5CoCrFeNi`                | Decimal counts are allowed                  |
+| Nested brackets         | `(FeCo)2CrNi` or `[FeCo]2CrNi` | Round or square brackets with multipliers   |
+| Mixed counts            | `Fe10Co20Cr30Ni40`             | Any non-negative integer or decimal counts  |
 
-Element symbols must start with an uppercase letter (`Fe`, not `fe`). Spaces inside the formula are not allowed.
+Element symbols must start with an uppercase letter (`Fe`, not `fe`). Spaces are ignored, so `Fe Co Cr Ni` and `FeCoCrNi` are the same alloy. Quote a formula that contains spaces on the command line (e.g. `HEACalculator search single "Fe25 Co75"`), otherwise the shell splits it into separate arguments.
 
 ---
 
@@ -27,7 +28,7 @@ If you provide a formula without numeric counts (e.g. `FeCoCrNi`), all elements 
 
 There is no hard limit on the number of components. However:
 
-- The mixing enthalpy and formation enthalpy databases cover a finite set of binary pairs. If a pair is missing, a `MissingMixingEnthalpyError` or `MissingFormationEnthalpyError` is raised.
+- The mixing enthalpy and formation enthalpy databases cover a finite set of binary pairs. If a pair is missing, the values that need it (and the models that use them) are reported as `N/A` (`null` in JSON), and everything else is still calculated. See [Some results show `N/A`](troubleshooting.md#some-results-show-na).
 - Solid-solution criteria were derived for 5-component alloys and may be less reliable for 2- or 3-component systems.
 
 ---
@@ -49,8 +50,8 @@ Most parameters (density, VEC, delta, mixing enthalpy/entropy) are calculated at
 
 - `omega` is evaluated at the estimated melting temperature $T_m$.
 - `omega_at(T)` can be called with an arbitrary temperature.
-- Model 6 evaluates formation enthalpies at $0.55\,T_m$.
-- Model 7 defaults to an annealing temperature of $0.60\,T_m$ (configurable).
+- Model 6 compares the 0 K DFT formation enthalpies against the entropy bound $-T\,\Delta S_{\text{mix}}$, evaluated at $T = 0.55\,T_m$.
+- Model 7 defaults to an annealing temperature of $0.55\,T_m$ and $k_2 = 0.6$; both can be changed with `model_7(k_2=..., annealing_temperature=...)`.
 
 ---
 
@@ -65,18 +66,31 @@ hea = HEACalculator("AlCoCrFeNi")
 print(hea.thermo.mixing_enthalpy)
 ```
 
+To calculate many alloys in parallel, use `HEACalculator.screen`. See [Parallel screening](usage.md#parallel-screening).
+
 See the [Usage](usage.md) page for full examples.
 
 ---
 
 ## How do I cite HEACalculator?
 
-If you use `HEACalculator` in your research, please cite:
+If you use `HEACalculator` in your research, please cite the following:
 
-> Doğuhan Sarıtürk. *HEACalculator*. (2019). doi:[10.5281/zenodo.3590318](https://doi.org/10.5281/zenodo.3590318)
+> Sarıtürk, D., Kalay, Y. E., & Arróyave, R. (2026). HEACalculator: An Open-Source Python Tool for Thermodynamic Property Calculation and Solid Solution Prediction in High-Entropy Alloys. arXiv. https://doi.org/10.48550/arXiv.2606.19661
+
+> Sarıtürk, D. (2019). HEACalculator. Zenodo. https://doi.org/10.5281/zenodo.3590318
 
 ??? quote "BibTeX"
     ```bibtex
+    @misc{sariturk_2026_arxiv,
+      author    = {Sarıtürk, Doğuhan and Kalay, Yunus Eren and Arróyave, Raymundo},
+      title     = {{HEACalculator}: An Open-Source {Python} Tool for Thermodynamic Property Calculation and Solid Solution Prediction in High-Entropy Alloys},
+      year      = 2026,
+      publisher = {arXiv},
+      doi       = {10.48550/arXiv.2606.19661},
+      url       = {https://doi.org/10.48550/arXiv.2606.19661},
+    }
+
     @software{sariturk_2019_3590318,
       author    = {Sarıtürk, Doğuhan},
       title     = {HEACalculator},
@@ -100,14 +114,3 @@ You should also cite the original papers for any specific prediction models you 
 ## How do I report a bug or request a feature?
 
 Open an issue on GitHub: [github.com/dogusariturk/HEACalculator/issues](https://github.com/dogusariturk/HEACalculator/issues)
-
----
-
-## How do I build the documentation locally?
-
-```bash
-uv sync --extra docs
-uv run mkdocs serve
-```
-
-Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
