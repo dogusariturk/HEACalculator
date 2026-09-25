@@ -33,7 +33,7 @@
 
 High Entropy Alloys (HEAs) are multi-principal-element alloys that are difficult to characterize from composition alone. `HEACalculator` takes a composition as input, computes thermodynamic and physical parameters, and runs those values through eight published solid-solution formation models.
 
-A CLI (built on [Typer](https://typer.tiangolo.com/)) and a GUI (built with [PyQt6](https://riverbankcomputing.com/software/pyqt/)) both use the same calculation core.
+A CLI (built on [Typer](https://typer.tiangolo.com/)), a GUI (built with [PyQt6](https://riverbankcomputing.com/software/pyqt/)), and a Python API all use the same calculation core.
 
 ---
 
@@ -44,7 +44,7 @@ A CLI (built on [Typer](https://typer.tiangolo.com/)) and a GUI (built with [PyQ
 - Density (g/cm$^3$)
 - Melting Temperature (K)
 - Mixing Enthalpy, $\Delta H_{\text{mix}}$ (kJ/mol)
-- Miedema Mixing Enthalpy, $\Delta H_{\text{mix}}$ (kJ/mol)
+- Miedema Mixing Enthalpy, $\Delta H_{\text{mix}}^{\text{Miedema}}$ (kJ/mol)
 - Mixing Entropy, $\Delta S_{\text{mix}}$ (J/K·mol)
 - Formation Enthalpy, $\Delta H_f$ (meV/atom)
 - Minimum Formation Enthalpy, min. $\Delta H_f$ (meV/atom)

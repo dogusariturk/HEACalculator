@@ -71,7 +71,7 @@ uv run --extra docs mkdocs serve
 
 ## Commit messages and pull requests
 
-- Write clear, imperative commit messages (e.g. "Add BSF k-path validation", not "Added" or "Adding").
+- Write clear, imperative commit messages (e.g. "Add Pauling electronegativity difference", not "Added" or "Adding").
 - Keep pull requests focused on a single change; unrelated fixes should be separate PRs.
 - Reference related issues in the PR description (e.g. `Fixes #123`).
 - Ensure `uv run prek run --all-files` and `uv run pytest tests/ -v` pass locally before opening the PR. CI runs the same checks (`.github/workflows/lint.yml` and `.github/workflows/tests.yml`) and must pass before merge.

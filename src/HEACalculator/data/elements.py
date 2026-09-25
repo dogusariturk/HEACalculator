@@ -49,7 +49,7 @@ class _Element:
            column 5.
         4. Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
         5. Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
-        6. Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: London, 2014. ISBN 9781482208689.
+        6. Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: Boca Raton, FL, 2014. ISBN 9781482208689.
     """
 
     symbol: str

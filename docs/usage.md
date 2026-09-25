@@ -1,6 +1,6 @@
 # Usage
 
-`HEACalculator` provides two interfaces, a **command-line interface (CLI)** and a **graphical user interface (GUI)**, both backed by the same calculation core.
+`HEACalculator` provides a **command-line interface (CLI)**, a **graphical user interface (GUI)**, and a **[Python API](#python-api)**, all backed by the same calculation core.
 
 ---
 
@@ -41,13 +41,13 @@ Use `uv add` instead when `HEACalculator` should live inside a project's environ
 
 ## Command-Line Interface
 
-![HEACalculator CLI help](https://user-images.githubusercontent.com/46679086/205514909-ab4930cd-2f5b-4d9c-9598-750c661d44db.png)
-
 Running `HEACalculator` without arguments displays the help screen:
 
 ```bash
-HEACalculator --help
+HEACalculator
 ```
+
+![HEACalculator CLI help](https://user-images.githubusercontent.com/46679086/205514909-ab4930cd-2f5b-4d9c-9598-750c661d44db.png)
 
 ---
 
@@ -63,9 +63,9 @@ HEACalculator search single <ALLOY> [OPTIONS]
 
 **Options**
 
-| Option   | Default | Description                                                    |
-|----------|---------|----------------------------------------------------------------|
-| `--json` | `False` | Output results as a JSON output instead of human-readable text |
+| Option   | Default | Description                                           |
+|----------|---------|-------------------------------------------------------|
+| `--json` | `False` | Output results as JSON instead of human-readable text |
 
 **Examples**
 
@@ -84,7 +84,7 @@ HEACalculator search single FeCoCrNi --json
 ```
 
 ```json
-{"formula": "FeCoCrNi", "density": 8.160249511400652, "delta": 1.1761590026042914, "omega": 5.753925287423301, "vec": 8.25, "mixing_enthalpy": -3.75, ...}
+{"formula": "FeCoCrNi", "density": 8.16024951140065, "delta": 0.302115884766779, "omega": 5.753925287423301, "vec": 8.25, "mixing_enthalpy": -3.75, ...}
 ```
 
 NaN values (from missing database entries) appear as JSON `null`.
@@ -116,6 +116,8 @@ HEACalculator search range --elements "El1 El2 ..." [OPTIONS]
 
 Pure single-element compositions (one element at 100 at%, the rest at 0 at%) are excluded from `search range` results, even when both `--start 0` and `--end 100` are used with a step that lands on those endpoints.
 
+To run the same screen from Python, see [Parallel screening](#parallel-screening).
+
 **Examples**
 
 ```bash
@@ -141,10 +143,10 @@ HEACalculator search csv <FILE> [OPTIONS]
 
 **Options**
 
-| Option             | Default       | Description                                        |
-|--------------------|---------------|-----------------------------------------------------|
-| `--column`, `-c`   | `composition` | Name of the column containing alloy compositions   |
-| `--json`           | `False`       | Output results as JSON instead of CSV rows          |
+| Option           | Default       | Description                                      |
+|------------------|---------------|--------------------------------------------------|
+| `--column`, `-c` | `composition` | Name of the column containing alloy compositions |
+| `--json`         | `False`       | Output results as JSON instead of CSV rows       |
 
 **CSV format requirements**
 
@@ -184,7 +186,7 @@ HEACalculator search csv alloys.csv --json
 
 ---
 
-### `gui` - Graphical User Interface
+## Graphical User Interface
 
 Launch the PyQt6 desktop application:
 
@@ -192,20 +194,20 @@ Launch the PyQt6 desktop application:
 HEACalculator gui
 ```
 
-> **Note:** Requires `PyQt6`. Install with `uv add "HEACalculator[gui]"` or `pip install "HEACalculator[gui]"`.
+> **Note:** Requires `PyQt6`. Install the `gui` extra with `uv tool install "HEACalculator[gui]"` (standalone tool), `uv add "HEACalculator[gui]"` (project dependency), or `pip install "HEACalculator[gui]"`.
 
 ![HEACalculator GUI](https://user-images.githubusercontent.com/46679086/205514915-e4ce2dbf-4636-4639-b978-3a018183ba82.png)
 
 The GUI has two pages, switched via the navigation buttons on the left:
 
-**Parameters page (single alloy)**
+### Parameters page (single alloy)
 
 1. Select elements from the periodic table (percentages are distributed equally by default)
 2. Adjust the at% values in the composition table as needed
 3. Click **Calculate**
 4. Click **Save** to export results as a CSV file
 
-**Batch Calculations page (range screening)**
+### Batch Calculations page (range screening)
 
 Equivalent to the CLI `search range` command.
 
@@ -279,6 +281,40 @@ NaN values (from missing pair database entries) are returned as `None` so the di
 ```python
 omega_800 = hea.thermo.omega_at(800)  # at 800 K
 ```
+
+### Parallel screening
+
+`HEACalculator.screen` calculates many alloys in parallel, the same way `search range` does, and yields fully calculated `HEACalculator` objects in input order. It uses all CPU cores by default; set `n_workers` to use fewer.
+
+Pass `find_all_comps` output to screen a composition range. It generates the same compositions as `search range`: sorted, with pure elements excluded, and with formulas like `Al5.0Ti45.0V50.0`.
+
+```python
+import pandas as pd
+
+from HEACalculator import HEACalculator
+from HEACalculator.utils import find_all_comps
+
+if __name__ == "__main__":
+    compositions = find_all_comps("Al Ti V", start=0, end=100, step=5)
+    results = pd.DataFrame(calc.get_dict() for calc in HEACalculator.screen(compositions, n_workers=4))
+```
+
+Or pass a list of formulas. A failing alloy, such as one with an unknown element symbol, does not stop the screen. As with a single `HEACalculator`, the error is raised when its properties are accessed:
+
+```python
+from HEACalculator import HEACalculator
+from HEACalculator.exceptions import ElementNotFoundError
+
+if __name__ == "__main__":
+    for calc in HEACalculator.screen(["FeCoCrNi", "FeXx", "WMoTaNb"]):
+        try:
+            print(calc.formula, calc.predictor.microstructure)
+        except ElementNotFoundError as e:
+            print(f"Skipping {calc.formula}: {e}")
+```
+
+!!! note "Why `if __name__ == "__main__":`?"
+    On macOS and Windows (and on Linux from Python 3.14), each worker process starts a fresh interpreter and re-imports your script. Without the guard, every worker would start the screen again and raise `RuntimeError`. Jupyter notebooks don't need the guard.
 
 ### Accessing element data directly
 

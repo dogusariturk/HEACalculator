@@ -77,11 +77,13 @@ Then clone and sync:
 git clone https://github.com/dogusariturk/HEACalculator.git
 cd HEACalculator
 
-uv sync                   # Core dependencies (CLI only)
-uv sync --group dev       # Core + development tools (ruff, pytest, prek, ty)
-uv sync --extra gui       # Core + GUI support (PyQt6)
-uv sync --extra docs      # Core + documentation dependencies (mkdocs-material)
+uv sync --no-dev               # CLI only
+uv sync --no-dev --extra gui   # CLI + GUI (PyQt6)
+uv sync                        # Development: CLI + GUI + dev tools (ruff, pytest, prek, ty)
+uv sync --extra docs           # Development + documentation tools (mkdocs-material)
 ```
+
+Each command sets up the whole environment, so run the one you need. Running a different one later replaces it rather than adding to it.
 
 Alternatively with pip:
 
@@ -102,18 +104,23 @@ HEACalculator --help
 
 Expected output:
 
-```
-Usage: HEACalculator [OPTIONS] COMMAND [ARGS]...
+``` { .text .cli-output }
+ Usage: HEACalculator [OPTIONS] COMMAND [ARGS]...
 
-  A tool for calculating High-Entropy Alloy (HEA) specific parameters and
-  solid-solution predictions.
+ A tool for calculating High-Entropy Alloy (HEA) specific parameters and
+ solid-solution predictions.
 
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  gui     Starts the HEACalculator Graphical User Interface (GUI).
-  search  Parameter search commands
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --version             -V        Show the HEACalculator version and exit.     │
+│ --install-completion            Install completion for the current shell.    │
+│ --show-completion               Show completion for the current shell, to    │
+│                                 copy it or customize the installation.       │
+│ --help                -h        Show this message and exit.                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ gui     Starts the HEACalculator Graphical User Interface (GUI).             │
+│ search  Parameter search commands                                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ---
@@ -148,10 +155,10 @@ HEACalculator gui
 
 ## Pre-commit Hooks (development)
 
-Install pre-commit hooks after cloning to enable automatic linting and formatting on every commit:
+Install the pre-commit hooks with [prek](https://github.com/j178/prek) after cloning to enable automatic linting and formatting on every commit:
 
 ```bash
-uv run pre-commit install
+uv run prek install
 ```
 
 Hooks run `uv-lock` (lockfile sync), `ruff` (linting and formatting), `ty` (type checking), and several file-hygiene checks (trailing whitespace, end-of-file, YAML/TOML validation, etc.).
