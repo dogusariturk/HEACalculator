@@ -1,4 +1,5 @@
 site_name: HEACalculator
+site_url: https://dogusariturk.github.io/HEACalculator/
 repo_url: https://github.com/dogusariturk/HEACalculator
 repo_name: dogusariturk/HEACalculator
 
@@ -51,6 +52,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.arithmatex:
       generic: true
   - footnotes
