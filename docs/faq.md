@@ -29,24 +29,25 @@ If you provide a formula without numeric counts (e.g. `FeCoCrNi`), all elements 
 There is no hard limit on the number of components. However:
 
 - The mixing enthalpy and formation enthalpy databases cover a finite set of binary pairs. If a pair is missing, the values that need it (and the models that use them) are reported as `N/A` (`null` in JSON), and everything else is still calculated. See [Some results show `N/A`](troubleshooting.md#some-results-show-na).
-- Solid-solution criteria were derived for 5-component alloys and may be less reliable for 2- or 3-component systems.
+- The solid-solution criteria were calibrated almost entirely on alloys with four to seven principal elements, most with five or six. Results for binary or ternary alloys are an extrapolation and should be read with care.
 
 ---
 
 ## Which prediction model should I trust?
 
-No single model is universally reliable across all alloy families. As a rule of thumb:
+None of them is reliable across all alloy families, and no criterion has emerged as the most reliable. Each was calibrated on its own set of alloys, and they often disagree for the same composition: for AlCoCrFeNi, two report a solid solution, two an intermetallic, and four multiple phases.
 
-- **Model 1 (Yang & Zhang)** and **Model 2 (Guo *et al.*)** are the most widely cited and provide a good baseline.
-- **Model 6 (Troparevsky *et al.*)** is based on DFT formation enthalpies and tends to be more physically grounded.
-- **Model 8 (King *et al.*)** uses Gibbs free energy and is considered one of the more thermodynamically rigorous criteria.
-- Use multiple models together: if several agree, confidence is higher.
+Rather than picking one:
+
+- Report all eight results, not only the ones that match your expectation.
+- Give more weight to criteria whose original papers include alloys similar to yours (see the [references](overview.md#references)).
+- Treat agreement between criteria as supporting evidence, not proof, and confirm important predictions with CALPHAD calculations or experiments.
 
 ---
 
 ## Does HEACalculator account for temperature effects?
 
-Most parameters (density, VEC, delta, mixing enthalpy/entropy) are calculated at 0 K or use reference-temperature data. Exceptions:
+Most parameters (density, VEC, δ, mixing enthalpy and entropy, and the other composition descriptors) do not depend on temperature: they are computed from the composition and tabulated element and binary-pair data. The exceptions are:
 
 - `omega` is evaluated at the estimated melting temperature $T_m$.
 - `omega_at(T)` can be called with an arbitrary temperature.
