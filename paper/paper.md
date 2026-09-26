@@ -50,17 +50,17 @@ Those papers list more than 300 compositions between them. The eight criteria gi
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | **Symbol**                  | **Parameter**                                                | **Formula**                                                                      | **Unit**        |
 +:============================+:=============================================================+:=================================================================================+:================+
-| $\rho$                      | Density                                                      | $\sum w_i c_i / \sum V_i c_i$                                                    | g/cm$^3$        |
+| $\rho$                      | Density                                                      | $\sum M_i c_i / \sum V_i c_i$                                                    | g/cm$^3$        |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | $T_m$                       | Melting temperature                                          | $\sum c_i T_{m,i}$                                                               | K               |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta H_\text{mix}$       | Mixing enthalpy                                              | $4\sum_{i<j} c_i c_j H_{ij}^\text{mix}$                                          | kJ/mol          |
+| $\Delta H_\text{mix}$       | Mixing enthalpy                                              | $4\sum_{i<j} c_i c_j \Delta H_{ij}^\text{mix}$                                   | kJ/mol          |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | $\Delta S_\text{mix}$       | Mixing entropy                                               | $-R\sum c_i \ln c_i$                                                             | J/(K$\cdot$mol) |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta H_f$                | Formation enthalpy                                           | $4\sum_{i<j} c_i c_j H_{ij}^f$                                                   | meV/atom        |
+| $\Delta H_f$                | Formation enthalpy                                           | $4\sum_{i<j} c_i c_j \Delta H_{ij}^f$                                            | meV/atom        |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\min(\Delta H_f)$          | Minimum binary formation enthalpy                            | $\min_{i<j}(H_{ij}^f)$                                                           | meV/atom        |
+| $\min(\Delta H_f)$          | Minimum binary formation enthalpy                            | $\min_{i<j}(\Delta H_{ij}^f)$                                                    | meV/atom        |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | VEC                         | Valence electron concentration                               | $\sum c_i \text{VEC}_i$                                                          | ---             |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
@@ -76,14 +76,14 @@ Those papers list more than 300 compositions between them. The eight criteria gi
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | $\Omega$                    | Omega                                                        | $T_m \Delta S_\text{mix} / \lvert\Delta H_\text{mix}\rvert$                      | ---             |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\gamma$                    | Gamma                                                        | $\Omega_S / \Omega_L$                                                            | ---             |
+| $\gamma$                    | Gamma                                                        | $\omega_S / \omega_L$                                                            | ---             |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | $\lambda$                   | Lambda                                                       | $\Delta S_\text{mix} / \delta^2$                                                 | J/(K$\cdot$mol) |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 | $\phi$                      | Phi                                                          | $(\Delta S_\text{mix} - \lvert\Delta H_\text{mix}\rvert/T_m) / \lvert S_E\rvert$ | ---             |
 +-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
 
-: Thermodynamic and structural descriptors computed by `HEACalculator` for a candidate alloy composition. Here $c_i$, $w_i$, and $V_i$ are the atomic fraction, atomic weight, and atomic volume of element $i$. The averages $\bar{r}$ and $\bar{\chi}$ are composition-weighted, $R$ is the gas constant, $S_E$ is the hard-sphere excess entropy [@ye2015int], and $\Omega_S$ and $\Omega_L$ are the solid angles subtended by the smallest and largest atoms. The atomic radius $r_i$ applies to $\delta$, $\lambda$, and $S_E$, while $\delta_\text{CN12}$ and $\gamma$ use the Goldschmidt CN12 radius. \label{tab:descriptors}
+: Thermodynamic and structural descriptors computed by `HEACalculator` for a candidate alloy composition. Here $c_i$, $M_i$, and $V_i$ are the atomic (mole) fraction, molar mass, and molar volume of element $i$. The averages $\bar{r}$ and $\bar{\chi}$ are composition-weighted, $R$ is the gas constant, $S_E$ is the hard-sphere excess entropy [@ye2015int], and $\omega_S$ and $\omega_L$ are the solid angles subtended by the smallest and largest atoms. The atomic radius $r_i$ applies to $\delta$, $\lambda$, and $S_E$, while $\delta_\text{CN12}$ and $\gamma$ use the Goldschmidt CN12 radius. \label{tab:descriptors}
 
 +-------------------+----------------------------------------------------------------------------------+--------------------+
 | **Model**         | **Solid-solution criterion**                                                     | **Reference**      |
@@ -107,8 +107,8 @@ Those papers list more than 300 compositions between them. The eight criteria gi
 +-------------------+----------------------------------------------------------------------------------+--------------------+
 | 5                 | $\phi \geq 20$                                                                   | [@ye2015scr]       |
 +-------------------+----------------------------------------------------------------------------------+--------------------+
-| 6                 | $\min(H_{ij}^f) > -T_\text{crit}\Delta S_\text{mix}$ \                           | [@troparevsky2015] |
-|                   | $\max(H_{ij}^f) < 37$ meV/atom                                                   |                    |
+| 6                 | $\min(\Delta H_{ij}^f) > -T_\text{crit}\Delta S_\text{mix}$ \                    | [@troparevsky2015] |
+|                   | $\max(\Delta H_{ij}^f) < 37$ meV/atom                                            |                    |
 +-------------------+----------------------------------------------------------------------------------+--------------------+
 | 7                 | $k_1 < \Omega(T_\text{ann})(1-k_2)+1$; \                                         | [@senkov2016]      |
 |                   | $k_2=0.6$, $T_\text{ann}=0.55\,T_m$                                              |                    |
