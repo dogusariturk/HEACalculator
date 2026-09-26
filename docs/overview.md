@@ -44,6 +44,19 @@ $$
 
 where $R = 8.314\,\text{J/(mol·K)}$ is the gas constant.
 
+### King Gibbs Energies and $\varPhi$ { data-toc-label="King Gibbs Energies and Phi" }
+
+$$
+\Delta G_{SS} = \Delta H_{\text{mix}}^{\text{Miedema}} - T_m \Delta S_{\text{mix}} \quad [\text{kJ/mol}]
+$$
+
+$$
+\Delta G_{\max} = \left\lfloor \frac{n}{2} \right\rfloor H^{\text{int}}_{\max} \quad [\text{kJ/mol}], \qquad
+\varPhi = \frac{\Delta G_{SS}}{-\lvert \Delta G_{\max} \rvert}
+$$
+
+where $\Delta G_{SS}$ is the Gibbs energy of the disordered solid solution at $T_m$, computed with the Miedema mixing enthalpy above. $H^{\text{int}}_{\max}$ is the binary intermetallic enthalpy $H_{ij}^{\text{int}}$ with the largest magnitude among the element pairs in the alloy, where $H_{ij}^{\text{int}}$ is the Miedema chemical (interface) enthalpy of an ordered intermetallic between elements $i$ and $j$ at their relative composition, without the elastic term (King *et al.* Supplementary Eq. S9). With $n$ elements, at most $\lfloor n/2 \rfloor$ binary intermetallics can form while keeping the alloy's stoichiometry. Model 8 predicts a solid solution when $\varPhi \geq 1$.[^11]
+
 ### Formation Enthalpy
 
 $$
@@ -51,6 +64,14 @@ $$
 $$
 
 Binary formation enthalpies $\Delta H_{ij}^f$ are taken from DFT calculations by Troparevsky *et al.*[^2]
+
+### Minimum and Maximum Binary Formation Enthalpy { data-toc-label="Min./Max. Binary Formation Enthalpy" }
+
+$$
+\Delta H_f^{\min} = \min_{i<j} \Delta H_{ij}^f, \qquad \Delta H_f^{\max} = \max_{i<j} \Delta H_{ij}^f \quad [\text{meV/atom}]
+$$
+
+the lowest and highest binary formation enthalpies among the element pairs in the alloy. Model 6 uses both: it predicts a solid solution when $\Delta H_f^{\min}$ is above the entropy bound $-T_{\text{crit}}\Delta S_{\text{mix}}$ and $\Delta H_f^{\max}$ is below 37 meV/atom.[^2]
 
 ### Atomic Size Difference (δ) { data-toc-label="Atomic Size Difference" }
 
@@ -60,7 +81,13 @@ $$
 
 where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i c_i r_i$ is the average radius.[^4] [^21]
 
-$\delta_{\text{CN12}}$ uses the same formula with Goldschmidt CN12 radii instead. Model 1 and $\gamma$ (Model 3) use CN12 radii, while Model 2, $\lambda$ (Model 4), and $S_E$ (Model 5) use the atomic radius.
+### Atomic Size Difference, CN12 ($\delta_{\text{CN12}}$) { data-toc-label="Atomic Size Difference (CN12)" }
+
+$$
+\delta_{\text{CN12}} = \sqrt{\sum_{i=1}^{n} c_i \left(1 - \frac{r_i^{\text{CN12}}}{\bar{r}^{\text{CN12}}}\right)^2} \times 100 \quad [\%]
+$$
+
+where $r_i^{\text{CN12}}$ is the Goldschmidt radius of element $i$ for 12-fold coordination and $\bar{r}^{\text{CN12}} = \sum_i c_i r_i^{\text{CN12}}$ is the average CN12 radius. Model 1 and $\gamma$ (Model 3) use CN12 radii, while Model 2, $\lambda$ (Model 4), and $S_E$ (Model 5) use the atomic radius.[^4] [^11]
 
 ### Allen Electronegativity Difference ($\Delta\chi_{\text{Allen}}$) { data-toc-label="Allen Electronegativity Difference" }
 
@@ -144,6 +171,14 @@ where $M_i$ and $V_i$ are the molar mass and molar volume of element $i$.
 $$
 \overline{T}_m = \sum_{i=1}^{n} c_i\,T_{m,i} \quad [\text{K}]
 $$
+
+### Critical Temperature
+
+$$
+T_{\text{crit}} = 0.55\,T_m \quad [\text{K}]
+$$
+
+Model 6 uses it in the entropy bound $-T_{\text{crit}}\Delta S_{\text{mix}}$ (converted to meV/atom), and Model 7 uses it as the default annealing temperature $T_{\text{anneal}}$.
 
 ---
 
