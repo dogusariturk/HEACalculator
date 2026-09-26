@@ -120,7 +120,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_5(self) -> str:
-        r"""Ye *et al.* criteria: $\phi = (S_C - S_H) / |S_E| >= 20$.
+        r"""Ye *et al.* criteria: $\phi = (S_c - S_H) / |S_E| >= 20$.
 
         Returns:
             ``"Solid Solution"`` or ``"Multiple Phases"``.
@@ -218,7 +218,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_8(self) -> str:
-        r"""King *et al.* criteria: $\Phi = \Delta G_{\text{SS}} / (-|\Delta G_{\text{max}}|) >= 1$.
+        r"""King *et al.* criteria: $\varPhi = \Delta G_{SS} / (-|\Delta G_{\text{max}}|) >= 1$.
 
         Returns:
             ``"Solid Solution"`` or ``"Multiple Phases"``.
