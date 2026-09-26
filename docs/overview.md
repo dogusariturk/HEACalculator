@@ -87,10 +87,13 @@ where $T_m = \sum_i x_i T_{m,i}$ is the composition-weighted melting temperature
 ### Gamma (γ) { data-toc-label="Gamma" }
 
 $$
-\gamma = \frac{1 - \sqrt{1 - \left(\frac{r_S}{r_S + \bar{r}}\right)^2}}{1 - \sqrt{1 - \left(\frac{r_L}{r_L + \bar{r}}\right)^2}}
+\gamma = \omega_S / \omega_L
+= \left(1 - \sqrt{\frac{(r_S + \bar{r})^2 - \bar{r}^2}{(r_S + \bar{r})^2}}\right)
+\Bigg/
+\left(1 - \sqrt{\frac{(r_L + \bar{r})^2 - \bar{r}^2}{(r_L + \bar{r})^2}}\right)
 $$
 
-where $r_S$ and $r_L$ are the radii of the smallest and largest atoms, respectively.[^6]
+where $\omega_S$ and $\omega_L$ are the solid angles of the smallest and largest atoms, $r_S$ and $r_L$ are their radii, and $\bar{r}$ is the average radius.[^6]
 
 ### Lambda (λ) { data-toc-label="Lambda" }
 
