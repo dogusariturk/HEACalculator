@@ -113,7 +113,7 @@ Those papers list more than 300 compositions between them. The eight criteria gi
 | 7                 | $k_1 < \Omega(T_\text{ann})(1-k_2)+1$; \                                         | [@senkov2016]      |
 |                   | $k_2=0.6$, $T_\text{ann}=0.55\,T_m$                                              |                    |
 +-------------------+----------------------------------------------------------------------------------+--------------------+
-| 8                 | $F = \Delta G_\text{SS}/(-\lvert\Delta G_\text{max}\rvert) \geq 1$               | [@king2016]        |
+| 8                 | $\Phi = \Delta G_\text{SS}/(-\lvert\Delta G_\text{max}\rvert) \geq 1$            | [@king2016]        |
 +-------------------+----------------------------------------------------------------------------------+--------------------+
 
 : Published criteria for solid-solution formation implemented in `HEACalculator`. The crystal-structure row predicts the expected phase (FCC, BCC, HCP, or mixed BCC+FCC) from the valence electron concentration. Models 1--8 each classify a composition as *Solid Solution*, *Intermetallic*, or *Multiple Phases* based on the stated threshold. Models 1 and 3 take $\delta$ and $\gamma$ from Goldschmidt CN12 radii, while Models 2, 4, and 5 use uncorrected radii. The Model 7 ratio $k_1$ is $\Delta H_f/\Delta H_\text{mix}$, with $\Delta H_f$ in kJ/mol. Its parameters $k_2$ and $T_\text{ann}$ are user-configurable. The critical temperature $T_\text{crit}$ is $0.55\,T_m$, and $T_\text{crit}\Delta S_\text{mix}$ is converted to meV/atom. The Gibbs energies $\Delta G_\text{SS}$ and $\Delta G_\text{max}$ are those of the disordered solid solution and the largest-magnitude ordered binary. \label{tab:models}
