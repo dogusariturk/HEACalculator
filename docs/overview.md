@@ -13,18 +13,18 @@ Predicting whether a given multi-component composition will form a solid solutio
 ### Mixing Enthalpy
 
 $$
-\Delta H_{\text{mix}} = \sum_{i<j} 4\,\Delta H_{ij}^{\text{mix}}\,x_i x_j \quad [\text{kJ/mol}]
+\Delta H_{\text{mix}} = \sum_{i<j} 4\,\Delta H_{ij}^{\text{mix}}\,c_i c_j \quad [\text{kJ/mol}]
 $$
 
-where the sum runs over each unique pair of elements once, $x_i$ is the mole fraction of element $i$, and $\Delta H_{ij}^{\text{mix}}$ is the binary mixing enthalpy of elements $i$ and $j$ from Miedema's model, as tabulated by Takeuchi and Inoue.[^18] The formula follows Zhang *et al.*[^1]
+where the sum runs over each unique pair of elements once, $c_i$ is the atomic (mole) fraction of element $i$, and $\Delta H_{ij}^{\text{mix}}$ is the binary mixing enthalpy of elements $i$ and $j$ from Miedema's model, as tabulated by Takeuchi and Inoue.[^18] The formula follows Zhang *et al.*[^1]
 
 ### Miedema Mixing Enthalpy
 
 $$
-\Delta H_{\text{mix}}^{\text{Miedema}} = \sum_{i \neq j} x_i x_j
-\bigl(x_j H_{\text{chem},ij} + x_i H_{\text{chem},ji}
-+ x_j H_{\text{el},ij} + x_i H_{\text{el},ji}
-+ x_j H_{\text{struct},ij} + x_i H_{\text{struct},ji}\bigr)
+\Delta H_{\text{mix}}^{\text{Miedema}} = \sum_{i \neq j} c_i c_j
+\bigl(c_j H_{\text{chem},ij} + c_i H_{\text{chem},ji}
++ c_j H_{\text{el},ij} + c_i H_{\text{el},ji}
++ c_j H_{\text{struct},ij} + c_i H_{\text{struct},ji}\bigr)
 \quad [\text{kJ/mol}]
 $$
 
@@ -39,7 +39,7 @@ This three-term formula follows King *et al.* Supplementary Eq. S8.[^11] It is u
 ### Mixing Entropy
 
 $$
-\Delta S_{\text{mix}} = -R \sum_{i=1}^{n} x_i \ln x_i \quad [\text{J/K·mol}]
+\Delta S_{\text{mix}} = -R \sum_{i=1}^{n} c_i \ln c_i \quad [\text{J/K·mol}]
 $$
 
 where $R = 8.314\,\text{J/(mol·K)}$ is the gas constant.
@@ -47,7 +47,7 @@ where $R = 8.314\,\text{J/(mol·K)}$ is the gas constant.
 ### Formation Enthalpy
 
 $$
-\Delta H_f = \sum_{i<j} 4\,\Delta H_{ij}^f\,x_i x_j \quad [\text{meV/atom}]
+\Delta H_f = \sum_{i<j} 4\,\Delta H_{ij}^f\,c_i c_j \quad [\text{meV/atom}]
 $$
 
 Binary formation enthalpies $\Delta H_{ij}^f$ are taken from DFT calculations by Troparevsky *et al.*[^2]
@@ -55,28 +55,28 @@ Binary formation enthalpies $\Delta H_{ij}^f$ are taken from DFT calculations by
 ### Atomic Size Difference (δ) { data-toc-label="Atomic Size Difference" }
 
 $$
-\delta = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{r_i}{\bar{r}}\right)^2} \times 100 \quad [\%]
+\delta = \sqrt{\sum_{i=1}^{n} c_i \left(1 - \frac{r_i}{\bar{r}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i x_i r_i$ is the average radius.[^4] [^21]
+where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i c_i r_i$ is the average radius.[^4] [^21]
 
 $\delta_{\text{CN12}}$ uses the same formula with Goldschmidt CN12 radii instead. Model 1 and $\gamma$ (Model 3) use CN12 radii, while Model 2, $\lambda$ (Model 4), and $S_E$ (Model 5) use the atomic radius.
 
 ### Allen Electronegativity Difference ($\Delta\chi_{\text{Allen}}$) { data-toc-label="Allen Electronegativity Difference" }
 
 $$
-\Delta\chi_{\text{Allen}} = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
+\Delta\chi_{\text{Allen}} = \sqrt{\sum_{i=1}^{n} c_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $\chi_i$ is the Allen configuration energy (CE) of element $i$ in Pauling units and $\bar{\chi} = \sum_i x_i \chi_i$ is the composition-weighted average.[^12] [^13]
+where $\chi_i$ is the Allen configuration energy (CE) of element $i$ in Pauling units and $\bar{\chi} = \sum_i c_i \chi_i$ is the composition-weighted average.[^12] [^13]
 
 ### Pauling Electronegativity Difference ($\Delta\chi_{\text{Pauling}}$) { data-toc-label="Pauling Electronegativity Difference" }
 
 $$
-\Delta\chi_{\text{Pauling}} = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
+\Delta\chi_{\text{Pauling}} = \sqrt{\sum_{i=1}^{n} c_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $\chi_i$ is the Pauling electronegativity of element $i$ and $\bar{\chi} = \sum_i x_i \chi_i$ is the composition-weighted average.[^16]
+where $\chi_i$ is the Pauling electronegativity of element $i$ and $\bar{\chi} = \sum_i c_i \chi_i$ is the composition-weighted average.[^16]
 
 ### Omega (Ω) { data-toc-label="Omega" }
 
@@ -84,7 +84,7 @@ $$
 \Omega = \frac{T_m \,\Delta S_{\text{mix}}}{|\Delta H_{\text{mix}}|}
 $$
 
-where $T_m = \sum_i x_i T_{m,i}$ is the composition-weighted melting temperature.[^5]
+where $T_m = \sum_i c_i T_{m,i}$ is the composition-weighted melting temperature.[^5]
 
 `omega_at(T)` evaluates $\Omega$ at any temperature $T$ (in K) by using $T$ in place of $T_m$ in the numerator. Model 7 uses it at the annealing temperature $T_{\text{anneal}}$.
 
@@ -118,7 +118,7 @@ where $S_c = \Delta S_{\text{mix}}$ is the ideal configurational entropy of mixi
 ### Valence Electron Concentration (VEC)
 
 $$
-\text{VEC} = \sum_{i=1}^{n} x_i\,(\text{VEC})_i
+\text{VEC} = \sum_{i=1}^{n} c_i\,(\text{VEC})_i
 $$
 
 Used to predict the stable crystal structure (FCC, BCC, or HCP).[^3]
@@ -126,7 +126,7 @@ Used to predict the stable crystal structure (FCC, BCC, or HCP).[^3]
 ### Hume-Rothery Electron-to-Atom Ratio (e/a)
 
 $$
-e/a = \sum_{i=1}^{n} x_i\,(e/a)_i
+e/a = \sum_{i=1}^{n} c_i\,(e/a)_i
 $$
 
 where $(e/a)_i$ is the number of outer s+p electrons of element $i$; d and f electrons are not counted. This follows the Hume-Rothery convention and is distinct from VEC.[^17]
@@ -134,15 +134,15 @@ where $(e/a)_i$ is the number of outer s+p electrons of element $i$; d and f ele
 ### Density
 
 $$
-\rho = \frac{\sum_i x_i M_i}{\sum_i x_i V_i} \quad [\text{g/cm}^3]
+\rho = \frac{\sum_i c_i M_i}{\sum_i c_i V_i} \quad [\text{g/cm}^3]
 $$
 
-where $M_i$ and $V_i$ are the molar mass and atomic volume of element $i$.
+where $M_i$ and $V_i$ are the molar mass and molar volume of element $i$.
 
 ### Melting Temperature
 
 $$
-\overline{T}_m = \sum_{i=1}^{n} x_i\,T_{m,i} \quad [\text{K}]
+\overline{T}_m = \sum_{i=1}^{n} c_i\,T_{m,i} \quad [\text{K}]
 $$
 
 ---
