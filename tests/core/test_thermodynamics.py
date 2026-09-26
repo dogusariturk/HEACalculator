@@ -125,6 +125,11 @@ class TestNewProperties:
 
         assert thermodynamics.mixing_enthalpy_miedema == pytest.approx(expected, abs=1e-10)
 
+    def test_f_parameter_is_deprecated_alias_for_phi_king(self, thermodynamics):
+        """f_parameter still returns phi_king but warns that it is deprecated."""
+        with pytest.warns(DeprecationWarning, match="phi_king"):
+            assert thermodynamics.f_parameter == thermodynamics.phi_king
+
     def test_delta_g_ss_is_negative_for_fecocrni(self, thermodynamics):
         """delta_G_ss is negative for FeCoCrNi (entropy term dominates)."""
         assert thermodynamics.delta_g_ss < 0

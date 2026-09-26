@@ -513,9 +513,9 @@ class TestNaNInputsReturnNA:
         p = SolidSolutionPredictor(comp, t)
         assert math.isnan(p.model_7_k1())
 
-    def test_model_8_na_when_f_parameter_is_nan(self, comp_thermo):
-        """model_8 returns 'N/A' when f_parameter is NaN."""
+    def test_model_8_na_when_phi_king_is_nan(self, comp_thermo):
+        """model_8 returns 'N/A' when phi_king is NaN."""
         comp, t = comp_thermo
-        t.__dict__["f_parameter"] = float("nan")
+        t.__dict__["phi_king"] = float("nan")
         p = SolidSolutionPredictor(comp, t)
         assert p.model_8 == "N/A"
