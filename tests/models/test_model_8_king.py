@@ -16,16 +16,16 @@ def test_table_coverage():
 
 
 @pytest.mark.parametrize(
-    "formula,delta_g_ss_paper,delta_g_max_paper,f_parameter_paper",
+    "formula,delta_g_ss_paper,delta_g_max_paper,phi_king_paper",
     WORKED_EXAMPLES,
     ids=[case[0] for case in WORKED_EXAMPLES],
 )
-def test_parameters(thermo, formula, delta_g_ss_paper, delta_g_max_paper, f_parameter_paper):
+def test_parameters(thermo, formula, delta_g_ss_paper, delta_g_max_paper, phi_king_paper):
     """The paper's three worked examples are reproduced."""
     calculated = thermo(formula)
     assert calculated.delta_g_ss == pytest.approx(delta_g_ss_paper, rel=0.03)
     assert calculated.delta_g_max == pytest.approx(delta_g_max_paper, rel=0.02)
-    assert calculated.f_parameter == pytest.approx(f_parameter_paper, abs=0.025)
+    assert calculated.phi_king == pytest.approx(phi_king_paper, abs=0.025)
 
 
 def test_classification_accuracy(predictor, assert_classification):

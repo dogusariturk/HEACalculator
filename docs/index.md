@@ -61,7 +61,7 @@ A CLI (built on [Typer](https://typer.tiangolo.com/)), a GUI (built with [PyQt6]
 - Gamma, $\gamma$
 - Lambda, $\lambda$
 - Phi, $\phi$
-- $\Delta G_{\text{SS}}$
+- $\Delta G_{SS}$
 - $\Delta G_{\text{max}}$
 
 **Solid-solution formation prediction**
