@@ -58,7 +58,9 @@ $$
 \delta = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{r_i}{\bar{r}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i x_i r_i$ is the average radius.[^4][^21]
+where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i x_i r_i$ is the average radius.[^4] [^21]
+
+$\delta_{\text{CN12}}$ uses the same formula with Goldschmidt CN12 radii instead. Model 1 and $\gamma$ (Model 3) use CN12 radii, while Model 2, $\lambda$ (Model 4), and $S_E$ (Model 5) use the atomic radius.
 
 ### Allen Electronegativity Difference ($\Delta\chi_{\text{Allen}}$) { data-toc-label="Allen Electronegativity Difference" }
 
@@ -66,7 +68,7 @@ $$
 \Delta\chi_{\text{Allen}} = \sqrt{\sum_{i=1}^{n} x_i \left(1 - \frac{\chi_i}{\bar{\chi}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $\chi_i$ is the Allen configuration energy (CE) of element $i$ in Pauling units and $\bar{\chi} = \sum_i x_i \chi_i$ is the composition-weighted average.[^12][^13]
+where $\chi_i$ is the Allen configuration energy (CE) of element $i$ in Pauling units and $\bar{\chi} = \sum_i x_i \chi_i$ is the composition-weighted average.[^12] [^13]
 
 ### Pauling Electronegativity Difference ($\Delta\chi_{\text{Pauling}}$) { data-toc-label="Pauling Electronegativity Difference" }
 
@@ -84,6 +86,8 @@ $$
 
 where $T_m = \sum_i x_i T_{m,i}$ is the composition-weighted melting temperature.[^5]
 
+`omega_at(T)` evaluates $\Omega$ at any temperature $T$ (in K) by using $T$ in place of $T_m$ in the numerator. Model 7 uses it at the annealing temperature $T_{\text{anneal}}$.
+
 ### Gamma (γ) { data-toc-label="Gamma" }
 
 $$
@@ -93,7 +97,7 @@ $$
 \left(1 - \sqrt{\frac{(r_L + \bar{r})^2 - \bar{r}^2}{(r_L + \bar{r})^2}}\right)
 $$
 
-where $\omega_S$ and $\omega_L$ are the solid angles of the smallest and largest atoms, $r_S$ and $r_L$ are their radii, and $\bar{r}$ is the average radius.[^6]
+where $\omega_S$ and $\omega_L$ are the solid angles of the smallest and largest atoms, $r_S$ and $r_L$ are their Goldschmidt CN12 radii, and $\bar{r}$ is the composition-weighted average CN12 radius.[^6]
 
 ### Lambda (λ) { data-toc-label="Lambda" }
 
@@ -102,6 +106,14 @@ $$
 $$
 
 A combined entropy–misfit parameter.[^7]
+
+### Phi (ϕ) { data-toc-label="Phi" }
+
+$$
+\phi = \frac{S_c - S_H}{\lvert S_E \rvert}, \qquad S_H = \frac{\lvert \Delta H_{\text{mix}} \rvert}{T_m}
+$$
+
+where $S_c = \Delta S_{\text{mix}}$ is the ideal configurational entropy of mixing, $S_H$ is the complementary entropy derived from the mixing enthalpy, and $S_E$ is the excess entropy of mixing caused by atomic size misfit and dense packing. $S_E$ is computed with the Mansoori–Carnahan–Starling–Leland hard-sphere model from the atomic radii and averaged over the FCC ($\xi = 0.74$) and BCC ($\xi = 0.68$) packing fractions; `phi_fcc` and `phi_bcc` give the value at each packing fraction.[^9] [^19] [^20]
 
 ### Valence Electron Concentration (VEC)
 
@@ -139,16 +151,16 @@ $$
 
 `HEACalculator` implements eight published criteria. Each model returns `"Solid Solution"`, `"Intermetallic"`, or `"Multiple Phases"`. A model returns `"N/A"` when the data it requires are unavailable.
 
-| Model | Author(s)                   | Criteria                                                                                                                                 | Reference                                                                    |
-|-------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| 1     | Yang & Zhang (2012)         | $\Omega \geq 1.1$ and $\delta \leq 6.6\%$                                                                                                | [5](#fn:5)                                                                   |
-| 2     | Guo *et al.* (2013)         | $-11.6 < \Delta H_{\text{mix}} < 3.2\,\text{kJ/mol}$ and $\delta < 6.6\%$                                                                | [8](#fn:8){ #fnref:8 }                                                       |
-| 3     | Wang *et al.* (2015)        | $\gamma < 1.175$                                                                                                                         | [6](#fn:6)                                                                   |
-| 4     | Singh *et al.* (2014)       | $\lambda > 0.96$: Solid Solution; $0.24 \leq \lambda \leq 0.96$: Multiple Phases; $\lambda < 0.24$: Intermetallic                        | [7](#fn:7)                                                                   |
-| 5     | Ye *et al.* (2015)          | $\phi = (S_C - S_H) / \lvert S_E\rvert \geq 20$                                                                                          | [9](#fn:9){ #fnref:9 }, [19](#fn:19){ #fnref:19 }, [20](#fn:20){ #fnref:20 } |
-| 6     | Troparevsky *et al.* (2015) | $\Delta H_f^{\min} > -T_{\text{crit}}\Delta S_{\text{mix}}$ and $\Delta H_f^{\max} < 37\,\text{meV/atom}$, $T_{\text{crit}} = 0.55\,T_m$ | [2](#fn:2)                                                                   |
-| 7     | Senkov & Miracle (2016)     | $k_1 = \Delta H_f / \Delta H_{\text{mix}} < 1 + \Omega(T_{\text{anneal}})(1 - k_2)$, $T_{\text{anneal}} = 0.55\,T_m$, $k_2 = 0.6$        | [10](#fn:10){ #fnref:10 }                                                    |
-| 8     | King *et al.* (2016)        | $\phi = \Delta G_{\text{SS}} / (-\lvert \Delta G_{\max}\rvert) \geq 1$                                                                   | [11](#fn:11)                                                                 |
+| Model | Author(s)                   | Criteria                                                                                                                                 | Reference                 |
+|-------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| 1     | Yang & Zhang (2012)         | $\Omega \geq 1.1$ and $\delta_{\text{CN12}} \leq 6.6\%$                                                                                  | [5](#fn:5)                |
+| 2     | Guo *et al.* (2013)         | $-11.6 < \Delta H_{\text{mix}} < 3.2\,\text{kJ/mol}$ and $\delta < 6.6\%$                                                                | [8](#fn:8){ #fnref:8 }    |
+| 3     | Wang *et al.* (2015)        | $\gamma < 1.175$                                                                                                                         | [6](#fn:6)                |
+| 4     | Singh *et al.* (2014)       | $\lambda > 0.96$: Solid Solution; $0.24 \leq \lambda \leq 0.96$: Multiple Phases; $\lambda < 0.24$: Intermetallic                        | [7](#fn:7)                |
+| 5     | Ye *et al.* (2015)          | $\phi = (S_C - S_H) / \lvert S_E\rvert \geq 20$                                                                                          | [9](#fn:9)                |
+| 6     | Troparevsky *et al.* (2015) | $\Delta H_f^{\min} > -T_{\text{crit}}\Delta S_{\text{mix}}$ and $\Delta H_f^{\max} < 37\,\text{meV/atom}$, $T_{\text{crit}} = 0.55\,T_m$ | [2](#fn:2)                |
+| 7     | Senkov & Miracle (2016)     | $k_1 = \Delta H_f / \Delta H_{\text{mix}} < 1 + \Omega(T_{\text{anneal}})(1 - k_2)$, $T_{\text{anneal}} = 0.55\,T_m$, $k_2 = 0.6$        | [10](#fn:10){ #fnref:10 } |
+| 8     | King *et al.* (2016)        | $\phi = \Delta G_{\text{SS}} / (-\lvert \Delta G_{\max}\rvert) \geq 1$                                                                   | [11](#fn:11)              |
 
 A microstructure prediction based on VEC is also provided. The HCP window is tested first, so a composition falling in it is reported as HCP even though it also satisfies the BCC bound:
 
@@ -174,10 +186,10 @@ A microstructure prediction based on VEC is also provided. The HCP window is tes
 [^11]: King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. *Acta Mater.* **2016**, *104*, 172–179.
 [^12]: Mann, J.B.; Meek, T.L.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 2780–2783.
 [^13]: Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. *J. Am. Chem. Soc.* **2000**, *122*, 5132–5137.
-[^14]: de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. *Cohesion in Metals: Transition Metal Alloys.* North-Holland, Amsterdam, 1988.
+[^14]: de Boer, F.R.; Boom, R.; Mattens, W.C.M.; Miedema, A.R.; Niessen, A.K. *Cohesion in Metals: Transition Metal Alloys.* North-Holland, Amsterdam, **1988**.
 [^15]: Niessen, A.K.; Miedema, A.R. *Ber. Bunsenges. Phys. Chem.* **1983**, *87*, 717–725.
-[^16]: Haynes, W.M. *CRC Handbook of Chemistry and Physics*, 95th ed.; CRC Press: Boca Raton, FL, 2014. ISBN 9781482208689.
-[^17]: Hume-Rothery, W.; Smallman, R.E.; Haworth, C.W. *The Structure of Metals and Alloys*, 5th ed.; Institute of Metals: London, 1969.
+[^16]: Haynes, W.M. *CRC Handbook of Chemistry and Physics*, 95th ed.; CRC Press: Boca Raton, FL, **2014**. ISBN 9781482208689.
+[^17]: Hume-Rothery, W.; Smallman, R.E.; Haworth, C.W. *The Structure of Metals and Alloys*, 5th ed.; Institute of Metals: London, **1969**.
 [^18]: Takeuchi, A.; Inoue, A. *Mater. Trans.* **2005**, *46*(12), 2817–2829.
 [^19]: Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. *Intermetallics* **2015**, *59*, 75–80.
 [^20]: Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W., Jr. *J. Chem. Phys.* **1971**, *54*, 1523–1525.
