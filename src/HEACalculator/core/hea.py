@@ -247,17 +247,17 @@ class HEACalculator:
             f"{'Phi (FCC)':25}: {self._fmt(t.phi_fcc)}\n"
             f"{'Delta G_ss':25}: {self._fmt(t.delta_g_ss)} kJ/mol\n"
             f"{'Delta G_max':25}: {self._fmt(t.delta_g_max)} kJ/mol\n"
-            f"{'F Parameter':25}: {self._fmt(t.f_parameter)}\n"
+            f"{'Phi (King)':25}: {self._fmt(t.phi_king)}\n"
             f"\n{'Predictions':=^48}\n"
             f"{'Microstructure':25}:     {p.microstructure}\n"
             f"{'Model 1':25}:     {p.model_1} (Omega={self._fmt(t.omega, '.2f')}, Delta={self._fmt(t.atomic_size_difference_cn12, '.2f')})\n"
             f"{'Model 2':25}:     {p.model_2} (DeltaHmix={self._fmt(t.mixing_enthalpy, '.2f')}, Delta={self._fmt(t.atomic_size_difference, '.2f')})\n"
             f"{'Model 3':25}:     {p.model_3} (Gamma={self._fmt(t.gamma, '.2f')})\n"
             f"{'Model 4':25}:     {p.model_4} (Lambda={self._fmt(t.lambda_, '.2f')})\n"
-            f"{'Model 5':25}:     {p.model_5} (Phi={self._fmt(t.phi, '.2f')})\n"
+            f"{'Model 5':25}:     {p.model_5} (phi={self._fmt(t.phi, '.2f')})\n"
             f"{'Model 6':25}:     {p.model_6} (Hf_min={self._fmt(t.min_formation_enthalpy, '.2f')}, Hf_max={self._fmt(t.max_formation_enthalpy, '.2f')})\n"
             f"{'Model 7':25}:     {p.model_7()} (k1={self._fmt(p.model_7_k1(), '.2f')}, k1_cr={self._fmt(p.model_7_k1_critical(), '.2f')})\n"
-            f"{'Model 8':25}:     {p.model_8} (F={self._fmt(t.f_parameter, '.2f')})\n"
+            f"{'Model 8':25}:     {p.model_8} (Phi={self._fmt(t.phi_king, '.2f')})\n"
         )
 
 

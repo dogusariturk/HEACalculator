@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import warnings
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -538,12 +539,22 @@ class HEAThermodynamics:
         return (len(self._c.alloy) // 2) * largest
 
     @cached_property
-    def f_parameter(self) -> float:
-        r"""Model 8 F parameter: $\Delta G_{\text{SS}} / (-|\Delta G_{\text{max}}|)$.
+    def phi_king(self) -> float:
+        r"""Model 8 $\Phi$ parameter: $\Phi = \Delta G_{\text{SS}} / (-|\Delta G_{\text{max}}|)$.
 
         Returns:
-            Dimensionless model 8 ``F`` parameter, or ``math.inf`` when ``\Delta G_{\text{max}}`` is zero.
+            Dimensionless model 8 $\Phi$ parameter, or ``math.inf`` when ``\Delta G_{\text{max}}`` is zero.
         """
         if self.delta_g_max == 0:
             return math.inf
         return self.delta_g_ss / (-abs(self.delta_g_max))
+
+    @property
+    def f_parameter(self) -> float:
+        r"""Deprecated alias for ``phi_king``.
+
+        Returns:
+            The Model 8 $\Phi$ parameter.
+        """
+        warnings.warn("`f_parameter` is deprecated; use `phi_king` instead.", DeprecationWarning, stacklevel=2)
+        return self.phi_king
