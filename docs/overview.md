@@ -192,10 +192,10 @@ Model 6 uses it in the entropy bound $-T_{\text{crit}}\Delta S_{\text{mix}}$ (co
 | 2     | Guo *et al.* (2013)         | $-11.6 < \Delta H_{\text{mix}} < 3.2\,\text{kJ/mol}$ and $\delta < 6.6\%$                                                                | [8](#fn:8){ #fnref:8 }    |
 | 3     | Wang *et al.* (2015)        | $\gamma < 1.175$                                                                                                                         | [6](#fn:6)                |
 | 4     | Singh *et al.* (2014)       | $\lambda > 0.96$: Solid Solution; $0.24 \leq \lambda \leq 0.96$: Multiple Phases; $\lambda < 0.24$: Intermetallic                        | [7](#fn:7)                |
-| 5     | Ye *et al.* (2015)          | $\phi = (S_C - S_H) / \lvert S_E\rvert \geq 20$                                                                                          | [9](#fn:9)                |
+| 5     | Ye *et al.* (2015)          | $\phi = (S_c - S_H) / \lvert S_E\rvert \geq 20$                                                                                          | [9](#fn:9)                |
 | 6     | Troparevsky *et al.* (2015) | $\Delta H_f^{\min} > -T_{\text{crit}}\Delta S_{\text{mix}}$ and $\Delta H_f^{\max} < 37\,\text{meV/atom}$, $T_{\text{crit}} = 0.55\,T_m$ | [2](#fn:2)                |
 | 7     | Senkov & Miracle (2016)     | $k_1 = \Delta H_f / \Delta H_{\text{mix}} < 1 + \Omega(T_{\text{anneal}})(1 - k_2)$, $T_{\text{anneal}} = 0.55\,T_m$, $k_2 = 0.6$        | [10](#fn:10){ #fnref:10 } |
-| 8     | King *et al.* (2016)        | $\phi = \Delta G_{\text{SS}} / (-\lvert \Delta G_{\max}\rvert) \geq 1$                                                                   | [11](#fn:11)              |
+| 8     | King *et al.* (2016)        | $\varPhi = \Delta G_{SS} / (-\lvert \Delta G_{\max}\rvert) \geq 1$                                                                       | [11](#fn:11)              |
 
 A microstructure prediction based on VEC is also provided. The HCP window is tested first, so a composition falling in it is reported as HCP even though it also satisfies the BCC bound:
 
