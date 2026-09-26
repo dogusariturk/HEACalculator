@@ -318,10 +318,10 @@ class TestHEACalculatorStrAdditional:
         lines = str(calculator).splitlines()
         assert any("Delta G_max" in line for line in lines)
 
-    def test_str_f_parameter_present(self, calculator):
-        """F Parameter line appears in __str__."""
+    def test_str_phi_king_present(self, calculator):
+        """Phi (King) line appears in __str__."""
         lines = str(calculator).splitlines()
-        assert any("F Parameter" in line for line in lines)
+        assert any("Phi (King)" in line for line in lines)
 
     def test_str_predictions_section_header(self, calculator):
         """A Predictions banner divides thermodynamics from model results."""

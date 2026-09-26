@@ -3558,7 +3558,7 @@ class Ui_ParametersPage(object):
         self.resultsTreeWidget.headerItem().setText(9, _translate("ParametersPage", "Phi"))
         self.resultsTreeWidget.headerItem().setToolTip(
             9,
-            _translate("ParametersPage", "<html><head/><body><p>φ</p></body></html>"),
+            _translate("ParametersPage", "<html><head/><body><p>ϕ</p></body></html>"),
         )
         self.resultsTreeWidget.headerItem().setText(10, _translate("ParametersPage", "VEC"))
         self.resultsTreeWidget.headerItem().setText(11, _translate("ParametersPage", "e/a"))

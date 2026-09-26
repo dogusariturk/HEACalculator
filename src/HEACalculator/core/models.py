@@ -120,7 +120,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_5(self) -> str:
-        r"""Ye *et al.* criteria: $\phi = (S_C - S_H) / |S_E| >= 20$.
+        r"""Ye *et al.* criteria: $\phi = (S_c - S_H) / |S_E| >= 20$.
 
         Returns:
             ``"Solid Solution"`` or ``"Multiple Phases"``.
@@ -218,7 +218,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_8(self) -> str:
-        r"""King *et al.* criteria: $\phi = \Delta G_{\text{SS}} / (-|\Delta G_{\text{max}}|) >= 1$.
+        r"""King *et al.* criteria: $\varPhi = \Delta G_{SS} / (-|\Delta G_{\text{max}}|) >= 1$.
 
         Returns:
             ``"Solid Solution"`` or ``"Multiple Phases"``.
@@ -226,7 +226,7 @@ class SolidSolutionPredictor:
         References:
             - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
         """
-        f = self._t.f_parameter
-        if math.isnan(f):
+        phi_king = self._t.phi_king
+        if math.isnan(phi_king):
             return "N/A"
-        return "Solid Solution" if f >= 1 else "Multiple Phases"
+        return "Solid Solution" if phi_king >= 1 else "Multiple Phases"
