@@ -66,7 +66,7 @@ A CLI (built on [Typer](https://typer.tiangolo.com/)), a GUI (built with [PyQt6]
 
 **Solid-solution formation prediction**
 
-- Expected Microstructure (FCC / BCC / HCP / BCC+FCC)
+- Expected Microstructure (FCC / BCC / BCC+FCC)
 - 8 independent published models (Yang & Zhang, Guo, Wang, Singh, Ye, Troparevsky, Senkov & Miracle, King)
 
 ---
