@@ -6,13 +6,14 @@
 
 `HEACalculator` uses a flexible chemical formula parser that handles several common styles:
 
-| Style                   | Example                        | Notes                                       |
-|-------------------------|--------------------------------|---------------------------------------------|
-| Equimolar (symbol-only) | `FeCoCrNi`                     | All elements treated as equal fractions     |
-| Explicit atom counts    | `Fe25Co25Cr25Ni25`             | Counts are normalized internally            |
-| Fractional counts       | `Al0.5CoCrFeNi`                | Decimal counts are allowed                  |
-| Nested brackets         | `(FeCo)2CrNi` or `[FeCo]2CrNi` | Round or square brackets with multipliers   |
-| Mixed counts            | `Fe10Co20Cr30Ni40`             | Any non-negative integer or decimal counts  |
+| Style                   | Example                        | Notes                                                                    |
+|-------------------------|--------------------------------|--------------------------------------------------------------------------|
+| Equimolar (symbol-only) | `FeCoCrNi`                     | All elements treated as equal fractions                                  |
+| Explicit atom counts    | `Fe25Co25Cr25Ni25`             | Counts are normalized internally                                         |
+| Fractional counts       | `Al0.5CoCrFeNi`                | Decimal counts are allowed                                               |
+| Nested brackets         | `(FeCo)2CrNi` or `[FeCo]2CrNi` | Round or square brackets with multipliers                                |
+| Group share             | `(CoCrFeNi)90Al10`             | Counts adding up to 100 or 1 give the whole group's share (10 at.% Al)   |
+| Mixed counts            | `Fe10Co20Cr30Ni40`             | Any non-negative integer or decimal counts                               |
 
 Element symbols must start with an uppercase letter (`Fe`, not `fe`). Spaces are ignored, so `Fe Co Cr Ni` and `FeCoCrNi` are the same alloy. Quote a formula that contains spaces on the command line (e.g. `HEACalculator search single "Fe25 Co75"`), otherwise the shell splits it into separate arguments.
 

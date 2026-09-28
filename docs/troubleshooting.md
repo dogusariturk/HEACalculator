@@ -183,6 +183,7 @@ Use one of the supported notation styles:
 | Explicit atom counts  | `Fe25Co25Cr25Ni25`             |
 | Fractional counts     | `Fe0.5CoCrNi`                  |
 | Nested brackets       | `(FeCo)2CrNi` or `[FeCo]2CrNi` |
+| Group share           | `(CoCrFeNi)90Al10`             |
 
 For `search range`, pass elements as a space-separated list via `--elements "Fe Co Cr Ni"`.
 
