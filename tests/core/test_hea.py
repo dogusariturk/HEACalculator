@@ -382,7 +382,7 @@ class TestGetListAdditionalValues:
     def test_get_list_microstructure_is_valid_crystal_structure(self, calculator):
         """Crystal structure at index 17 is one of the recognized phase strings."""
         lst = calculator.get_list()
-        assert lst[17] in ("FCC", "BCC", "HCP", "BCC+FCC", "N/A")
+        assert lst[17] in ("FCC", "BCC", "BCC+FCC", "N/A")
 
     def test_get_list_model_1_is_valid_prediction(self, calculator):
         """Model 1 at index 18 is a recognized prediction string."""

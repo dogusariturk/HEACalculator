@@ -124,7 +124,18 @@ class TestMicrostructureVariants:
 
     def test_microstructure_returns_valid_structure(self, fcc_predictor):
         """Microstructure prediction always returns one of the recognized structure strings."""
-        assert fcc_predictor.microstructure in ("FCC", "BCC", "HCP", "BCC+FCC")
+        assert fcc_predictor.microstructure in ("FCC", "BCC", "BCC+FCC")
+
+    @pytest.mark.parametrize(
+        "vec,expected",
+        [(3.0, "BCC"), (6.86, "BCC"), (6.87, "BCC+FCC"), (7.99, "BCC+FCC"), (8.0, "FCC")],
+    )
+    def test_vec_thresholds(self, vec, expected):
+        """Guo et al. (2011): VEC >= 8 is FCC, VEC < 6.87 is BCC, and values between are mixed; there is no HCP window."""
+        comp = AlloyComposition("FeCoCrNi")
+        t = HEAThermodynamics(comp)
+        t.__dict__["valence_electron_concentration"] = vec
+        assert SolidSolutionPredictor(comp, t).microstructure == expected
 
     def test_bcc_alloy(self):
         """NbMoTaW is a well-known refractory BCC HEA."""
