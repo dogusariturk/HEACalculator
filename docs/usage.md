@@ -247,7 +247,7 @@ print(hea.thermo.gamma)
 print(hea.thermo.lambda_)
 
 # Solid-solution predictions
-print(hea.predictor.microstructure)        # "FCC", "BCC", "HCP", or "BCC+FCC"
+print(hea.predictor.microstructure)        # "FCC", "BCC", or "BCC+FCC"
 print(hea.predictor.model_1)               # "Solid Solution" or "Intermetallic"
 print(hea.predictor.model_2)
 print(hea.predictor.model_3)

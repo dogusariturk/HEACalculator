@@ -148,7 +148,7 @@ $$
 \text{VEC} = \sum_{i=1}^{n} c_i\,(\text{VEC})_i
 $$
 
-Used to predict the stable crystal structure (FCC, BCC, or HCP).[^3]
+Used to predict the stable crystal structure (FCC, BCC, or mixed BCC + FCC).[^3]
 
 ### Hume-Rothery Electron-to-Atom Ratio (e/a)
 
@@ -197,12 +197,11 @@ Model 6 uses it in the entropy bound $-T_{\text{crit}}\Delta S_{\text{mix}}$ (co
 | 7     | Senkov & Miracle (2016)     | $k_1 = \Delta H_f / \Delta H_{\text{mix}} < 1 + \Omega(T_{\text{anneal}})(1 - k_2)$, $T_{\text{anneal}} = 0.55\,T_m$, $k_2 = 0.6$        | [10](#fn:10){ #fnref:10 } |
 | 8     | King *et al.* (2016)        | $\varPhi = \Delta G_{SS} / (-\lvert \Delta G_{\max}\rvert) \geq 1$                                                                       | [11](#fn:11)              |
 
-A microstructure prediction based on VEC is also provided. The HCP window is tested first, so a composition falling in it is reported as HCP even though it also satisfies the BCC bound:
+A microstructure prediction based on VEC is also provided:[^3]
 
-- 2.5 ≤ VEC ≤ 3.5: HCP
 - VEC ≥ 8: FCC
-- VEC ≤ 6.87: BCC
-- 6.87 < VEC < 8: BCC + FCC (mixed)
+- VEC < 6.87: BCC
+- 6.87 ≤ VEC < 8: BCC + FCC (mixed)
 
 ---
 
