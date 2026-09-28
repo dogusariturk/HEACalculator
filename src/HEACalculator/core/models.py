@@ -35,8 +35,10 @@ class SolidSolutionPredictor:
     def microstructure(self) -> str:
         """Expected crystal structure based on VEC.
 
+        VEC >= 8 favors FCC, VEC < 6.87 favors BCC, and values in between give mixed BCC+FCC.
+
         Returns:
-            One of ``"FCC"``, ``"BCC"``, ``"HCP"``, or ``"BCC+FCC"``.
+            One of ``"FCC"``, ``"BCC"``, or ``"BCC+FCC"``, or ``"N/A"`` when VEC is unavailable.
 
         References:
             - Guo, S.; Ng, C.; Lu, J.; Liu, C.T. J. Appl. Phys. 2011, 109, 103505.
@@ -44,11 +46,9 @@ class SolidSolutionPredictor:
         vec = self._t.valence_electron_concentration
         if math.isnan(vec):
             return "N/A"
-        if 2.5 <= vec <= 3.5:
-            return "HCP"
         if vec >= 8.0:
             return "FCC"
-        if vec <= 6.87:
+        if vec < 6.87:
             return "BCC"
         return "BCC+FCC"
 
