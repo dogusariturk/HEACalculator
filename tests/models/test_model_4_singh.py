@@ -1,13 +1,18 @@
 """Model 4 against Singh et al., Intermetallics 53 (2014) 112-119, Table 1."""
 
+import re
+
 import pytest
 from published_data import SINGH_2014_TABLE_1 as TABLE
 
-NOT_SOLID_SOLUTION = ("B2", "C", "L", "L12", "sigma", "tet")
+NOT_SOLID_SOLUTION = ("B2", "C", "C'", "L", "L12", "sigma", "tet")
 
 
 def is_solid_solution(phases):
     """Return whether a phase string in this table names a solid solution only.
+
+    Codes in parentheses are the phases Singh et al. found in their own experiments, and B2 volume
+    fractions such as ``B2(81%)`` are dropped before the codes are read.
 
     Args:
         phases: Phase codes as printed.
@@ -15,12 +20,13 @@ def is_solid_solution(phases):
     Returns:
         True when every code is a disordered solid solution.
     """
-    return not any(code in NOT_SOLID_SOLUTION for code in phases.replace("+", " ").split())
+    codes = re.split(r"[\s+()]+", re.sub(r"\(\d+%\)", "", phases))
+    return not any(code in NOT_SOLID_SOLUTION for code in codes)
 
 
 def test_table_coverage():
     """The transcribed table is intact."""
-    assert len(TABLE) == 61
+    assert len(TABLE) == 76
 
 
 @pytest.mark.parametrize(
@@ -40,8 +46,8 @@ def test_delta_reproduces_table(thermo, assert_median_error):
         TABLE,
         lambda row: thermo(row["formula"]).atomic_size_difference,
         lambda row: row["delta"],
-        below=0.02,
-        rows_compared=61,
+        below=0.01,
+        rows_compared=76,
         worst=0.45,
     )
 
@@ -62,6 +68,7 @@ def test_lambda_reproduces_table(thermo, assert_median_error):
         lambda row: row["lambda"],
         below=0.5,
         relative=True,
+        rows_compared=76,
     )
 
 

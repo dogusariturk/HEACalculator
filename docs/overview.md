@@ -79,7 +79,7 @@ $$
 \delta = \sqrt{\sum_{i=1}^{n} c_i \left(1 - \frac{r_i}{\bar{r}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $r_i$ is the atomic radius of element $i$ and $\bar{r} = \sum_i c_i r_i$ is the average radius.[^4] [^21]
+where $r_i$ is the atomic radius of element $i$, taken from Guo and Liu (2011) Table 1, and $\bar{r} = \sum_i c_i r_i$ is the average radius.[^4] [^21]
 
 ### Atomic Size Difference, CN12 ($\delta_{\text{CN12}}$) { data-toc-label="Atomic Size Difference (CN12)" }
 
@@ -87,7 +87,7 @@ $$
 \delta_{\text{CN12}} = \sqrt{\sum_{i=1}^{n} c_i \left(1 - \frac{r_i^{\text{CN12}}}{\bar{r}^{\text{CN12}}}\right)^2} \times 100 \quad [\%]
 $$
 
-where $r_i^{\text{CN12}}$ is the Goldschmidt radius of element $i$ for 12-fold coordination and $\bar{r}^{\text{CN12}} = \sum_i c_i r_i^{\text{CN12}}$ is the average CN12 radius. Model 1 and $\gamma$ (Model 3) use CN12 radii, while Model 2, $\lambda$ (Model 4), and $S_E$ (Model 5) use the atomic radius.[^4] [^11]
+where $r_i^{\text{CN12}}$ is the radius of element $i$ in a 12-coordinated metal, taken from Kittel's Table 9, and $\bar{r}^{\text{CN12}} = \sum_i c_i r_i^{\text{CN12}}$ is the average CN12 radius. Model 1 and $\gamma$ (Model 3) use CN12 radii, while Model 2, $\lambda$ (Model 4), and $S_E$ (Model 5) use the atomic radius.[^4] [^5] [^22]
 
 ### Allen Electronegativity Difference ($\Delta\chi_{\text{Allen}}$) { data-toc-label="Allen Electronegativity Difference" }
 
@@ -124,7 +124,7 @@ $$
 \left(1 - \sqrt{\frac{(r_L + \bar{r})^2 - \bar{r}^2}{(r_L + \bar{r})^2}}\right)
 $$
 
-where $\omega_S$ and $\omega_L$ are the solid angles of the smallest and largest atoms, $r_S$ and $r_L$ are their Goldschmidt CN12 radii, and $\bar{r}$ is the composition-weighted average CN12 radius.[^6]
+where $\omega_S$ and $\omega_L$ are the solid angles of the smallest and largest atoms, $r_S$ and $r_L$ are their CN12 radii, and $\bar{r}$ is the composition-weighted average CN12 radius.[^6]
 
 ### Lambda (λ) { data-toc-label="Lambda" }
 
@@ -228,4 +228,5 @@ A microstructure prediction based on VEC is also provided. The HCP window is tes
 [^18]: Takeuchi, A.; Inoue, A. *Mater. Trans.* **2005**, *46*(12), 2817–2829.
 [^19]: Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. *Intermetallics* **2015**, *59*, 75–80.
 [^20]: Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W., Jr. *J. Chem. Phys.* **1971**, *54*, 1523–1525.
-[^21]: Senkov, O.N.; Miracle, D.B. *Mater. Res. Bull.* **2001**, *36*, 2183–2198.
+[^21]: Guo, S.; Liu, C.T. *Prog. Nat. Sci.: Mater. Int.* **2011**, *21*, 433–446, Table 1.
+[^22]: Kittel, C. *Introduction to Solid State Physics*, 8th ed.; Wiley, **2005**; Chapter 3, Table 9.

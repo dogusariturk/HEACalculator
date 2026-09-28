@@ -11,8 +11,8 @@ WORKED_EXAMPLES = [
 
 
 def test_table_coverage():
-    """The transcribed table is intact."""
-    assert len(TABLE) == 182
+    """The transcribed table is intact: every row of Supplementary Table S1 (the text says 185 systems; the table prints 184)."""
+    assert len(TABLE) == 184
 
 
 @pytest.mark.parametrize(

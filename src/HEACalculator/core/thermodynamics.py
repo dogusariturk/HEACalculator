@@ -40,7 +40,7 @@ class HEAThermodynamics:
         self._c = composition
 
     def _model_atomic_radius_cn12_list(self) -> list[float]:
-        """Return the per-element Goldschmidt CN12 radii used by the delta and gamma calculations.
+        """Return the per-element 12-coordinated metallic radii used by delta_CN12 and gamma.
 
         Returns:
             CN12 radii in pm aligned with the alloy element order.
@@ -48,7 +48,7 @@ class HEAThermodynamics:
         return [self._c.elements[elm].atomic_radius_cn12 for elm in self._c.alloy]
 
     def _model_atomic_radius_list(self) -> list[float]:
-        """Return the per-element atomic radii used by the lambda and excess-entropy models.
+        """Return the per-element atomic radii used by delta, lambda and the excess entropy.
 
         Returns:
             Atomic radii in pm aligned with the alloy element order.
@@ -177,14 +177,15 @@ class HEAThermodynamics:
 
     @cached_property
     def atomic_size_difference_cn12(self) -> float:
-        r"""Atomic size difference ($\delta$) of the alloy, computed with Goldschmidt CN12 radii.
+        r"""Atomic size difference ($\delta$) of the alloy, computed with ``atomic_radius_cn12``.
 
         Returns:
             Atomic size difference in percent using CN12 radii.
 
         References:
             - Fang, S.S.; Xiao, X.S.; Xia, L.; Li, W.H.; Dong, Y.D. J. Non-Cryst. Solids 2003, 321, 120-125.
-            - King, D.J.M.; Middleburgh, S.C.; McGregor, A.G.; Cortie, M.B. Acta Mater. 2016, 104, 172-179.
+            - Yang, X.; Zhang, Y. Mater. Chem. Phys. 2012, 132, 233-238.
+            - Kittel, C. Introduction to Solid State Physics, 8th ed.; Wiley, 2005; Chapter 3, Table 9.
         """
         radii = self._model_atomic_radius_cn12_list()
         average_radius = self._average_radius(radii)
@@ -202,7 +203,7 @@ class HEAThermodynamics:
 
         References:
             - Fang, S.S.; Xiao, X.S.; Xia, L.; Li, W.H.; Dong, Y.D. J. Non-Cryst. Solids 2003, 321, 120-125.
-            - Senkov, O.N.; Miracle, D.B. Mater. Res. Bull. 2001, 36, 2183-2198.
+            - Guo, S.; Liu, C.T. Prog. Nat. Sci.: Mater. Int. 2011, 21, 433-446.
         """
         radii = self._model_atomic_radius_list()
         average_radius = self._average_radius(radii)
@@ -297,6 +298,8 @@ class HEAThermodynamics:
     def gamma(self) -> float:
         """Gamma parameter (solid-angle ratio of smallest/largest atoms).
 
+        Uses ``atomic_radius_cn12``.
+
         Returns:
             Dimensionless gamma parameter from the alloy radius distribution.
 
@@ -343,10 +346,10 @@ class HEAThermodynamics:
     def lambda_(self) -> float:
         r"""Lambda parameter (entropy / atomic-size-difference ratio).
 
-        Uses ``atomic_radius``, matching Singh *et al.*.
+        Uses ``atomic_radius``.
 
         Returns:
-            Dimensionless lambda parameter, or ``math.inf`` when the delta is zero.
+            Lambda in J/(K.mol), the unit of Singh *et al.* Table 1, or ``math.inf`` when the delta is zero.
 
         References:
             - Singh, A.K.; Kumar, N.; Dwivedi, A.; Subramaniam, A. Intermetallics 2014, 53, 112-119.
@@ -361,6 +364,8 @@ class HEAThermodynamics:
         Implements the Mansoori-Carnahan-Starling-Leland (MCSL) hard-sphere mixture
         equations from the Appendix of Ye *et al.* (eqs. 3A-4B). Returns a dimensionless
         value that is zero for identical atom sizes and negative otherwise.
+
+        Uses ``atomic_radius``.
 
         Args:
             xi (float): Total atomic packing fraction (0.68 for BCC, 0.74 for FCC).
@@ -457,9 +462,10 @@ class HEAThermodynamics:
         r"""$\phi$ parameter: $(S_c - S_H) / |S_E|$.
 
         $S_H = |H_a| / T_m$ is the complementary entropy derived from the mixing enthalpy.
-        H_a uses the Takeuchi & Inoue (2005) binary mixing enthalpy table, as cited by
-        Ye *et al.* (2015) refs [5,14]. $S_E$ uses the MCSL hard-sphere model with ``atomic_radius``,
-        averaged over the BCC and FCC packing fractions before entering the ratio.
+        H_a uses the Takeuchi & Inoue (2005) binary mixing enthalpy table; Ye *et al.* compute it
+        following Takeuchi *et al.* (2011) and Takeuchi & Inoue (2000, 2001). $S_E$ uses the MCSL
+        hard-sphere model with ``atomic_radius`` (Guo and Liu 2011, Table 1), averaged over the BCC
+        and FCC packing fractions before entering the ratio.
 
         Returns:
             Dimensionless phi parameter, or ``math.inf`` when $T_m$ or the averaged $S_E$ is zero.

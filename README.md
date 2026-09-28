@@ -257,7 +257,7 @@ if __name__ == "__main__":  # required by multiprocessing on macOS and Windows
 - Parameters and predictions
   - Expected Microstructure [^3]
   - Delta Parameter (Atomic Size Difference) [^4] [^21]
-  - Delta Parameter (CN12-corrected Atomic Size Difference) [^4]
+  - Delta Parameter (CN12 Atomic Size Difference) [^4] [^22]
   - Electronegativity Difference (Allen CE scale) [^12] [^13]
   - Electronegativity Difference (Pauling scale) [^16]
   - Omega Parameter [^5]
@@ -292,7 +292,8 @@ if __name__ == "__main__":  # required by multiprocessing on macOS and Windows
 [^18]: Takeuchi, A.; Inoue, A. Mater. Trans. 2005, 46(12), 2817–2829.
 [^19]: Ye, Y.F.; Wang, Q.; Lu, J.; Liu, C.T.; Yang, Y. Intermetallics 2015, 59, 75–80.
 [^20]: Mansoori, G.A.; Carnahan, N.F.; Starling, K.E.; Leland, T.W., Jr. J. Chem. Phys. 1971, 54, 1523–1525.
-[^21]: Senkov, O.N.; Miracle, D.B. Mater. Res. Bull. 2001, 36, 2183–2198.
+[^21]: Guo, S.; Liu, C.T. Prog. Nat. Sci.: Mater. Int. 2011, 21, 433–446, Table 1.
+[^22]: Kittel, C. Introduction to Solid State Physics, 8th ed.; Wiley, 2005; Chapter 3, Table 9.
 
 ---
 

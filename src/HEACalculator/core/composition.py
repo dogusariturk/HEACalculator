@@ -82,7 +82,7 @@ class AlloyComposition:
 
     @cached_property
     def atomic_radius_list(self) -> list[float]:
-        """Atomic radius for each element in the same order as ``alloy``.
+        """Atomic radius (Guo and Liu 2011, Table 1) for each element in the same order as ``alloy``.
 
         Returns:
             Atomic radii in pm aligned with the alloy element order.
@@ -100,7 +100,7 @@ class AlloyComposition:
 
     @cached_property
     def atomic_radius_cn12_list(self) -> list[float]:
-        """Goldschmidt CN12 atomic radius for each element in the same order as ``alloy``.
+        """12-coordinated metallic radius (Kittel Table 9) for each element in the same order as ``alloy``.
 
         Returns:
             CN12 radii in pm aligned with the alloy element order.
@@ -109,7 +109,7 @@ class AlloyComposition:
 
     @cached_property
     def average_atomic_radius_cn12(self) -> float:
-        """Composition-weighted average Goldschmidt CN12 atomic radius.
+        """Composition-weighted average 12-coordinated metallic radius (Kittel Table 9).
 
         Returns:
             Composition-weighted average CN12 radius in pm.

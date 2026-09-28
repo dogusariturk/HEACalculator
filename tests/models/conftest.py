@@ -80,11 +80,10 @@ def assert_median_error():
         Callable performing the assertion.
     """
 
-    def _assert(rows, computed, published, *, below, relative=False, floor=0.0, rows_compared=None, worst=None):
+    def _assert(rows, computed, published, *, below, rows_compared, relative=False, floor=0.0, worst=None):
         errors = _collect(rows, computed, published, relative, floor)
         unit = "%" if relative else ""
-        if rows_compared is not None:
-            assert len(errors) >= rows_compared, f"only {len(errors)} of {len(rows)} rows compared"
+        assert len(errors) >= rows_compared, f"only {len(errors)} of {len(rows)} rows compared"
         median = statistics.median(errors)
         assert median < below, f"median error {median:.4f}{unit} over {len(errors)} rows, expected below {below}{unit}"
         if worst is not None:
