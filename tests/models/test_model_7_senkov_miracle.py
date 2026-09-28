@@ -57,6 +57,7 @@ def test_critical_k1_reproduces_table(predictor, assert_median_error):
         lambda row: row["k1_critical"],
         below=1.5,
         relative=True,
+        rows_compared=45,
     )
 
 

@@ -227,12 +227,12 @@ class TestAlloyCompositionAtomicRadius:
         assert composition.average_atomic_radius > 0
 
     def test_average_atomic_radius_fecocrni(self, composition):
-        """Average atomic radius for equimolar FeCoCrNi equals (124.1+125.1+124.9+124.6)/4."""
+        """Average atomic radius for equimolar FeCoCrNi equals Guo and Liu's (124.1+125.1+124.9+124.6)/4."""
         assert composition.average_atomic_radius == pytest.approx(124.675, abs=1e-2)
 
     def test_average_atomic_radius_cn12_fecocrni(self, composition):
-        """Average CN12 radius for equimolar FeCoCrNi equals (126+125+128+124)/4."""
-        assert composition.average_atomic_radius_cn12 == pytest.approx(125.75, abs=1e-2)
+        """Average CN12 radius for equimolar FeCoCrNi equals Kittel's (127+125+128+125)/4."""
+        assert composition.average_atomic_radius_cn12 == pytest.approx(126.25, abs=1e-2)
 
 
 class TestAlloyCompositionPaulingEN:

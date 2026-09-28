@@ -2,8 +2,9 @@
 
 import pytest
 from published_data import YANG_ZHANG_2012_TABLE_1 as TABLE
+from published_data import YANG_ZHANG_2012_TABLE_2 as GLASSES
 
-NOT_SOLID_SOLUTION = ("compound", "laves", "sigma", "boride", "ordered", "aucu", "mo5 si3", "cu2 y")
+NOT_SOLID_SOLUTION = ("compound", "laves", "sigma", "alpha", "boride", "ordered", "aucu", "mo5 si3", "cu2 y", "al3 ti")
 
 
 def is_solid_solution(structure):
@@ -19,18 +20,34 @@ def is_solid_solution(structure):
 
 
 def test_table_coverage():
-    """The transcribed table is intact."""
-    assert len(TABLE) == 129
+    """The transcribed tables are intact.
+
+    Table 1 prints 134 alloys; Ti0.5CoCeFeNiCu0.5Al0.5 is left out because its printed formula contains Ce.
+    """
+    assert len(TABLE) == 133
+    assert len(GLASSES) == 33
 
 
 @pytest.mark.parametrize(
     "formula,delta_paper,omega_paper",
-    [("CoCrFeNi", 1.06, 5.71), ("CoCrFeNiCu", 1.07, 7.36), ("CoCrFeNiAl", 5.25, 1.83), ("CuNi", 1.63, 2.22)],
+    [
+        ("CoCrFeNi", 1.06, 5.71),
+        ("CoCrFeNiCu", 1.07, 7.36),
+        ("CoCrFeNiAl", 5.25, 1.83),
+        pytest.param(
+            "CuNi",
+            1.63,
+            2.22,
+            marks=pytest.mark.xfail(
+                strict=True, reason="Kittel Table 9 gives Cu 1.28 and Ni 1.25 A, so delta is 1.19, not the printed 1.63"
+            ),
+        ),
+    ],
 )
 def test_named_alloys(thermo, formula, delta_paper, omega_paper):
     """Four alloys the paper reports are reproduced."""
     calculated = thermo(formula)
-    assert calculated.atomic_size_difference_cn12 == pytest.approx(delta_paper, abs=0.25)
+    assert calculated.atomic_size_difference_cn12 == pytest.approx(delta_paper, abs=0.05)
     assert calculated.omega == pytest.approx(omega_paper, rel=0.02)
 
 
@@ -40,13 +57,24 @@ def test_delta_reproduces_table(thermo, assert_median_error):
         TABLE,
         lambda row: thermo(row["formula"]).atomic_size_difference_cn12,
         lambda row: row["delta"],
-        below=0.30,
-        rows_compared=125,
+        below=0.01,
+        rows_compared=133,
+    )
+
+
+def test_glass_delta_reproduces_table(thermo, assert_median_error):
+    """Delta reproduces the Table 2 glasses as well."""
+    assert_median_error(
+        GLASSES,
+        lambda row: thermo(row["formula"]).atomic_size_difference_cn12,
+        lambda row: row["delta"],
+        below=0.01,
+        rows_compared=33,
     )
 
 
 def test_delta_uses_cn12_radii(thermo, median_error):
-    """Yang and Zhang's radii are the CN12 set, so that column must back this delta."""
+    """Yang and Zhang cite Kittel for their radii, and Kittel Table 9 is the CN12 column."""
     published = lambda row: row["delta"]  # noqa: E731
     cn12 = median_error(TABLE, lambda row: thermo(row["formula"]).atomic_size_difference_cn12, published)
     plain = median_error(TABLE, lambda row: thermo(row["formula"]).atomic_size_difference, published)
@@ -68,6 +96,7 @@ def test_omega_reproduces_table(thermo, assert_median_error):
         below=1.0,
         relative=True,
         floor=0.01,
+        rows_compared=133,
     )
 
 
@@ -78,6 +107,7 @@ def test_mixing_enthalpy_reproduces_table(thermo, assert_median_error):
         lambda row: thermo(row["formula"]).mixing_enthalpy,
         lambda row: row["enthalpy"],
         below=0.02,
+        rows_compared=133,
     )
 
 

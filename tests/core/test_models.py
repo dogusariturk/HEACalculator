@@ -30,11 +30,11 @@ class TestSolidSolutionPredictorFeCoCrNi:
         assert predictor.model_2 == "Solid Solution"
 
     def test_model_3_solid_solution(self, predictor):
-        """Model 3 (deltaHmix-deltaSmix criterion) predicts solid solution for FeCoCrNi."""
+        """Model 3 (gamma criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_3 == "Solid Solution"
 
     def test_model_4_solid_solution(self, predictor):
-        """Model 4 (deltaHmix-VEC criterion) predicts solid solution for FeCoCrNi."""
+        """Model 4 (Lambda criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_4 == "Solid Solution"
 
     def test_model_5_returns_valid_result(self, predictor):
@@ -46,7 +46,7 @@ class TestSolidSolutionPredictorFeCoCrNi:
         assert predictor.model_5 == "Solid Solution"
 
     def test_model_6_solid_solution(self, predictor):
-        """Model 6 (lambda criterion) predicts solid solution for FeCoCrNi."""
+        """Model 6 (binary formation enthalpy criterion) predicts solid solution for FeCoCrNi."""
         assert predictor.model_6 == "Solid Solution"
 
     def test_model_7_result_is_valid(self, predictor):
@@ -66,7 +66,7 @@ class TestSolidSolutionPredictorFeCoCrNi:
         assert predictor.model_8 in ("Solid Solution", "Multiple Phases")
 
     def test_model_8_fecocrni_solid_solution(self, predictor):
-        """King et al. (2016): FeCoCrNi Phi >= 1 -> Solid Solution."""
+        """King et al. (2016), worked example in Section 3.1: CoCrFeNi F = 1.16 >= 1 -> Solid Solution."""
         assert predictor.model_8 == "Solid Solution"
 
 
@@ -74,21 +74,21 @@ class TestModel8KingCriterion:
     """King et al. (2016): Phi = delta_G_ss / (-|delta_G_max|) >= 1 -> Solid Solution."""
 
     def test_model_8_fecocrni_solid_solution(self):
-        """King et al. (2016): CoCrFeNi Phi >= 1 -> Solid Solution."""
+        """King et al. (2016), worked example in Section 3.1: CoCrFeNi F = 1.16 >= 1 -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_8 == "Solid Solution"
 
     def test_model_8_alcocrfeni_multiple_phases(self):
-        """King et al. (2016): AlCoCrFeNi Phi ~= 0.36 < 1 -> Multiple Phases."""
+        """King et al. (2016), worked example in Section 3.1: AlCoCrFeNi F = 0.36 < 1 -> Multiple Phases."""
         comp = AlloyComposition("AlCoCrFeNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_8 == "Multiple Phases"
 
     def test_model_8_cantor_alloy_solid_solution(self):
-        """King et al. (2016): CoCrFeMnNi is experimentally a single-phase SS."""
+        """King et al. (2016) Table S1 lists CoCrFeMnNi twice (F + F, multiphase; F, solid solution), so only the label is checked."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
@@ -230,63 +230,63 @@ class TestPaperValidation:
         assert 4.0 < t.omega < 8.0
 
     def test_model_1_cantor_alloy_solid_solution(self):
-        """Yang & Zhang (2012): CoCrFeMnNi (Omega=5.76, delta=1.12%) -> Solid Solution."""
+        """Yang & Zhang (2012) Table 1: CoCrFeNiMn is FCC (Omega = 5.77, delta = 0.92%) -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_1 == "Solid Solution"
 
     def test_model_1_nbmotaw_solid_solution(self):
-        """Yang & Zhang (2012): NbMoTaW refractory BCC HEA passes Omega-delta criterion."""
-        comp = AlloyComposition("NbMoTaW")
+        """Yang & Zhang (2012) Table 1: W27.3Nb22.7Mo25.6Ta24.4 is BCC (Omega = 5.62, delta = 2.27%) -> Solid Solution."""
+        comp = AlloyComposition("W27.3Nb22.7Mo25.6Ta24.4")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_1 == "Solid Solution"
 
     def test_model_1_alni_intermetallic(self):
-        """Yang & Zhang (2012): AlNi (Omega=0.35 << 1.1, delta=7.12% > 6.6%) -> Intermetallic."""
+        """AlNi (not in Yang & Zhang's tables) has delta above their 6.6% limit -> Intermetallic."""
         comp = AlloyComposition("AlNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_1 == "Intermetallic"
 
     def test_model_2_fecocrni_solid_solution(self):
-        """Guo et al. (2013): FeCoCrNi delta and deltaH_mix are within the SS region."""
+        """FeCoCrNi (not in Guo et al.'s Table 1) falls inside the Model 2 solid-solution window."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_2 == "Solid Solution"
 
     def test_model_2_cantor_alloy_solid_solution(self):
-        """Guo et al. (2013): CoCrFeMnNi (dHmix=-4.16 in window, delta=1.12%) -> Solid Solution."""
+        """Guo et al. (2013) Table 1: CoCrFeMnNi is SS (dHmix = -4.16 kJ/mol, delta = 3.27) -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_2 == "Solid Solution"
 
     def test_model_2_nbmotaw_solid_solution(self):
-        """Guo et al. (2013): NbMoTaW (dHmix~-6.5 in window, delta small) -> Solid Solution."""
+        """Guo et al. (2013) Table 1: WNbMoTa is SS (dHmix = -6.50 kJ/mol, delta = 2.31) -> Solid Solution."""
         comp = AlloyComposition("NbMoTaW")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_2 == "Solid Solution"
 
     def test_model_2_alni_intermetallic(self):
-        """Guo et al. (2013): AlNi (dHmix=-22 kJ/mol << -11.6) -> Intermetallic."""
+        """AlNi (not in Guo et al.'s Table 1) has dHmix below their -11.6 kJ/mol limit -> Intermetallic."""
         comp = AlloyComposition("AlNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_2 == "Intermetallic"
 
     def test_model_3_fecocrni_solid_solution(self):
-        """Wang et al. (2015): FeCoCrNi has gamma < 1.175 -> Solid Solution."""
+        """FeCoCrNi gamma is below Wang et al.'s 1.175 limit -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_3 == "Solid Solution"
 
     def test_model_3_cantor_alloy_solid_solution(self):
-        """Wang et al. (2015): CoCrFeMnNi (gamma~1.03 < 1.175) -> Solid Solution."""
+        """CoCrFeMnNi gamma is below Wang et al.'s 1.175 limit -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
@@ -301,7 +301,7 @@ class TestPaperValidation:
         assert p.model_3 == "Intermetallic"
 
     def test_model_4_fecocrni_solid_solution(self):
-        """Singh et al. (2014): FeCoCrNi has high Lambda (>> 0.96)."""
+        """Singh et al. (2014) Table 1 lists Co24.90Cr25.12Fe24.58Ni25.90 (AN75) with Lambda = 34.1; FeCoCrNi is above 0.96."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
@@ -315,35 +315,35 @@ class TestPaperValidation:
         assert p.model_4 == "Intermetallic"
 
     def test_model_4_cantor_alloy_solid_solution(self):
-        """Singh et al. (2014): CoCrFeMnNi (lambda >> 0.96) -> Solid Solution."""
+        """Singh et al. (2014) Table 1 AN60: MnCoCrFeNi has Lambda = 1.251 > 0.96 -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_4 == "Solid Solution"
 
     def test_model_4_alcocrfeni_multiple_phases(self):
-        """Singh et al. (2014): AlCoCrFeNi (lambda~0.42 in [0.24, 0.96]) -> Multiple Phases."""
+        """Singh et al. (2014) Table 1 AN25: Al20.12Co19.58Cr20.7Fe20.33Ni19.27 (F + B2) has Lambda = 0.399 -> Multiple Phases."""
         comp = AlloyComposition("AlCoCrFeNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_4 == "Multiple Phases"
 
     def test_model_5_coni_zero_enthalpy_solid_solution(self):
-        """Ye et al. (2015): CoNi has dHmix=0 -> Omega=inf -> Phi=inf -> Solid Solution."""
+        """CoNi (not in Ye et al.'s tables) has dHmix = 0 in the package's table -> Phi = inf -> Solid Solution."""
         comp = AlloyComposition("CoNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_5 == "Solid Solution"
 
     def test_model_5_cantor_alloy_solid_solution(self):
-        """Ye et al. (2015): CoCrFeMnNi has near-identical radii -> tiny |S_E| -> Phi >> 20 -> Solid Solution."""
+        """Ye et al. (2015) Table S1: CoCrFeMnNi is FCC with Phi = 32.47 / 36.09 > 20 -> Solid Solution."""
         comp = AlloyComposition("CoCrFeMnNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_5 == "Solid Solution"
 
     def test_model_5_nbmotaw_solid_solution(self):
-        """Ye et al. (2015): NbMoTaW has small size mismatch -> Phi >> 20 -> Solid Solution."""
+        """Ye et al. (2015) Table S1: WNbMoTa is BCC with Phi = 56.78 / 63.39 > 20 -> Solid Solution."""
         comp = AlloyComposition("NbMoTaW")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
@@ -357,7 +357,7 @@ class TestPaperValidation:
         assert p.model_5 == "Multiple Phases"
 
     def test_model_6_fecocrni_solid_solution(self):
-        """Troparevsky et al. (2015): All CoCrFeNi binaries are within enthalpy window."""
+        """Troparevsky et al. (2015): CrFeCoNi forms a single phase; all its binaries are within the enthalpy window."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
@@ -371,18 +371,18 @@ class TestPaperValidation:
         assert p.model_6 == "Solid Solution"
 
     def test_model_6_alcocrfeni_multiple_phases(self):
-        """Troparevsky et al. (2015): AlCoCrFeNi min_Hf=-677 meV/atom << lower bound -> Multiple Phases."""
+        """Troparevsky et al. (2015): the NiAl binary (-677 meV/atom) is far below the lower bound -> Multiple Phases."""
         comp = AlloyComposition("AlCoCrFeNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_6 == "Multiple Phases"
 
     def test_model_7_fecocrni_solid_solution(self):
-        """Senkov & Miracle (2016) Table 1: CoCrFeNi at T_A=973K is FCC solid solution."""
+        """Senkov & Miracle (2016) Table 1: CoCrFeNi annealed at T_A = 573 K is FCC -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
-        assert p.model_7(annealing_temperature=973) == "Solid Solution"
+        assert p.model_7(annealing_temperature=573) == "Solid Solution"
 
     def test_model_7_cantor_alloy_solid_solution(self):
         """Senkov & Miracle (2016): CoCrFeMnNi at default T_A -> Solid Solution."""
@@ -399,14 +399,14 @@ class TestPaperValidation:
         assert p.model_7() == "Solid Solution"
 
     def test_model_8_fecocrni_solid_solution(self):
-        """King et al. (2016) Table 1: CoCrFeNi Phi >= 1 -> Solid Solution."""
+        """King et al. (2016), worked example in Section 3.1: CoCrFeNi F = 1.16 >= 1 -> Solid Solution."""
         comp = AlloyComposition("FeCoCrNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)
         assert p.model_8 == "Solid Solution"
 
     def test_model_8_alcocrfeni_multiple_phases(self):
-        """King et al. (2016) Table 1: AlCoCrFeNi Phi ~= 0.36 < 1 -> Multiple Phases."""
+        """King et al. (2016), worked example in Section 3.1: AlCoCrFeNi F = 0.36 < 1 -> Multiple Phases."""
         comp = AlloyComposition("AlCoCrFeNi")
         t = HEAThermodynamics(comp)
         p = SolidSolutionPredictor(comp, t)

@@ -1,6 +1,7 @@
-"""Model 2 against Guo et al., Intermetallics 41 (2013) 96-103, Table 1."""
+"""Model 2 against Guo et al., Intermetallics 41 (2013) 96-103, Table 1, and its radius source."""
 
 from published_data import GUO_2013_TABLE_1 as TABLE
+from published_data import GUO_LIU_2011_TABLES_2_3
 
 CRYSTALLINE = tuple(row for row in TABLE if row["phase"] in ("SS", "IM"))
 
@@ -17,9 +18,27 @@ def test_delta_reproduces_table(thermo, assert_median_error):
         TABLE,
         lambda row: thermo(row["formula"]).atomic_size_difference,
         lambda row: row["delta"],
-        below=0.02,
-        rows_compared=85,
+        below=0.01,
+        rows_compared=93,
         worst=0.30,
+    )
+
+
+#: Rows whose printed delta Guo and Liu's own Table 1 radii do not give (9.09 vs 7.48, 16.72 vs 12.17).
+GUO_LIU_MISPRINTS = ("AlCrMoTaTiZr", "Ti40Zr25Cu12Ni3Be20")
+
+
+def test_delta_reproduces_guo_liu_tables(thermo, assert_median_error):
+    """``atomic_radius`` is Guo and Liu (2011) Table 1, so it reproduces the deltas they computed from it."""
+    rows = tuple(row for row in GUO_LIU_2011_TABLES_2_3 if row["formula"] not in GUO_LIU_MISPRINTS)
+    assert len(rows) == len(GUO_LIU_2011_TABLES_2_3) - 2
+    assert_median_error(
+        rows,
+        lambda row: thermo(row["formula"]).atomic_size_difference,
+        lambda row: row["delta"],
+        below=0.01,
+        rows_compared=149,
+        worst=0.08,
     )
 
 
@@ -44,6 +63,7 @@ def test_mixing_enthalpy_reproduces_table(thermo, assert_median_error):
         lambda row: thermo(row["formula"]).mixing_enthalpy,
         lambda row: row["enthalpy"],
         below=0.02,
+        rows_compared=93,
     )
 
 

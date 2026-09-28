@@ -1,6 +1,7 @@
 """Model 5 against Ye et al., Scr. Mater. 104 (2015) 53-55, Supplementary Table S1."""
 
 import pytest
+from published_data import YE_2015_INTERMETALLICS_EXCESS_ENTROPY as EXCESS_ENTROPY
 from published_data import YE_2015_TABLE_S1 as TABLE
 
 from HEACalculator.core.thermodynamics import GAS_CONSTANT
@@ -53,9 +54,34 @@ def test_phi_reproduces_table(thermo, assert_median_error):
         lambda row: thermo(row["formula"]).phi,
         published_phi,
         below=4.0,
-        rows_compared=40,
+        rows_compared=43,
         relative=True,
     )
+
+
+EXCESS_ENTROPY_MISPRINTS = (
+    "FeCoNiCrCuAl0.3",
+    "CoCrFeNiAlNb0.25",
+    "Fe66Ni8.46Ti0.35Cr20.16Mo0.75W0.39Nb0.24C1.38Mn1.1Si1.18",
+)
+
+
+@pytest.mark.parametrize("packing,column", [(0.68, "excess_entropy_068"), (0.74, "excess_entropy_074")])
+def test_excess_entropy_reproduces_intermetallics_tables(thermo, packing, column):
+    """|S_E| from ``atomic_radius`` reproduces Ye et al. (Intermetallics 2015) Tables S1 and S3.
+
+    The tables print four decimals, so a row matches when it is within 2% or within that rounding.
+    """
+    assert len(EXCESS_ENTROPY) == 174
+    misses = []
+    for row in EXCESS_ENTROPY:
+        if row["formula"] in EXCESS_ENTROPY_MISPRINTS:
+            continue
+        published = float(row[column])
+        calculated = abs(thermo(row["formula"])._compute_se_at_packing(packing))
+        if abs(calculated - published) > max(0.02 * published, 0.00005):
+            misses.append((row["formula"], published, round(calculated, 5)))
+    assert misses == []
 
 
 def test_classification_accuracy(predictor, assert_classification):
@@ -67,5 +93,5 @@ def test_classification_accuracy(predictor, assert_classification):
         overall=0.90,
         solid_solution=0.80,
         intermetallic=0.90,
-        rows_scored=40,
+        rows_scored=43,
     )
