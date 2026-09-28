@@ -24,29 +24,28 @@ class _Element:
         atomic_number: Atomic number.
         atomic_volume: Atomic volume in cm$^3$/mol.
         atomic_weight: Relative atomic weight.
-        atomic_radius_cn12: Goldschmidt CN12 metallic radius in pm.
-        atomic_radius: Atomic radius in pm (NaN if unavailable).
+        atomic_radius_cn12: Radius of the element in a 12-coordinated metal, in pm, from Kittel
+            Table 9 (NaN where the table gives none).
+        atomic_radius: Atomic radius in pm from Guo and Liu (2011) Table 1 (NaN for elements the table omits).
         nvalence: Number of valence electrons.
         allen_electronegativity: Allen configuration energy in Pauling units (NaN if unavailable).
         pauling_electronegativity: Pauling electronegativity (NaN if unavailable).
         ea: Hume-Rothery electron-to-atom ratio (outer s+p electrons per atom; d and f excluded; NaN for noble gases).
 
     Notes:
-        The two radius columns are different conventions, not alternative estimates of the same
-        quantity, and each model uses the one its source paper used. ``atomic_radius_cn12`` is
-        corrected to 12-fold coordination, so b.c.c. metals carry the ~3% CN8 to CN12 correction;
-        ``atomic_radius`` carries no such correction, so the same metals are ~3% smaller. They
-        agree for fcc and hcp metals, which are already 12-coordinated.
+        Each radius column is the table a model's source paper used. ``atomic_radius`` is Guo and
+        Liu (2011) Table 1, which reproduces the published size parameters of Guo et al. (2013),
+        Singh et al. (2014) and Ye et al. (2015). ``atomic_radius_cn12`` is the "Radii of ions in
+        12-coordinated metals" row of Kittel's Table 9, the source Yang and Zhang (2012) cite.
+
+        Kittel gives a range or two valence states for four elements; the values stored are
+        Ce 182 (range 171-182), Eu 204 (Eu2+; Eu3+ is 180), Yb 194 (Yb2+; Yb3+ is 174) and
+        Pu 161 (midpoint of 158-164).
 
     References:
         1. IUPAC-CIAAW. Standard atomic weights. [https://www.ciaaw.org/atomic-weights.htm](https://www.ciaaw.org/atomic-weights.htm).
-        2. Greenwood, N.N.; Earnshaw, A. Chemistry of the Elements, 2nd ed.; Butterworth-Heinemann: Oxford, 1997
-           (metallic radii); cross-checked against Smithells Metals Reference Book, 8th ed., Table 4.25, column 6
-           (Goldschmidt radii). Non-metals fall back to covalent or van der Waals radii.
-        3. Teatum, E.T.; Gschneidner, K.A.; Waber, J.T. Compilation of Calculated Data Useful in Predicting
-           Metallurgical Behavior of the Elements in Binary Alloy Systems, LA-4003; Los Alamos Scientific
-           Laboratory, 1968, Table I; distances from Smithells Metals Reference Book, 8th ed., Table 4.25,
-           column 5.
+        2. Kittel, C. Introduction to Solid State Physics, 8th ed.; Wiley: Hoboken, NJ, 2005; Chapter 3, Table 9.
+        3. Guo, S.; Liu, C.T. Prog. Nat. Sci.: Mater. Int. 2011, 21, 433-446, Table 1.
         4. Mann, J.B.; Meek, T.L.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 2780-2783.
         5. Mann, J.B.; Meek, T.L.; Knight, E.T.; Capitani, J.F.; Allen, L.C. J. Am. Chem. Soc. 2000, 122, 5132-5137.
         6. Haynes, W.M. CRC Handbook of Chemistry and Physics, 95th ed.; CRC Press: Boca Raton, FL, 2014. ISBN 9781482208689.
