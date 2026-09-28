@@ -101,7 +101,7 @@ class SolidSolutionPredictor:
 
     @cached_property
     def model_4(self) -> str:
-        r"""Singh *et al.* criteria: $\lambda$ > 0.96 (DSS), 0.24 <= $\lambda$ <= 0.96 (DSS + Compound), $\lambda$ < 0.24 (Compound).
+        r"""Singh *et al.* criteria: $\Lambda$ > 0.96 (DSS), 0.24 <= $\Lambda$ <= 0.96 (DSS + Compound), $\Lambda$ < 0.24 (Compound).
 
         Returns:
             ``"Solid Solution"``, ``"Multiple Phases"``, or ``"Intermetallic"``.

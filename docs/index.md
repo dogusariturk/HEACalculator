@@ -59,7 +59,7 @@ A CLI (built on [Typer](https://typer.tiangolo.com/)), a GUI (built with [PyQt6]
 - Electronegativity Difference, $\Delta\chi_{\text{Pauling}}$ (%)
 - Omega, $\Omega$
 - Gamma, $\gamma$
-- Lambda, $\lambda$
+- Lambda, $\Lambda$
 - Phi, $\phi$
 - $\Delta G_{SS}$
 - $\Delta G_{\text{max}}$
