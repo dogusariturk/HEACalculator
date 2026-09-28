@@ -3553,7 +3553,7 @@ class Ui_ParametersPage(object):
         self.resultsTreeWidget.headerItem().setText(8, _translate("ParametersPage", "Lambda"))
         self.resultsTreeWidget.headerItem().setToolTip(
             8,
-            _translate("ParametersPage", "<html><head/><body><p>λ</p></body></html>"),
+            _translate("ParametersPage", "<html><head/><body><p>Λ</p></body></html>"),
         )
         self.resultsTreeWidget.headerItem().setText(9, _translate("ParametersPage", "Phi"))
         self.resultsTreeWidget.headerItem().setToolTip(
@@ -3588,7 +3588,7 @@ class Ui_ParametersPage(object):
 
         self.resultsTreeWidget.headerItem().setText(16, _translate("ParametersPage", "Melting Temperature"))
         self.resultsTreeWidget.headerItem().setToolTip(
-            15, _translate("ParametersPage", "<html><head/><body><p>K</p></body></html>")
+            16, _translate("ParametersPage", "<html><head/><body><p>K</p></body></html>")
         )
 
         self.resultsTreeWidget.headerItem().setText(17, _translate("ParametersPage", "Crystal Structure"))
