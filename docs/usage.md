@@ -73,9 +73,10 @@ HEACalculator search single <ALLOY> [OPTIONS]
 HEACalculator search single FeCoCrNi
 HEACalculator search single Fe25Co25Cr25Ni25
 HEACalculator search single "(FeCo)2CrNi"
+HEACalculator search single "(CoCrFeNi)90Al10"
 ```
 
-The formula parser handles equimolar notation (`FeCoCrNi`), explicit atom counts (`Fe25Co25Cr25Ni25`), and nested bracket notation (`(FeCo)2CrNi`).
+The formula parser handles equimolar notation (`FeCoCrNi`), explicit atom counts (`Fe25Co25Cr25Ni25`), and nested bracket notation. A count after a bracket multiplies every element inside it, so `(FeCo)2CrNi` is Fe2Co2CrNi. When the counts at a bracket level add up to 100 or 1, they are read as at.% or atomic fractions instead, and a bracket's count is the share of the whole group: `(CoCrFeNi)90Al10` is 22.5 at.% each of Co, Cr, Fe and Ni plus 10 at.% Al, and `(CoCrFeNi)0.9Al0.1` is the same alloy.
 
 Use `--json` to get machine-readable output with raw numeric values (useful for scripting or agent pipelines):
 

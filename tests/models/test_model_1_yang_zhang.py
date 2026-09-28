@@ -51,6 +51,22 @@ def test_named_alloys(thermo, formula, delta_paper, omega_paper):
     assert calculated.omega == pytest.approx(omega_paper, rel=0.02)
 
 
+BRACKETED = tuple(row for row in TABLE if "(" in str(row["formula"]))
+
+
+def test_bracketed_rows_are_present():
+    """Table 1 writes three alloys as a share of an equiatomic group, e.g. Al20(TiCoCrFeNiCuVMn)80."""
+    assert len(BRACKETED) == 3
+
+
+@pytest.mark.parametrize("row", BRACKETED, ids=[row["formula"] for row in BRACKETED])
+def test_bracketed_rows_read_as_shares(thermo, row):
+    """The bracketed alloys reproduce the published delta and mixing enthalpy, so their counts are read as at.%."""
+    calculated = thermo(row["formula"])
+    assert calculated.atomic_size_difference_cn12 == pytest.approx(row["delta"], abs=0.05)
+    assert calculated.mixing_enthalpy == pytest.approx(row["enthalpy"], abs=0.05)
+
+
 def test_delta_reproduces_table(thermo, assert_median_error):
     """Delta tracks the published column."""
     assert_median_error(
