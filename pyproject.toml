@@ -46,6 +46,7 @@ build-backend = "hatchling.build"
 Home-page = "https://github.com/dogusariturk/HEACalculator/"
 Issues = "https://github.com/dogusariturk/HEACalculator/issues"
 Repository = "https://github.com/dogusariturk/HEACalculator.git"
+Documentation = "https://dogusariturk.github.io/HEACalculator/"
 
 [project.scripts]
 HEACalculator = "HEACalculator.__main__:app"
