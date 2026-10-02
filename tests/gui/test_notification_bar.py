@@ -106,12 +106,12 @@ class TestShowMessage:
         notification_bar.AUTO_DISMISS_MS = 300
         notification_bar.show_message("Calculation failed.", "error")
         qtbot.wait(200)
+        remaining_before = notification_bar.dismissTimer.remainingTime()
 
         notification_bar.show_message("Saved results.", "info")
-        qtbot.wait(200)
 
-        # 400 ms have elapsed since the first message; only a restart keeps it visible.
-        assert notification_bar.isVisible()
+        # A restart puts the countdown back near the full interval; without one it keeps shrinking.
+        assert notification_bar.dismissTimer.remainingTime() > remaining_before
         qtbot.waitUntil(lambda: not notification_bar.isVisible(), timeout=2000)
 
 
