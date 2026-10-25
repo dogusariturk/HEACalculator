@@ -8,7 +8,7 @@ required.
 import json
 import re
 import tempfile
-from collections.abc import Iterator
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
 from unittest import TestCase
@@ -44,7 +44,7 @@ def _flat(text: str) -> str:
 
 
 @contextmanager
-def _temp_csv(content: str) -> Iterator[str]:
+def _temp_csv(content: str) -> Generator[str]:
     """Write content to a temporary CSV file and yield its path, removing it afterwards.
 
     Args:
