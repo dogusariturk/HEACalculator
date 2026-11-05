@@ -205,11 +205,11 @@ class SolidSolutionPredictor:
         """
         if annealing_temperature is None:
             annealing_temperature = self._t.critical_temperature
-        if self._t.mixing_enthalpy == 0:
-            return "Intermetallic"
         k1 = self.model_7_k1()
         if math.isnan(k1):
             return "N/A"
+        if self._t.mixing_enthalpy == 0:
+            return "Intermetallic"
         return (
             "Solid Solution"
             if self.model_7_k1_critical(k_2=k_2, annealing_temperature=annealing_temperature) > k1
