@@ -519,6 +519,21 @@ class TestGetDict:
         assert round_tripped["formula"] == "FeCoCrNi"
         assert round_tripped["density"] == pytest.approx(8.16, abs=1e-2)
 
+    @pytest.mark.parametrize(("attribute", "key"), [("omega", "omega"), ("lambda_", "lambda"), ("phi", "phi")])
+    def test_inf_becomes_none(self, attribute, key):
+        """Infinite thermodynamic values are represented as None."""
+        calc = HEACalculator("FeCoCrNi")
+        calc.thermo.__dict__[attribute] = math.inf
+        assert calc.get_dict()[key] is None
+
+    def test_zero_mixing_enthalpy_result_is_strict_json(self):
+        """TiZrHf (zero mixing enthalpy, so Omega = inf) serializes without the non-standard Infinity token."""
+        import json
+
+        d = HEACalculator("TiZrHf").get_dict()
+        assert d["omega"] is None
+        json.dumps(d, allow_nan=False)
+
     def test_no_formatted_strings_for_numeric_fields(self, calculator):
         """Numeric fields are raw numbers, not '8.16'-style formatted strings."""
         d = calculator.get_dict()
