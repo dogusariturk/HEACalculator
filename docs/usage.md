@@ -88,7 +88,7 @@ HEACalculator search single FeCoCrNi --json
 {"formula": "FeCoCrNi", "density": 8.16024951140065, "delta": 0.302115884766779, "omega": 5.753925287423301, "vec": 8.25, "mixing_enthalpy": -3.75, ...}
 ```
 
-NaN values (from missing database entries) appear as JSON `null`.
+NaN values (from missing database entries) and infinite values (such as Omega when the mixing enthalpy is zero) appear as JSON `null`.
 
 ---
 
@@ -260,7 +260,7 @@ print(hea.predictor.model_8)
 # Human-readable summary
 print(hea)
 
-# Machine-readable dict (raw floats; NaN -> None)
+# Machine-readable dict (raw floats; NaN and inf -> None)
 d = hea.get_dict()
 print(d["density"])           # 8.160249...
 print(d["mixing_enthalpy"])   # -3.75
@@ -275,7 +275,7 @@ import json
 result_json = json.dumps(hea.get_dict())
 ```
 
-NaN values (from missing pair database entries) are returned as `None` so the dict serializes to valid JSON without extra handling.
+NaN values (from missing pair database entries) and infinite values (such as Omega when the mixing enthalpy is zero) are returned as `None`, so the dict serializes to valid JSON without extra handling.
 
 ### Omega at a specific temperature
 
