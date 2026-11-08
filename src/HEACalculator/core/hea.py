@@ -133,14 +133,15 @@ class HEACalculator:
     def get_dict(self) -> dict:
         """Return all calculated properties as a dict with raw numeric values.
 
-        NaN values are returned as None for JSON compatibility.
+        NaN values (missing data) and infinite values are returned as None, so the
+        dict serializes to strict JSON.
 
         Returns:
             Mapping of property names to raw numeric or string values.
         """
 
         def _n(v: float) -> float | None:
-            return None if isinstance(v, float) and math.isnan(v) else v
+            return None if isinstance(v, float) and not math.isfinite(v) else v
 
         t = self.thermo
         p = self.predictor

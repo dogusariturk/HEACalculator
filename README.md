@@ -215,7 +215,7 @@ hea.predictor.model_1                      # "Solid Solution"
 hea.predictor.model_7()                    # method, accepts optional parameters
 ```
 
-Use `get_dict()` to get raw numeric values, the same data as `--json`. NaN values are returned as `None`:
+Use `get_dict()` to get raw numeric values, the same data as `--json`. NaN and infinite values are returned as `None`:
 
 ```python
 import json

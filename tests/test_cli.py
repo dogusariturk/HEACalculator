@@ -135,6 +135,12 @@ class TestSingleSearchJson(TestCase):
         data = json.loads(result.output)
         assert data["formation_enthalpy"] is None
 
+    def test_json_output_inf_becomes_null(self):
+        """Infinite values (Omega for TiZrHf, where the mixing enthalpy is zero) appear as JSON null, not Infinity."""
+        result = runner.invoke(app, ["single", "TiZrHf", "--json"])
+        data = json.loads(result.output, parse_constant=lambda name: self.fail(f"non-standard JSON constant {name}"))
+        assert data["omega"] is None
+
 
 class TestRangeSearch(TestCase):
     """Tests for the ``range`` subcommand."""
