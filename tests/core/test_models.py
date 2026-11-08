@@ -517,6 +517,14 @@ class TestNaNInputsReturnNA:
         p = SolidSolutionPredictor(comp, t)
         assert p.model_7() == "N/A"
 
+    def test_model_7_na_when_formation_enthalpy_is_nan_and_mixing_enthalpy_is_zero(self, comp_thermo):
+        """model_7 returns 'N/A', not the zero-enthalpy 'Intermetallic' fallback, when formation_enthalpy is NaN."""
+        comp, t = comp_thermo
+        t.__dict__["mixing_enthalpy"] = 0.0
+        t.__dict__["formation_enthalpy"] = float("nan")
+        p = SolidSolutionPredictor(comp, t)
+        assert p.model_7() == "N/A"
+
     def test_model_7_k1_nan_when_formation_enthalpy_is_nan(self, comp_thermo):
         """model_7_k1 returns NaN when formation_enthalpy is NaN."""
         comp, t = comp_thermo
