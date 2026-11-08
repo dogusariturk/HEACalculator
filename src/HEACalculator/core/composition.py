@@ -27,11 +27,7 @@ class AlloyComposition:
     """
 
     def __init__(self, formula: str) -> None:
-        """Initialize with *formula*; all derived properties are computed lazily on first access.
-
-        Raises:
-            KeyError: If any element symbol in the formula is not in the element database.
-        """
+        """Initialize with *formula*; all derived properties are computed lazily on first access."""
         self.formula = formula
 
     @cached_property
@@ -40,6 +36,9 @@ class AlloyComposition:
 
         Returns:
             Parsed element counts from the input formula.
+
+        Raises:
+            ValueError: If the formula cannot be parsed.
         """
         return nested_formula_parser(self.formula)
 
@@ -49,6 +48,9 @@ class AlloyComposition:
 
         Returns:
             Element records for each symbol in the alloy.
+
+        Raises:
+            ElementNotFoundError: If an element symbol is not in the element database.
         """
         return {elm: Element(elm) for elm in self.alloy}
 
