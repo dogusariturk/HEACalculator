@@ -47,88 +47,31 @@ The phenomenological criteria for solid-solution formation in HEAs come from sep
 
 Those papers list nearly 500 compositions between them. All eight criteria give an answer for 70% of them, but they rarely agree. Where they disagree, nearly three in four split three ways, calling the same alloy a solid solution, an intermetallic, and multiple phases. AlCoCrFeNi is typical, with two criteria reporting a solid solution, two an intermetallic, and four multiple phases. Which criterion a study picks therefore usually determines the answer it reports. No criterion has emerged as the most reliable, so there is no good reason to report one and drop the others.
 
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| **Symbol**                  | **Parameter**                                                | **Formula**                                                                      | **Unit**        |
-+:============================+:=============================================================+:=================================================================================+:================+
-| $\rho$                      | Density                                                      | $\sum M_i c_i / \sum V_i c_i$                                                    | g/cm$^3$        |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $T_m$                       | Melting temperature                                          | $\sum c_i T_{m,i}$                                                               | K               |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta H_\text{mix}$       | Mixing enthalpy                                              | $4\sum_{i<j} c_i c_j \Delta H_{ij}^\text{mix}$                                   | kJ/mol          |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta S_\text{mix}$       | Mixing entropy                                               | $-R\sum c_i \ln c_i$                                                             | J/(K$\cdot$mol) |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta H_f$                | Formation enthalpy                                           | $4\sum_{i<j} c_i c_j \Delta H_{ij}^f$                                            | meV/atom        |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\min(\Delta H_f)$          | Minimum binary formation enthalpy                            | $\min_{i<j}(\Delta H_{ij}^f)$                                                    | meV/atom        |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| VEC                         | Valence electron concentration                               | $\sum c_i \text{VEC}_i$                                                          | ---             |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $e/a$                       | Hume-Rothery electron-to-atom ratio                          | $\sum c_i (e/a)_i$                                                               | ---             |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\delta$                    | Atomic size difference                                       | $100\sqrt{\sum c_i(1-r_i/\bar{r})^2}$                                            | %               |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\delta_\text{CN12}$        | Atomic size difference (CN12)                                | same formula, 12-coordinated radii [@kittel2005]                                 | %               |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta\chi_\text{Allen}$   | Electronegativity difference (Allen)                         | $100\sqrt{\sum c_i(1-\chi_i/\bar{\chi})^2}$                                      | %               |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Delta\chi_\text{Pauling}$ | Electronegativity difference (Pauling)                       | same formula, Pauling scale                                                      | %               |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Omega$                    | Omega                                                        | $T_m \Delta S_\text{mix} / \lvert\Delta H_\text{mix}\rvert$                      | ---             |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\gamma$                    | Gamma                                                        | $\omega_S / \omega_L$                                                            | ---             |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\Lambda$                   | Lambda                                                       | $\Delta S_\text{mix} / \delta^2$                                                 | J/(K$\cdot$mol) |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
-| $\phi$                      | Phi                                                          | $(\Delta S_\text{mix} - \lvert\Delta H_\text{mix}\rvert/T_m) / \lvert S_E\rvert$ | ---             |
-+-----------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------+-----------------+
+| **Model** | **Solid-solution criterion** | **Reference** |
+|:------|:---------------------------------------------|:---------------|
+| 1 | $\Omega \geq 1.1$ and $\delta_\text{CN12} \leq 6.6\%$ | [@yang2012] |
+| 2 | $-11.6 < \Delta H_\text{mix} < 3.2$ kJ/mol and $\delta < 6.6\%$ | [@guo2013] |
+| 3 | $\gamma < 1.175$ | [@wang2015] |
+| 4 | $\Lambda > 0.96$; intermetallic if $\Lambda < 0.24$, otherwise multiple phases | [@singh2014] |
+| 5 | $\phi \geq 20$ | [@ye2015scr] |
+| 6 | $\min(\Delta H_{ij}^f) > -T_\text{crit}\Delta S_\text{mix}$ and $\max(\Delta H_{ij}^f) < 37$ meV/atom | [@troparevsky2015] |
+| 7 | $\Delta H_f/\Delta H_\text{mix} < \Omega(T_\text{ann})(1-k_2)+1$ | [@senkov2016] |
+| 8 | $\varPhi = \Delta G_{SS}/(-\lvert\Delta G_\text{max}\rvert) \geq 1$ | [@king2016] |
 
-: Thermodynamic and structural descriptors computed by `HEACalculator` for a candidate alloy composition. Here $c_i$, $M_i$, and $V_i$ are the atomic (mole) fraction, molar mass, and molar volume of element $i$. The averages $\bar{r}$ and $\bar{\chi}$ are composition-weighted, $R$ is the gas constant, $S_E$ is the hard-sphere excess entropy [@ye2015int], and $\omega_S$ and $\omega_L$ are the solid angles subtended by the smallest and largest atoms. The atomic radius $r_i$ used for $\delta$, $\Lambda$, and $S_E$ is taken from @guoliu2011, and $\delta_\text{CN12}$ and $\gamma$ use the 12-coordinated metallic radii of @kittel2005. \label{tab:descriptors}
+: Published solid-solution criteria implemented in `HEACalculator`. Descriptor definitions, radius sets, and default parameters are given in the [documentation](https://dogusariturk.github.io/HEACalculator/overview/). \label{tab:models}
 
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| **Model**         | **Solid-solution criterion**                                                     | **Reference**      |
-+:==================+:=================================================================================+:===================+
-| Crystal structure | VEC $\geq 8$: FCC; \                                                             | [@guo2011]         |
-|                   | VEC $< 6.87$: BCC; \                                                             |                    |
-|                   | otherwise: BCC+FCC                                                               |                    |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 1                 | $\Omega \geq 1.1$ and \                                                          | [@yang2012]        |
-|                   | $\delta_\text{CN12} \leq 6.6\%$                                                  |                    |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 2                 | $-11.6 < \Delta H_\text{mix} < 3.2$ kJ/mol and \                                 | [@guo2013]         |
-|                   | $\delta < 6.6\%$                                                                 |                    |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 3                 | $\gamma < 1.175$                                                                 | [@wang2015]        |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 4                 | $\Lambda > 0.96$: solid solution; \                                              | [@singh2014]       |
-|                   | $0.24 \leq \Lambda \leq 0.96$: multiple phases; \                                |                    |
-|                   | $\Lambda < 0.24$: intermetallic                                                  |                    |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 5                 | $\phi \geq 20$                                                                   | [@ye2015scr]       |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 6                 | $\min(\Delta H_{ij}^f) > -T_\text{crit}\Delta S_\text{mix}$ and \                | [@troparevsky2015] |
-|                   | $\max(\Delta H_{ij}^f) < 37$ meV/atom                                            |                    |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 7                 | $k_1 < \Omega(T_\text{ann})(1-k_2)+1$; \                                         | [@senkov2016]      |
-|                   | $k_2=0.6$, $T_\text{ann}=0.55\,T_m$                                              |                    |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-| 8                 | $\varPhi = \Delta G_{SS}/(-\lvert\Delta G_\text{max}\rvert) \geq 1$              | [@king2016]        |
-+-------------------+----------------------------------------------------------------------------------+--------------------+
-
-: Published criteria for solid-solution formation implemented in `HEACalculator`. The crystal-structure row predicts the expected phase (FCC, BCC, or mixed BCC+FCC) from the valence electron concentration. Models 1--8 each classify a composition as *Solid Solution*, *Intermetallic*, or *Multiple Phases* based on the stated threshold. Models 1 and 3 take $\delta_\text{CN12}$ and $\gamma$ from the 12-coordinated radii of @kittel2005, while Models 2, 4, and 5 use the radii of @guoliu2011. The Model 7 ratio $k_1$ is $\Delta H_f/\Delta H_\text{mix}$, with $\Delta H_f$ in kJ/mol. Its parameters $k_2$ and $T_\text{ann}$ are user-configurable. The critical temperature $T_\text{crit}$ is $0.55\,T_m$, and $T_\text{crit}\Delta S_\text{mix}$ is converted to meV/atom. The Gibbs energies $\Delta G_{SS}$ and $\Delta G_\text{max}$ are those of the disordered solid solution and the largest-magnitude ordered binary. \label{tab:models}
-
-`HEACalculator` computes the sixteen descriptors listed in \autoref{tab:descriptors} and implements all eight published criteria in one validated, reusable package (\autoref{tab:models}). It bundles a database of 118 elements, 2,628 binary mixing enthalpies from @takeuchi2005, and 435 binary formation enthalpies derived from density functional theory (DFT) data from @troparevsky2015, along with utilities for single-composition analysis, parameter sweeps, and batch processing. It is aimed at materials scientists doing exploratory alloy design or high-throughput screening, and at anyone preparing candidate compositions for experimental work.
+`HEACalculator` computes sixteen descriptors and implements all eight published criteria (\autoref{tab:models}), plus the VEC-based crystal-structure rule of @guo2011, in one validated, reusable package. It bundles a database of 118 elements with atomic radii from @guoliu2011 and @kittel2005, 2,628 binary mixing enthalpies from @takeuchi2005, and 435 binary formation enthalpies derived from density functional theory (DFT) data from @troparevsky2015, along with utilities for single-composition analysis, parameter sweeps, and batch processing. It is aimed at materials scientists screening candidate compositions for alloy design or experiments.
 
 
 # State of the Field
 
-The closest peer among interactive screening tools is `HEAPS`, a free, open-source (CC0) HEA screening program that computes a larger collection of semi-empirical descriptors and criteria, including mechanical-property heuristics, through a MATLAB-based graphical workflow [@martin2022heaps]. It has two operating modes, a single-composition calculator and an exploration mode that screens large numbers of candidate alloys against user-defined composition and parameter constraints. Its standalone installer is built for 64-bit Windows and needs the free MATLAB Runtime, while running the MATLAB source files directly requires a MATLAB license. `HEACalculator`, by contrast, focuses more narrowly on the widely cited descriptors for solid-solution analysis, but packages them as a cross-platform, installable Python library with a documented API, command-line interface, and optional desktop GUI. That packaging lets other projects depend on the calculations and test them directly, on any operating system and without proprietary software.
+The closest interactive peer is `HEAPS` [@martin2022heaps], an open-source (CC0) MATLAB program that computes a larger set of semi-empirical descriptors and criteria, including mechanical-property heuristics, and screens candidate alloys against user-defined constraints. Its installer targets 64-bit Windows with the MATLAB Runtime, and running its source requires a MATLAB license. `HEACalculator` covers a narrower set of solid-solution descriptors but packages them as a cross-platform Python library with an API, CLI, and optional GUI, so other projects can depend on and test the calculations without proprietary software.
 
-`matminer` [@ward2018matminer] provides composition descriptors for materials informatics, including several alloy-specific featurizers, and leaves phase prediction to downstream models. Two HEA tools build such models. `AutomaticFeaturizerMPEA` [@subedi2022] is a Jupyter notebook that applies `matminer` featurizers to a dataset of multi-principal-element alloys, and the accompanying study trains a neural network on those features to detect intermetallic phases. `pyMPEALab` [@subedi2022pympealab] classifies phases through a graphical interface backed by a neural network. Both return a learned prediction rather than the verdicts of the published criteria. `HEACalculator` computes descriptors and then evaluates the eight published criteria against them. Each criterion reports its own verdict, so a user can see which rules a composition passes and which it fails.
+`matminer` [@ward2018matminer] provides composition descriptors, including alloy-specific featurizers, and leaves phase prediction to downstream models. Two HEA tools build such models: `AutomaticFeaturizerMPEA` [@subedi2022], a Jupyter notebook whose accompanying study trains a neural network on `matminer` features to detect intermetallic phases, and `pyMPEALab` [@subedi2022pympealab], a neural-network phase classifier with a graphical interface. Both return a learned prediction, whereas `HEACalculator` reports the verdict of each published criterion, so a user can see which rules a composition passes and which it fails.
 
 The closest peer in library form is `hea-bench` [@fieser2026heabench], first released in 2026, seven years after `HEACalculator` was made public. It computes a similar descriptor set, applies nine empirical phase rules [@fieser2026heabenchsw], and extends both to high-entropy oxides. It works from a single radius tabulation, while `HEACalculator` carries two and gives each criterion the tabulation that reproduces its source paper's published size parameters. The published thresholds were calibrated on particular radius sets and do not transfer between them. `hea-bench` has since added `HEACalculator` as an optional backend, as described in the Research Impact Statement.
 
-Model-specific scripts and spreadsheet calculators distributed as supplementary material are convenient for reproducing a particular set of results, but they are not designed to be reused as dependencies. `HEACalculator` is versioned and tested, so other work can cite a specific release and build on it directly. Contributing to existing interactive tools would not remove the need for that programmatic capability.
+Model-specific scripts and spreadsheets in supplementary material reproduce particular results but are not built as dependencies, and contributing to existing interactive tools would not supply that programmatic capability. `HEACalculator` is versioned and tested, so other work can cite a specific release and build on it.
 
 # Software Design
 
@@ -138,17 +81,17 @@ The reference data ships as JSON inside the package, and the data modules cite t
 
 ![The `HEACalculator` graphical interface showing the HEA Parameters page. Users select elements from the periodic table, assign atomic-percent compositions, and calculate thermodynamic descriptors and solid-solution predictions in a single shared results view.\label{fig:gui}](figure_1.png)
 
-Model 8 uses a different enthalpy model from the other criteria. Its two Gibbs energies follow the supplementary equations of @king2016 rather than the tabulated pair enthalpies used elsewhere in the package, applying the Miedema macroscopic-atom model with the parameterization of @deboer1988 and the structural term of @niessen1983. `HEACalculator` carries Miedema parameters for 35 elements, so Model 8 reports `N/A` when a composition contains an element outside that set. No other descriptor or criterion needs those parameters.
+Model 8 does not use the tabulated pair enthalpies. Its Gibbs energies follow the supplementary equations of @king2016, using the Miedema model [@deboer1988; @niessen1983] with parameters for 35 elements, so it reports `N/A` for compositions outside that set.
 
 The test suite checks every model against the data of the paper that introduced it, nearly 500 compositions in all. The descriptors reproduce the published values closely, and the criteria return the published phase label for roughly nine alloys in ten.
 
-The architecture serves research use rather than only interactive exploration. The CLI screens a composition range across CPU cores in parallel and reads candidate alloys from a CSV file. The optional PyQt6 desktop application covers interactive use (\autoref{fig:gui}). The package works both as an end-user calculator and as a dependency inside a larger study.
+The CLI screens composition ranges in parallel across CPU cores and reads candidate alloys from CSV files, and the optional PyQt6 desktop application covers interactive use (\autoref{fig:gui}).
 
 # Research Impact Statement
 
 `HEACalculator` has also been used as a descriptor source rather than as a phase-screening tool, supplying domain-specific features alongside general-purpose composition databases such as JARVIS [@choudhary2018jarvis; @choudhary2020jarvis], Oliynyk [@oliynyk2016], Magpie [@ward2016magpie], and mat2vec [@tshitoyan2019mat2vec]. Hossein @zadeh2024 combined those sources into 4937 candidate features and fitted an interpretable piecewise linear regression for the $\lambda_2$ compatibility parameter between the austenite and martensite phases of NiTi shape memory alloys, a quantity that correlates with transformation hysteresis. @sheikh2025 assembled 3372 features for Vickers hardness in refractory high-entropy alloys and narrowed them to six predictors through recursive feature elimination and mutual-information filtering. In each case the package supplied composition descriptors for a target property it does not itself predict, which is the reuse a packaged calculation core is meant to support.
 
-`HEACalculator` has been publicly available since 2019. `hea-bench` [@fieser2026heabenchsw], an independently published calculator for HEAs and high-entropy oxides, pins it as an optional dependency and wraps its Python API in an adapter that maps fifteen descriptors onto its own names. Both packages compute eight of them, so a user can pick either implementation from the command line. The other seven come only from `HEACalculator`. The `hea-bench` documentation compares the two backends on the eight shared descriptors over a fixed panel of fifty compositions. Eight further quantities are left unmapped, among them the King Gibbs energies, the Ye $\phi$, and the excess entropy, because the two packages do not compute them the same way. That is the ambiguity described in the Statement of Need, reached independently by a group trying to make the two packages interoperate.
+`HEACalculator` has been publicly available since 2019. `hea-bench` [@fieser2026heabenchsw], an independent calculator for HEAs and high-entropy oxides, uses it as an optional backend through an adapter that maps fifteen `HEACalculator` descriptors, seven of which `hea-bench` does not compute itself, and its documentation compares the two backends on the shared ones. Quantities such as the King Gibbs energies, the Ye $\phi$, and the excess entropy are left unmapped because the packages compute them differently. This is the ambiguity described in the Statement of Need, reached independently by a group trying to make the two packages interoperate.
 
 # AI Usage Disclosure
 
